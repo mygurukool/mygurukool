@@ -15,7 +15,7 @@ import {
   AccordionItemButton,
   AccordionItemPanel,
 } from "react-accessible-accordion";
-import AudioVideo from "./AudioVideo";
+// import AudioVideo from "./AudioVideo";
 import Video from "./Video";
 import maths from "./../assets/maths.gif";
 import maths2 from "./../assets/maths2.png";
@@ -94,7 +94,6 @@ export default class Student extends Component {
         displayName: this.state.studentData.displayName.replace("/", " "),
         groupName: this.state.studentData.department,
       });
-      alert("group name" + this.state.groupName);
       localStorage.setItem(
         "studentName",
         this.state.studentData.displayName.replace("/", "_")
