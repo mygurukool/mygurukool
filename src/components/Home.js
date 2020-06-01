@@ -88,8 +88,11 @@ export default class Home extends Component {
                 type="button"
                 onClick={(e): void => {
                   e.preventDefault();
+                  let stateNow = (new Date()).toISOString().replace(/[^0-9]/g, "").slice(0, -3);
+                  let random   = Math.random().toString(36).substring(7);
+
                   window.location.href =
-                    "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id=" + process.env.REACT_APP_CLIENT_ID + "&response_type=code&redirect_uri=" + process.env.REACT_APP_OAUTH_REDIRECT_URI + "&response_mode=query&scope=" + process.env.REACT_APP_OAUTH_SCOPES + "&prompt=consent&state=202005101845";
+                    "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id=" + process.env.REACT_APP_CLIENT_ID + "&response_type=id_token%20token&redirect_uri=" + process.env.REACT_APP_OAUTH_REDIRECT_URI + "&response_mode=fragment&scope=openid%20" + process.env.REACT_APP_OAUTH_SCOPES + "&prompt=consent&state=" + stateNow + "&nonce=" + random;
                 }}
               >
                 Login to the School App

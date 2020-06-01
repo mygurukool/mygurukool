@@ -74,13 +74,6 @@ export default class Student extends Component {
     this.displaySubjectIconByName = this.displaySubjectIconByName.bind(this);
   }
   componentDidMount() {
-    if (
-      "match" in this.props &&
-      "params" in this.props.match &&
-      "token" in this.props.match.params
-    ) {
-      localStorage.setItem("token", this.props.match.params.token);
-    }
     this.state.isLoading = true;
     //Fetch user Profile
     this.axiosCall(

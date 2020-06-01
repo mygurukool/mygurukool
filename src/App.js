@@ -1,6 +1,7 @@
 import React from "react";
 import logo from "./logo.svg";
 import "./App.css";
+import Auth from "./components/Auth";
 import Home from "./components/Home";
 import Student from "./components/Student";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -30,10 +31,10 @@ function App() {
           )}
         />
         <Route
-          path="/student/:token"
+          path="/auth"
           render={(props) => (
             <div className="App">
-              <Student {...props} />
+              <Auth {...props} />
             </div>
           )}
         />
