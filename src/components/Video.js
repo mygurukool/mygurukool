@@ -6,7 +6,7 @@ export default class Video extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
-      vidLink: props.vidUrl,
+      // vidLink: props.youtubelink,
       vidId: "",
       isOpen: false,
     };
@@ -21,9 +21,15 @@ export default class Video extends React.Component {
     //TODO: function should also extract video channel eg: youtube, youku, etc
 
     // exctract vid Id
-    this.state.vidId = this.state.vidLink.split(/[\/]+/).pop();
-    //should the url has "=" before the vid id
-    this.state.vidId = this.state.vidId.split(/[\=]+/).pop();
+    if (this.props.vidData.youtubelink) {
+      this.props.vidData.youtubelink = this.props.vidData.youtubelink
+        .split(/[\/]+/)
+        .pop();
+      //should the url has "=" before the vid id
+      this.props.vidData.youtubelink = this.props.vidData.youtubelink
+        .split(/[\=]+/)
+        .pop();
+    }
   }
 
   render() {
@@ -33,15 +39,18 @@ export default class Video extends React.Component {
         <ModalVideo
           channel="youtube"
           isOpen={this.state.isOpen}
-          videoId={this.state.vidId}
+          videoId={this.props.vidData.youtubelink}
           onClose={() => this.setState({ isOpen: false })}
         />
+        {this.props.vidData.youtubename ? this.props.vidData.youtubename : ""}
+        <br />
         <button
           type="button"
           className="btn btn-video margin-5px"
           onClick={this.openModal}
         >
-          <i class="fas fa-video"></i> Im Video, Click me!!
+          <i class="fas fa-video"></i>
+          <b> Im Video, Click me!!</b>
         </button>
       </div>
     );

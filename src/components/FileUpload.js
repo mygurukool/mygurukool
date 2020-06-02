@@ -6,7 +6,7 @@ import axios from "axios";
 export default class FileUpload extends Component {
   constructor(props) {
     super(props);
-    
+
     this.state = {
       file: "",
       fileUploaded: "",
@@ -188,96 +188,94 @@ export default class FileUpload extends Component {
   displayFile() {
     return (
       <Fragment>
-        {
-          this.props.exerciesDetails.objectFilename ? 
-          (
-            <tr>
-              <td>
-                {this.props.exerciesDetails.objectFilename.toUpperCase().replace(".PDF","")}
-              </td>
-              <td className="text-center">
-                <a href="#?">
-                  <i
-                    class="fas fa-eye fa-2x icons_pdf"
-                    id={this.props.exerciesDetails.fileObject}
-                    onClick={this.fetchFile}
-                  ></i>
-                </a> <a href="#?">
-                  <i
-                    class="fas fa-download fa-2x icons_pdf"
-                    id={this.props.exerciesDetails.fileObject}
-                    onClick={this.fetchFile}
-                  ></i>
-                </a>
-              </td>
-              <td className="float-right">
-                <a
-                  href="#?"
-                  onClick={this.handleUploadClick}
-                  className="btn btn-primary"
-                >
-                  <i class="fas fa-upload"></i> Upload Exercise
-                </a>
-              </td>
-            </tr>
-          ) : 
-          ("")
-        }
-        {
-          this.props.exerciesDetails.filename && this.props.exerciesDetails.filelink? 
-          (
-            <tr>
-              <td>
-                {this.props.exerciesDetails.filename.toUpperCase().replace(".PDF","")}
-              </td>
-              <td className='text-center'>
+        {this.props.exerciesDetails.objectFilename ? (
+          <tr>
+            <td>
+              {this.props.exerciesDetails.objectFilename
+                .toUpperCase()
+                .replace(".PDF", "")}
+            </td>
+            <td className="text-center">
+              <a href="#?">
+                <i
+                  class="fas fa-eye fa-2x"
+                  id={this.props.exerciesDetails.fileObject}
+                  onClick={this.fetchFile}
+                ></i>
+              </a>{" "}
+              <a href="#?">
+                <i
+                  class="fas fa-download fa-2x"
+                  id={this.props.exerciesDetails.fileObject}
+                  onClick={this.fetchFile}
+                ></i>
+              </a>
+            </td>
+            <td className="float-right">
+              <a
+                href="#?"
+                onClick={this.handleUploadClick}
+                className="btn btn-primary"
+              >
+                <i class="fas fa-upload"></i> Upload Exercise
+              </a>
+            </td>
+          </tr>
+        ) : (
+          ""
+        )}
+        {this.props.exerciesDetails.filename &&
+        this.props.exerciesDetails.filelink ? (
+          <tr>
+            <td>
+              {this.props.exerciesDetails.filename
+                .toUpperCase()
+                .replace(".PDF", "")}
+            </td>
+            <td className="text-center">
+              <a href={this.props.exerciesDetails.filelink} target="_blank">
+                <i class="fas fa-eye fa-2x"></i>
+              </a>
+              {this.props.exerciesDetails.filelink.indexOf("htm") == -1 ? (
                 <a href={this.props.exerciesDetails.filelink} target="_blank">
-                  <i
-                    class="fas fa-eye fa-2x icons_pdf"
-                  ></i>
-                </a> 
-                { this.props.exerciesDetails.filelink.indexOf('htm') == -1 ?  
-                  (<a href={this.props.exerciesDetails.filelink} target="_blank">
-                    <i
-                      class="fas fa-download fa-2x icons_pdf"
-                  ></i>
-                </a>):("")
-                }
-              </td>
-              <td className="float-right">
-                <a
-                  href="#?"
-                  onClick={this.handleUploadClick}
-                  className="btn btn-primary"
-                >
-                  <i class="fas fa-upload"></i> Upload Exercise
+                  <i class="fas fa-download fa-2x"></i>
                 </a>
-              </td>
-            </tr>
-          ) : 
-          ("")
-        }
-        {
-          !this.props.exerciesDetails.objectFilename && (!this.props.exerciesDetails.filename || !this.props.exerciesDetails.filelink) ?
-          (
-            <tr>
-              <td>
-                
-              </td>
-              <td>
-              </td>
-              <td className="float-right">
-                  <a
-                  href="#?"
-                  onClick={this.handleUploadClick}
-                  className="btn btn-primary"
-                >
-                  <i class="fas fa-upload"></i> Upload Exercise
-                </a>
-              </td>
-            </tr>
-          ) : ("")
-        }
+              ) : (
+                ""
+              )}
+            </td>
+            <td className="float-right">
+              <a
+                href="#?"
+                onClick={this.handleUploadClick}
+                className="btn btn-primary"
+              >
+                <i class="fas fa-upload"></i> Upload Exercise
+              </a>
+            </td>
+          </tr>
+        ) : (
+          ""
+        )}
+        {!this.props.exerciesDetails.objectFilename &&
+        (!this.props.exerciesDetails.filename ||
+          !this.props.exerciesDetails.filelink) ? (
+          <tr>
+            <td></td>
+            <td></td>
+            <td className="float-right">
+              <a
+                href="#?"
+                onClick={this.handleUploadClick}
+                className="btn btn-primary"
+              >
+                <i class="fas fa-upload"></i> Upload Exercise
+              </a>
+            </td>
+          </tr>
+        ) : (
+          ""
+        )}
       </Fragment>
     );
   }
@@ -286,15 +284,9 @@ export default class FileUpload extends Component {
       <Fragment>
         <table className="col-12 table table-stripped">
           <tr>
-            <td>
-              File Name
-            </td>
-            <td className="text-center">
-              View / Download
-            </td>
-            <td className="text-center">
-              Actions
-            </td>
+            <td>File Name</td>
+            <td className="text-center">View / Download</td>
+            <td className="text-center">Actions</td>
           </tr>
           {this.displayFile()}
           {this.state.showFlash ? (
