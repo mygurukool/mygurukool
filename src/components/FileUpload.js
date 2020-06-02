@@ -6,15 +6,11 @@ import axios from "axios";
 export default class FileUpload extends Component {
   constructor(props) {
     super(props);
-
+    
     this.state = {
       file: "",
       fileUploaded: "",
       hideFileUpload: true,
-      exerciseFileName: props.exerciesDetails.filename,
-      exerciseFileLink: props.exerciesDetails.filelink,
-      exerciseFileObject: props.exerciesDetails.fileObject,
-      exerciseFileType: props.exerciesDetails.filetype,
       fileUploadedName: "",
       groupId: props.groupData,
       subjectName: props.subjectName,
@@ -22,7 +18,6 @@ export default class FileUpload extends Component {
       studentDetails: props.studentDetails,
       fileName: "",
       exerciseFiles: "",
-      // toDownloadFile: true,
       showFlash: false,
     };
     this.handleFileChange = this.handleFileChange.bind(this);
@@ -30,9 +25,7 @@ export default class FileUpload extends Component {
     this.handleUploadClick = this.handleUploadClick.bind(this);
     this.fetchFile = this.fetchFile.bind(this);
     this.displayFile = this.displayFile.bind(this);
-    this.downloadPDF = this.downloadPDF.bind(this);
   }
-
   componentDidMount() {
     axios
       .get(
@@ -100,90 +93,13 @@ export default class FileUpload extends Component {
       hideFileUpload: false,
     });
   };
-
-  displayFile() {
-    // const toDownloadFile = true;
-    // if (this.state.exerciseFileLink) {
-    //   this.state.fetchedFileURL = this.state.exerciseFileLink;
-    // }
-    // if (this.state.exerciseFileObject) {
-    //   this.fetchFile(this.state.exerciseFileObject);
-    // } else {
-    //   this.state.toDownloadFile = false;
-    // }
-    // <a href={this.state.fetchedFileURL} target="_blank">
-    //   <i class="fas fa-eye fa-2x"></i>
-    // </a>
-
-    return (
-      <Fragment>
-        {/*Start: PDF is of Type BLOB */}
-        {this.state.exerciseFileObject ? (
-          <a href="#?">
-            <i
-              class="fas fa-eye fa-2x"
-              id={this.state.exerciseFileObject}
-              onClick={this.fetchFile}
-            ></i>
-          </a>
-        ) : (
-          ""
-        )}
-        &nbsp;&nbsp;
-        {this.state.exerciseFileObject ? (
-          <a href="#?">
-            <i
-              class="fas fa-download fa-2x"
-              id={this.state.exerciseFileObject}
-              onClick={this.fetchFile}
-            ></i>
-          </a>
-        ) : (
-          ""
-        )}
-        {/*End: PDF is of Type BLOB */}
-        {/*Start: PDF is of Type WebLink */}
-        {this.state.exerciseFileLink ? (
-          <a href={this.state.exerciseFileLink} target="_blank">
-            <i class="fas fa-eye fa-2x"></i>
-          </a>
-        ) : (
-          ""
-        )}
-        &nbsp;&nbsp;
-        {this.state.exerciseFileLink ? (
-          <a href={this.state.exerciseFileLink} target="_blank">
-            <i
-              class="fas fa-download fa-2x"
-              // id={this.state.exerciseFileLink}
-              // onClick={this.downloadPDF}
-            ></i>
-          </a>
-        ) : (
-          ""
-        )}
-        {/*Start: PDF is of Type WebLink */}
-      </Fragment>
-    );
-  }
-
-  downloadPDF = (event) => {
-    alert("download fileww");
-    const link = document.createElement("a");
-    link.href = event.target.id;
-    link.setAttribute("download", this.state.exerciseFileName);
-    document.body.appendChild(link);
-    link.click();
-  };
-
-  // fetchFile => event(targetId) {
   fetchFile = (event) => {
     axios
       .get(event.target.id, {
         params: {},
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
-          Accept: this.state.exerciseFileType,
+          Accept: this.props.exerciesDetails.exerciseFileType,
         },
         responseType: "blob", // important
       })
@@ -191,7 +107,7 @@ export default class FileUpload extends Component {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", this.state.exerciseFileName);
+        link.setAttribute("download", this.props.exerciesDetails.filename);
         document.body.appendChild(link);
         link.click();
       });
@@ -269,26 +185,104 @@ export default class FileUpload extends Component {
           });
       });
   };
-
+  displayFile() {
+    return (
+      <Fragment>
+        {
+          this.props.exerciesDetails.objectFilename ? 
+          (
+            <tr>
+              <td>
+                {this.props.exerciesDetails.objectFilename.toUpperCase().replace(".PDF","")}
+              </td>
+              <td className="text-center">
+                <a href="#?">
+                  <i
+                    class="fas fa-eye fa-2x icons_pdf"
+                    id={this.props.exerciesDetails.fileObject}
+                    onClick={this.fetchFile}
+                  ></i>
+                </a> <a href="#?">
+                  <i
+                    class="fas fa-download fa-2x icons_pdf"
+                    id={this.props.exerciesDetails.fileObject}
+                    onClick={this.fetchFile}
+                  ></i>
+                </a>
+              </td>
+              <td className="float-right">
+                <a
+                  href="#?"
+                  onClick={this.handleUploadClick}
+                  className="btn btn-primary"
+                >
+                  <i class="fas fa-upload"></i> Upload Exercise
+                </a>
+              </td>
+            </tr>
+          ) : 
+          ("")
+        }
+        {
+          this.props.exerciesDetails.filename ? 
+          (
+            <tr>
+              <td>
+                {this.props.exerciesDetails.filename.toUpperCase().replace(".PDF","")}
+              </td>
+              <td className="text-center">
+                <a href="{this.props.exerciesDetails.exerciseFileLink}" target="_blank">
+                  <i
+                    class="fas fa-eye fa-2x icons_pdf"
+                  ></i>
+                </a> <a href="{this.props.exerciesDetails.exerciseFileLink}" target="_blank">
+                  <i
+                    class="fas fa-download fa-2x icons_pdf"
+                  ></i>
+                </a>
+              </td>
+              <td className="float-right">
+                <a
+                  href="#?"
+                  onClick={this.handleUploadClick}
+                  className="btn btn-primary"
+                >
+                  <i class="fas fa-upload"></i> Upload Exercise
+                </a>
+              </td>
+            </tr>
+          ) : 
+          ("")
+        }
+        {
+          !this.props.exerciesDetails.objectFilename && !this.props.exerciesDetails.filename ?
+          (
+            <tr>
+              <td colspan="3">
+                No File Found
+              </td>
+            </tr>
+          ) : ("")
+        }
+      </Fragment>
+    );
+  }
   render() {
     return (
       <Fragment>
-        <table class="col-12">
-          <tr className="testing-color-blue col-12">
-            <td className="filelink">
-              {this.state.exerciseFileName ? this.state.exerciseFileName : ""}
+        <table className="col-12 table table-stripped">
+          <tr>
+            <td>
+              File Name
             </td>
-            <td className="filelink icons">{this.displayFile()}</td>
-            <td class="float-right">
-              <a
-                href="#?"
-                onClick={this.handleUploadClick}
-                className="btn btn-primary"
-              >
-                <i class="fas fa-upload"></i> Upload Exercise
-              </a>
+            <td className="text-center">
+              View / Download
+            </td>
+            <td className="text-center">
+              Actions
             </td>
           </tr>
+          {this.displayFile()}
           {this.state.showFlash ? (
             <tr>
               <td colspan="3" className="alert alert-success">

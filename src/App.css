@@ -7,6 +7,10 @@ ul li {
   display: block;
   line-height: 35px;
 }
+.icons_pdf {
+  font-size :20px !important;
+  margin-left: 10px;
+}
 .filelink a {
   color: #007bff;
   font-size: 12px;
