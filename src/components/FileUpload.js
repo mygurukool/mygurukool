@@ -224,7 +224,7 @@ export default class FileUpload extends Component {
           ("")
         }
         {
-          this.props.exerciesDetails.filename ? 
+          this.props.exerciesDetails.filename && this.props.exerciesDetails.filelink? 
           (
             <tr>
               <td>
@@ -236,11 +236,13 @@ export default class FileUpload extends Component {
                     class="fas fa-eye fa-2x icons_pdf"
                   ></i>
                 </a> 
-                <a href={this.props.exerciesDetails.filelink} target="_blank">
-                  <i
-                    class="fas fa-download fa-2x icons_pdf"
+                { this.props.exerciesDetails.filelink.indexOf('htm') == -1 ?  
+                  (<a href={this.props.exerciesDetails.filelink} target="_blank">
+                    <i
+                      class="fas fa-download fa-2x icons_pdf"
                   ></i>
-                </a>
+                </a>):("")
+                }
               </td>
               <td className="float-right">
                 <a
@@ -256,11 +258,22 @@ export default class FileUpload extends Component {
           ("")
         }
         {
-          !this.props.exerciesDetails.objectFilename && !this.props.exerciesDetails.filename ?
+          !this.props.exerciesDetails.objectFilename && (!this.props.exerciesDetails.filename || !this.props.exerciesDetails.filelink) ?
           (
             <tr>
-              <td colspan="3">
-                No File Found
+              <td>
+                
+              </td>
+              <td>
+              </td>
+              <td className="float-right">
+                  <a
+                  href="#?"
+                  onClick={this.handleUploadClick}
+                  className="btn btn-primary"
+                >
+                  <i class="fas fa-upload"></i> Upload Exercise
+                </a>
               </td>
             </tr>
           ) : ("")
