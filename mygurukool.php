@@ -42,7 +42,11 @@ foreach ($dom->getElementsByTagName('p') as $item) {
 		}						
 	}	
 	if(isset($item->firstChild->wholeText)){
-		$instructions.= "<li>".$item->firstChild->wholeText."</li>";
+		if (stripos($item->firstChild->wholeText, 'date') !== false){
+			$submissionDate = $item->firstChild->wholeText;
+		} else {
+			$instructions.= "<li>".$item->firstChild->wholeText."</li>";
+		}
 	}
 	if(isset($item->firstChild->tagName) && $item->firstChild->tagName == 'a') {
 		$file_youtube_link = $item->firstChild;
