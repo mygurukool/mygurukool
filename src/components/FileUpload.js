@@ -189,20 +189,19 @@ export default class FileUpload extends Component {
     return (
       <Fragment>
         {this.props.exerciesDetails.objectFilename ? (
-          <tr>
+          <tr className="testing-color-blue col-12">
             <td>
               {this.props.exerciesDetails.objectFilename
-                .toUpperCase()
                 .replace(".PDF", "")}
             </td>
-            <td className="text-center">
+            <td className="filelink icons">
               <a href="#?">
                 <i
                   class="fas fa-eye fa-2x"
                   id={this.props.exerciesDetails.fileObject}
                   onClick={this.fetchFile}
                 ></i>
-              </a>{" "}
+              </a> &nbsp;&nbsp;
               <a href="#?">
                 <i
                   class="fas fa-download fa-2x"
@@ -226,16 +225,15 @@ export default class FileUpload extends Component {
         )}
         {this.props.exerciesDetails.filename &&
         this.props.exerciesDetails.filelink ? (
-          <tr>
+          <tr className="testing-color-blue col-12">
             <td>
               {this.props.exerciesDetails.filename
-                .toUpperCase()
                 .replace(".PDF", "")}
             </td>
-            <td className="text-center">
+            <td className="filelink icons">
               <a href={this.props.exerciesDetails.filelink} target="_blank">
                 <i class="fas fa-eye fa-2x"></i>
-              </a>
+              </a>&nbsp;&nbsp;
               {this.props.exerciesDetails.filelink.indexOf("htm") == -1 ? (
                 <a href={this.props.exerciesDetails.filelink} target="_blank">
                   <i class="fas fa-download fa-2x"></i>
@@ -283,11 +281,6 @@ export default class FileUpload extends Component {
     return (
       <Fragment>
         <table className="col-12 table table-stripped">
-          <tr>
-            <td>File Name</td>
-            <td className="text-center">View / Download</td>
-            <td className="text-center">Actions</td>
-          </tr>
           {this.displayFile()}
           {this.state.showFlash ? (
             <tr>

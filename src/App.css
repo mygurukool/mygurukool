@@ -221,6 +221,7 @@ h2 small {
 .table td,
 .table th {
   border-top: 0;
+  vertical-align: middle !important;
 }
 .nav-pills.sub-nav .nav-link,
 .nav-pills .show > .nav-link {
