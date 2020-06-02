@@ -347,10 +347,10 @@ export default class Student extends Component {
                                 ) : (
                                   ""
                                 )} */}
-                                <b>Exercise Video Explanation</b>
+                                <b>Exercise Audio/ Video Explanation</b>
                                 <ul>
-                                  {exe.content && exe.content.youtubelink ? (
-                                    <Video vidUrl={exe.content.youtubelink} />
+                                  {exe.content ? (
+                                    <Video vidData={exe.content} />
                                   ) : (
                                     ""
                                   )}

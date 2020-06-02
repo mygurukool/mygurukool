@@ -53,6 +53,7 @@ foreach ($dom->getElementsByTagName('p') as $item) {
 		foreach($file_youtube_link->attributes as $attr){
 			if(strpos($attr->value,"youtu")!== false){
 				$array['youtubelink'] = $attr->value;
+				$array['youtubename'] = $file_youtube_link->nodeValue;
 			}	
 			else {
 				if($attr->name == 'href') {
