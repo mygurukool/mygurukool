@@ -42,11 +42,7 @@ foreach ($dom->getElementsByTagName('p') as $item) {
 		}						
 	}	
 	if(isset($item->firstChild->wholeText)){
-		if (stripos($item->firstChild->wholeText, 'date') !== false){
-			$submissionDate = $item->firstChild->wholeText;
-		} else {
-			$instructions.= "<li>".$item->firstChild->wholeText."</li>";
-		}			
+		$instructions.= "<li>".$item->firstChild->wholeText."</li>";
 	}
 	if(isset($item->firstChild->tagName) && $item->firstChild->tagName == 'a') {
 		$file_youtube_link = $item->firstChild;
@@ -55,7 +51,9 @@ foreach ($dom->getElementsByTagName('p') as $item) {
 				$array['youtubelink'] = $attr->value;
 			}	
 			else {
-				$array['filelink'] = $attr->value;
+				if($attr->name == 'href') {
+					$array['filelink'] = $attr->value;
+				}
 				$array['filename'] = $file_youtube_link->nodeValue;
 			}
 		}
@@ -65,7 +63,7 @@ if(!empty($dom->getElementsByTagName('object'))){
 	foreach ($dom->getElementsByTagName('object') as $item) {
 		foreach($item->attributes as $attr){
 			if($attr->name == 'data-attachment') {
-				$array['filename'] = $attr->value;
+				$array['objectFilename'] = $attr->value;
 			} else if($attr->name == 'type') {
 				$array['filetype'] = $attr->value;
 			} else if($attr->name == 'data') {
@@ -76,5 +74,5 @@ if(!empty($dom->getElementsByTagName('object'))){
 }	
 $array['instructions'] = $instructions;
 $array['submissionDate'] = $submissionDate;
-
+//echo "<pre>";print_r($array);
 echo json_encode($array);
