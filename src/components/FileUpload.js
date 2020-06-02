@@ -230,12 +230,13 @@ export default class FileUpload extends Component {
               <td>
                 {this.props.exerciesDetails.filename.toUpperCase().replace(".PDF","")}
               </td>
-              <td className="text-center">
-                <a href="{this.props.exerciesDetails.exerciseFileLink}" target="_blank">
+              <td className='text-center'>
+                <a href={this.props.exerciesDetails.filelink} target="_blank">
                   <i
                     class="fas fa-eye fa-2x icons_pdf"
                   ></i>
-                </a> <a href="{this.props.exerciesDetails.exerciseFileLink}" target="_blank">
+                </a> 
+                <a href={this.props.exerciesDetails.filelink} target="_blank">
                   <i
                     class="fas fa-download fa-2x icons_pdf"
                   ></i>
