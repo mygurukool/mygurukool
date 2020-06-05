@@ -68,6 +68,8 @@ export default class Student extends Component {
       groupDetails: "",
       groupName: "",
       subjectIcon: "",
+      expand:true,
+      openedItems: [],
     };
 
     this.axiosCall = this.axiosCall.bind(this);
@@ -158,6 +160,8 @@ export default class Student extends Component {
   };
 
   handleClick = (event) => {
+    console.log(this.state.expand)
+    this.setState({expand : false,openedItems:[]})
     this.setState({ currentView: event.target.text });
     this.state.isLoading = true;
     this.axiosCall(
@@ -207,6 +211,7 @@ export default class Student extends Component {
   }
 
   render() {
+    console.log(this.state.openedItems);
     return (
       <Fragment>
         <Header />
@@ -295,88 +300,100 @@ export default class Student extends Component {
             />
 
             {/* <Accordion allowZeroExpanded={true} className="testing-color-green"> */}
-            <Accordion allowZeroExpanded={true}>
+            <Accordion  
+        allowZeroExpanded={true}
+        onChange={(e) => this.setState({ openedItems: e })} //
+        preExpanded={this.state.openedItems}>
               {this.state.exercisedata &&
                 this.state.exercisedata.value.map((exe, i) => (
-                  <AccordionItem>
-                    {exe.title ? (
-                      <Fragment>
-                        <AccordionItemHeading>
-                          <AccordionItemButton>
-                            <div className="row">
-                              <div className="float-left col-12 exercisetitle">
-                                {exe.title
-                                  ? (this.state.exerciseTitle = exe.title)
-                                  : "No Exercise Data"}
-                                <small class="text-muted float-right">
-                                  {exe.content && exe.content.submissionDate
-                                    ? exe.content.submissionDate
-                                    : ""}
-                                </small>
+                 
+                    <AccordionItem key={exe.id} uuid={exe.id}>
+                      {exe.title ? (
+                        <Fragment>
+                          <AccordionItemHeading>
+                            <AccordionItemButton>
+                              <div className="row">
+                                <div className="float-left col-12 exercisetitle">
+                                  {exe.title
+                                    ? (this.state.exerciseTitle = exe.title)
+                                    : "No Exercise Data"}
+                                  <small className="text-muted float-right">
+                                    {exe.content && exe.content.submissionDate
+                                      ? exe.content.submissionDate  
+                                      : ""}
+                                  </small>
+                                </div>
                               </div>
-                            </div>
-                          </AccordionItemButton>
-                        </AccordionItemHeading>
-                        <AccordionItemPanel>
-                          <div className="card-body">
-                            <div className="row">
-                              {/* <div className="row testing-color-yellow"> */}
-                              <div className="col-8">
-                                <b>Exercise Instructions</b>
-                                <ul
-                                  dangerouslySetInnerHTML={{
-                                    __html: exe.content
-                                      ? exe.content.instructions
-                                      : "",
-                                  }}
-                                ></ul>
+                            </AccordionItemButton>
+                          </AccordionItemHeading>
+                          <AccordionItemPanel>
+                            <div className="card-body">
+                              <div className="row">
+                                {/* <div className="row testing-color-yellow"> */}
+                                <div className="col-8">
+                                  <b>Exercise Instructions</b>
+                                  <ul
+                                    dangerouslySetInnerHTML={{
+                                      __html: exe.content
+                                        ? exe.content.instructions
+                                        : "",
+                                    }}
+                                  ></ul>
+                                </div>
+                                <div className="col-4">
+                                  <button
+                                    type="button"
+                                    className="btn btn-primary turnin"
+                                  >
+                                    <i className="fas fa-check"></i> Turn In
+                                  </button>
+                                </div>
+                                <div className="col-12">
+                                  {/* {exe.content ? (
+                                    <AudioVideo
+                                      vidUrl={exe.content.youtubelink}
+                                    />
+                                  ) : (
+                                    ""
+                                  )} */}
+                                  <b>Exercise Audio/ Video Explanation</b>
+                                  <ul>
+                                    {exe.content && exe.content.youtubelink ? (
+                                      <Video vidData={exe.content} />
+                                    ) : (
+                                      ""
+                                    )}
+                                  </ul>
+                                </div>
                               </div>
-                              <div className="col-4">
-                                <button
-                                  type="button"
-                                  className="btn btn-primary turnin"
-                                >
-                                  <i class="fas fa-check"></i> Turn In
-                                </button>
-                              </div>
-                              <div className="col-12">
-                                <b>Exercise Audio/ Video Explanation</b>
-                                <ul>
-                                  {exe.content && exe.content.youtubelink ? (
-                                    <Video vidData={exe.content} />
+
+                              <div className="card card-body fileblock row">
+                                <div className="col-12">
+                                  <div></div>
+                                  {exe.content ? (
+                                    <FileUpload
+                                      exerciesDetails={exe.content}
+                                      groupData={this.state.groupDetails.id}
+                                      subjectName={this.state.currentView}
+                                      title={exe.title}
+                                      studentDetails={this.state.studentData}
+                                    />
                                   ) : (
                                     ""
                                   )}
-                                </ul>
+                                </div>
+                                <div className="col-12">{this.state.formUpload}</div>
                               </div>
                             </div>
-                            <div className="card card-body fileblock row">
-                              <div class="col-12">
-                                <div></div>
-                                {exe.content ? (
-                                  <FileUpload
-                                    exerciesDetails={exe.content}
-                                    groupData={this.state.groupDetails.id}
-                                    subjectName={this.state.currentView}
-                                    title={exe.title}
-                                    studentDetails={this.state.studentData}
-                                  />
-                                ) : (
-                                  ""
-                                )}
-                              </div>
-                              <div class="col-12">{this.state.formUpload}</div>
-                            </div>
-                          </div>
-                        </AccordionItemPanel>
-                      </Fragment>
-                    ) : (
-                      <h5>
-                        Hurrayyy! You have finished all your assignments of this
-                        subject
-                      </h5>
-                    )}
-                  </AccordionItem>
+                          </AccordionItemPanel>
+                        </Fragment>
+                      ) : (
+                        <h5>
+                          Hurrayyy! You have finished all your assignments of this
+                          subject
+                        </h5>
+                      )}
+                    </AccordionItem>
                 ))}
             </Accordion>
           </div>
