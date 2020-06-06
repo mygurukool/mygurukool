@@ -175,15 +175,50 @@ export default class Student extends Component {
         this.state.exercise &&
           this.state.exercise.value.map((exe, i) =>
             this.axiosCall(exe.contentUrl).then((response) => {
-              axios
-                .post(process.env.REACT_APP_WEBSERVER + "/mygurukool.php", {
-                  data: response.data,
-                })
-                .then((res) => {
-                  this.state.exercise.value[i].content = res.data;
-                  this.setState({ exercisedata: this.state.exercise });
-                  console.log(this.state.exercisedata);
-                });
+              let parser = new DOMParser();
+              let dom    = parser.parseFromString(response.data, "text/html");
+
+              let content        = {};
+              let instructions   = '';
+              let submissionDate = '';
+
+              for (let item of dom.getElementsByTagName('p')) {
+                if (item.firstChild.tagName != null && item.firstChild.tagName !== 'A') {
+                  if (item.textContent.match(/date/i)) {
+                    submissionDate = item.textContent;
+                  } else {
+                    instructions += "<li>" + item.textContent + "</li>";
+                  }
+                }
+
+                if (item.firstChild.wholeText != null) {
+                  if (item.firstChild.wholeText.match(/date/i)) {
+                    submissionDate = item.firstChild.wholeText;
+                  } else {
+                    instructions += "<li>" + item.firstChild.wholeText + "</li>";
+                  }
+                }
+
+                if (item.firstChild.tagName === 'A') {
+                  let child = item.firstChild;
+
+                  for (let attribute of child.attributes) {
+                    if (attribute.value.includes("youtu")) {
+                      content['youtubelink'] = attribute.value;
+                      content['youtubename'] = child.text;
+                    } else if (attribute.name === 'href') {
+                      content['filelink'] = attribute.value;
+                      content['filename'] = child.text;
+                    }
+                  }
+                }
+              }
+
+              content['instructions']   = instructions;
+              content['submissionDate'] = submissionDate;
+
+              this.state.exercise.value[i].content = content;
+              this.setState({ exercisedata: this.state.exercise });
             })
           );
       }
@@ -211,7 +246,7 @@ export default class Student extends Component {
   }
 
   render() {
-    console.log(this.state.openedItems);
+    //console.log(this.state.openedItems);
     return (
       <Fragment>
         <Header />
