@@ -17,6 +17,7 @@ import {
 } from "react-accessible-accordion";
 // import AudioVideo from "./AudioVideo";
 import Video from "./Video";
+import parseOneNotePage from "./utils";
 import maths from "./../assets/maths.gif";
 import maths2 from "./../assets/maths2.png";
 
@@ -68,7 +69,7 @@ export default class Student extends Component {
       groupDetails: "",
       groupName: "",
       subjectIcon: "",
-      expand:true,
+      expand: true,
       openedItems: [],
     };
 
@@ -160,8 +161,8 @@ export default class Student extends Component {
   };
 
   handleClick = (event) => {
-    console.log(this.state.expand)
-    this.setState({expand : false,openedItems:[]})
+    console.log(this.state.expand);
+    this.setState({ expand: false, openedItems: [] });
     this.setState({ currentView: event.target.text });
     this.state.isLoading = true;
     this.axiosCall(
@@ -175,49 +176,7 @@ export default class Student extends Component {
         this.state.exercise &&
           this.state.exercise.value.map((exe, i) =>
             this.axiosCall(exe.contentUrl).then((response) => {
-              let parser = new DOMParser();
-              let dom    = parser.parseFromString(response.data, "text/html");
-
-              let content        = {};
-              let instructions   = '';
-              let submissionDate = '';
-
-              for (let item of dom.getElementsByTagName('p')) {
-                if (item.firstChild.tagName != null && item.firstChild.tagName !== 'A') {
-                  if (item.textContent.match(/date/i)) {
-                    submissionDate = item.textContent;
-                  } else {
-                    instructions += "<li>" + item.textContent + "</li>";
-                  }
-                }
-
-                if (item.firstChild.wholeText != null) {
-                  if (item.firstChild.wholeText.match(/date/i)) {
-                    submissionDate = item.firstChild.wholeText;
-                  } else {
-                    instructions += "<li>" + item.firstChild.wholeText + "</li>";
-                  }
-                }
-
-                if (item.firstChild.tagName === 'A') {
-                  let child = item.firstChild;
-
-                  for (let attribute of child.attributes) {
-                    if (attribute.value.includes("youtu")) {
-                      content['youtubelink'] = attribute.value;
-                      content['youtubename'] = child.text;
-                    } else if (attribute.name === 'href') {
-                      content['filelink'] = attribute.value;
-                      content['filename'] = child.text;
-                    }
-                  }
-                }
-              }
-
-              content['instructions']   = instructions;
-              content['submissionDate'] = submissionDate;
-
-              this.state.exercise.value[i].content = content;
+              this.state.exercise.value[i].content = parseOneNotePage(response);
               this.setState({ exercisedata: this.state.exercise });
             })
           );
@@ -279,7 +238,7 @@ export default class Student extends Component {
                       <li className="nav-item">
                         <a
                           className={
-                            this.state.currentView == key.displayName
+                            this.state.currentView === key.displayName
                               ? "active nav-link"
                               : "nav-link"
                           }
@@ -335,100 +294,102 @@ export default class Student extends Component {
             />
 
             {/* <Accordion allowZeroExpanded={true} className="testing-color-green"> */}
-            <Accordion  
-        allowZeroExpanded={true}
-        onChange={(e) => this.setState({ openedItems: e })} //
-        preExpanded={this.state.openedItems}>
+            <Accordion
+              allowZeroExpanded={true}
+              onChange={(e) => this.setState({ openedItems: e })} //
+              preExpanded={this.state.openedItems}
+            >
               {this.state.exercisedata &&
                 this.state.exercisedata.value.map((exe, i) => (
-                 
-                    <AccordionItem key={exe.id} uuid={exe.id}>
-                      {exe.title ? (
-                        <Fragment>
-                          <AccordionItemHeading>
-                            <AccordionItemButton>
-                              <div className="row">
-                                <div className="float-left col-12 exercisetitle">
-                                  {exe.title
-                                    ? (this.state.exerciseTitle = exe.title)
-                                    : "No Exercise Data"}
-                                  <small className="text-muted float-right">
-                                    {exe.content && exe.content.submissionDate
-                                      ? exe.content.submissionDate  
-                                      : ""}
-                                  </small>
-                                </div>
+                  <AccordionItem key={exe.id} uuid={exe.id}>
+                    {exe.title ? (
+                      <Fragment>
+                        <AccordionItemHeading>
+                          <AccordionItemButton>
+                            <div className="row">
+                              <div className="float-left col-12 exercisetitle">
+                                {exe.title
+                                  ? (this.state.exerciseTitle = exe.title)
+                                  : "No Exercise Data"}
+                                <small className="text-muted float-right">
+                                  {exe.content && exe.content.submissionDate
+                                    ? exe.content.submissionDate
+                                    : ""}
+                                </small>
                               </div>
-                            </AccordionItemButton>
-                          </AccordionItemHeading>
-                          <AccordionItemPanel>
-                            <div className="card-body">
-                              <div className="row">
-                                {/* <div className="row testing-color-yellow"> */}
-                                <div className="col-8">
-                                  <b>Exercise Instructions</b>
-                                  <ul
-                                    dangerouslySetInnerHTML={{
-                                      __html: exe.content
-                                        ? exe.content.instructions
-                                        : "",
-                                    }}
-                                  ></ul>
-                                </div>
-                                <div className="col-4">
-                                  <button
-                                    type="button"
-                                    className="btn btn-primary turnin"
-                                  >
-                                    <i className="fas fa-check"></i> Turn In
-                                  </button>
-                                </div>
-                                <div className="col-12">
-                                  {/* {exe.content ? (
+                            </div>
+                          </AccordionItemButton>
+                        </AccordionItemHeading>
+                        <AccordionItemPanel>
+                          <div className="card-body">
+                            <div className="row">
+                              {/* <div className="row testing-color-yellow"> */}
+                              <div className="col-8">
+                                <b>Exercise Instructions</b>
+                                <ul
+                                  dangerouslySetInnerHTML={{
+                                    __html: exe.content
+                                      ? exe.content.instructions
+                                      : "",
+                                  }}
+                                ></ul>
+                              </div>
+                              <div className="col-4">
+                                <button
+                                  type="button"
+                                  className="btn btn-primary turnin"
+                                >
+                                  <i className="fas fa-check"></i> Turn In
+                                </button>
+                              </div>
+                              <div className="col-12">
+                                {/* {exe.content ? (
                                     <AudioVideo
                                       vidUrl={exe.content.youtubelink}
                                     />
                                   ) : (
                                     ""
                                   )} */}
-                                  <b>Exercise Audio/ Video Explanation</b>
-                                  <ul>
-                                    {exe.content && exe.content.youtubelink ? (
-                                      <Video vidData={exe.content} />
-                                    ) : (
-                                      ""
-                                    )}
-                                  </ul>
-                                </div>
-                              </div>
-
-                              <div className="card card-body fileblock row">
-                                <div className="col-12">
-                                  <div></div>
-                                  {exe.content ? (
-                                    <FileUpload
-                                      exerciesDetails={exe.content}
-                                      groupData={this.state.groupDetails.id}
-                                      subjectName={this.state.currentView}
-                                      title={exe.title}
-                                      studentDetails={this.state.studentData}
-                                    />
+                                <b>Exercise Audio/ Video Explanation</b>
+                                <ul>
+                                  {exe.content && exe.content.youtubelink ? (
+                                    <Video vidData={exe.content} />
                                   ) : (
                                     ""
                                   )}
-                                </div>
-                                <div className="col-12">{this.state.formUpload}</div>
+                                </ul>
                               </div>
                             </div>
-                          </AccordionItemPanel>
-                        </Fragment>
-                      ) : (
-                        <h5>
-                          Hurrayyy! You have finished all your assignments of this
-                          subject
-                        </h5>
-                      )}
-                    </AccordionItem>
+
+                            <div className="card card-body fileblock row">
+                              <div className="col-12">
+                                <div></div>
+                                {exe.content ? (
+                                  <FileUpload
+                                    exerciesDetails={exe.content}
+                                    groupData={this.state.groupDetails.id}
+                                    subjectName={this.state.currentView}
+                                    title={exe.title}
+                                    studentDetails={this.state.studentData}
+                                  />
+                                ) : (
+                                  ""
+                                )}
+                              </div>
+                              <div className="col-12">
+                                {this.state.formUpload}
+                              </div>
+                            </div>
+                          </div>
+                        </AccordionItemPanel>
+                      </Fragment>
+                    ) : (
+                      <h5>
+                        Hurrayyy! You have finished all your assignments of this
+                        subject
+                      </h5>
+                    )}
+                  </AccordionItem>
                 ))}
             </Accordion>
           </div>

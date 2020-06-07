@@ -94,6 +94,7 @@ export default class FileUpload extends Component {
     });
   };
   fetchFile = (event) => {
+    console.log(event.target.id);
     axios
       .get(event.target.id, {
         params: {},
@@ -105,6 +106,9 @@ export default class FileUpload extends Component {
       })
       .then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
+        console.log(
+          "url:  " + url + "filename : " + this.props.exerciesDetails.filename
+        );
         const link = document.createElement("a");
         link.href = url;
         link.setAttribute("download", this.props.exerciesDetails.filename);
@@ -129,7 +133,7 @@ export default class FileUpload extends Component {
         }
       )
       .then((driveRes) => {
-        // console.log(driveRes.data);
+        console.log(driveRes.data);
         axios
           .get(
             process.env.REACT_APP_GRAPH_API_URL +
@@ -142,7 +146,7 @@ export default class FileUpload extends Component {
             }
           )
           .then((res) => {
-            // console.log(res.data)
+            console.log(res.data);
             // console.log(process.env.REACT_APP_GRAPH_API_URL+"sites/"+process.env.REACT_APP_SHARE_POINT_URL+`/drives/${driveRes.data.value[0].id}/items/${res.data.value[0].id}:/${this.file.name}:/content`);
             // return false;
             if (res.data.value[0]) {
@@ -166,7 +170,7 @@ export default class FileUpload extends Component {
                   }
                 )
                 .then((response) => {
-                  // console.log(response.data.@microsoft.graph.downloadUr);
+                  console.log(response.data);
                   this.setState({ fileUploadedName: response.data });
                   this.setState({ fileName: this.file.name });
                   this.fileUploaded = true;
@@ -182,7 +186,13 @@ export default class FileUpload extends Component {
                 hideFileUpload: true,
               });
             }
+          })
+          .catch((error) => {
+            console.log(error);
           });
+      })
+      .catch((error) => {
+        console.log(error);
       });
   };
   displayFile() {
@@ -191,8 +201,7 @@ export default class FileUpload extends Component {
         {this.props.exerciesDetails.objectFilename ? (
           <tr className="testing-color-blue col-12">
             <td>
-              {this.props.exerciesDetails.objectFilename
-                .replace(".PDF", "")}
+              {this.props.exerciesDetails.objectFilename.replace(".PDF", "")}
             </td>
             <td className="filelink icons">
               <a href="#?">
@@ -201,7 +210,8 @@ export default class FileUpload extends Component {
                   id={this.props.exerciesDetails.fileObject}
                   onClick={this.fetchFile}
                 ></i>
-              </a> &nbsp;&nbsp;
+              </a>{" "}
+              &nbsp;&nbsp;
               <a href="#?">
                 <i
                   class="fas fa-download fa-2x"
@@ -226,15 +236,13 @@ export default class FileUpload extends Component {
         {this.props.exerciesDetails.filename &&
         this.props.exerciesDetails.filelink ? (
           <tr className="testing-color-blue col-12">
-            <td>
-              {this.props.exerciesDetails.filename
-                .replace(".PDF", "")}
-            </td>
+            <td>{this.props.exerciesDetails.filename.replace(".PDF", "")}</td>
             <td className="filelink icons">
               <a href={this.props.exerciesDetails.filelink} target="_blank">
                 <i class="fas fa-eye fa-2x"></i>
-              </a>&nbsp;&nbsp;
-              {this.props.exerciesDetails.filelink.indexOf("htm") == -1 ? (
+              </a>
+              &nbsp;&nbsp;
+              {this.props.exerciesDetails.filelink.indexOf("htm") === -1 ? (
                 <a href={this.props.exerciesDetails.filelink} target="_blank">
                   <i class="fas fa-download fa-2x"></i>
                 </a>
@@ -311,7 +319,7 @@ export default class FileUpload extends Component {
           )}
         </table>
         <div>
-          {this.state.hideFileUpload == false ? (
+          {this.state.hideFileUpload === false ? (
             <div class="card card-body fileblock col-12">
               <div class="custom-file">
                 <input
