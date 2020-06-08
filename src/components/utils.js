@@ -1,4 +1,8 @@
-export default function parseOneNotePage(page) {
+import maths from "./../assets/maths.gif";
+import maths2 from "./../assets/maths2.png";
+
+// parse OneNote Page
+export function parseOneNotePage(page) {
   let parser = new DOMParser();
   let dom = parser.parseFromString(page.data, "text/html");
 
@@ -39,14 +43,8 @@ export default function parseOneNotePage(page) {
   }
 
   if (dom.getElementsByTagName("object") != null) {
-    console.log(
-      "dom.getElementsByTagName():  " + dom.getElementsByTagName("object")
-    );
     for (let item of dom.getElementsByTagName("object")) {
       for (let attr of item.attributes) {
-        console.log(
-          "attr.name:   " + attr.name + "  attr.value:  " + attr.value
-        );
         if (attr.name === "data-attachment") {
           content["objectFilename"] = attr.value;
         } else if (attr.name === "type") {
@@ -65,4 +63,14 @@ export default function parseOneNotePage(page) {
   content["submissionDate"] = submissionDate;
 
   return content;
+}
+
+export function loadIconBySubject(subjectName) {
+  let subjectIcon = "";
+  if (subjectName.includes("Math")) {
+    subjectIcon = maths;
+  } else if (subjectName === "German") {
+    subjectIcon = maths2;
+  }
+  return subjectIcon;
 }

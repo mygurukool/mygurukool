@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import "..//App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import axios from "axios";
+import * as _apiUtils from "./AxiosUtil";
 
 export default class FileUpload extends Component {
   constructor(props) {
@@ -27,49 +27,24 @@ export default class FileUpload extends Component {
     this.displayFile = this.displayFile.bind(this);
   }
   componentDidMount() {
-    axios
-      .get(
-        process.env.REACT_APP_GRAPH_API_URL +
-          `sites/${this.state.groupId}/drives`,
-        {
-          params: {},
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      )
-      .then((driveRes) => {
-        axios
-          .get(
-            process.env.REACT_APP_GRAPH_API_URL +
-              `sites/${this.state.groupId}/drive/root/search(q='{${this.state.title}}')`,
-            {
-              params: {},
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          )
-          .then((res) => {
-            // console.log(process.env.REACT_APP_GRAPH_API_URL+`sites/${this.state.groupId}/drives/${driveRes.data.value[0].id}/items/${res.data.value[0].id}/children`);
-            if (res.data.value[0]) {
-              axios
-                .get(
-                  process.env.REACT_APP_GRAPH_API_URL +
-                    `sites/root/drives/${driveRes.data.value[0].id}/items/${res.data.value[0].id}/children`,
-                  {
-                    // 'https://graph.microsoft.com/v1.0/sites/mygurukool.sharepoint.com,7c9fc398-a705-4e32-8b92-1c55f6536ca5,960408e8-1290-401d-bb0e-e80861e1e003/drives/b!mMOffAWnMk6LkhxV9lNspegIBJaQEh1Auw7oCGHh4AN3wsxO31WBSJXjoo9fcf91/items/01RYMJ7Z6LKU4S3RYOL5C22SQRAF2SC7MV/children',
-                    params: {},
-                    headers: {
-                      Authorization: `Bearer ${localStorage.getItem("token")}`,
-                    },
-                  }
-                )
-                .then((fileRes) => {
-                  this.setState({ exerciseFiles: fileRes.data });
-                  console.log(fileRes.data);
-                });
-            }
-          });
-      });
+    _apiUtils.loadDrivesByGroupId(this.state.groupId).then((driveRes) => {
+      _apiUtils
+        .searchByGroup_Title(this.state.groupId, this.state.title)
+        .then((res) => {
+          // console.log(process.env.REACT_APP_GRAPH_API_URL+`sites/${this.state.groupId}/drives/${driveRes.data.value[0].id}/items/${res.data.value[0].id}/children`);
+          if (res.data.value[0]) {
+            _apiUtils
+              .getStudentUploadedExerciseFiles(
+                driveRes.data.value[0].id,
+                res.data.value[0].id
+              )
+              .then((fileRes) => {
+                this.setState({ exerciseFiles: fileRes.data });
+                console.log(fileRes.data);
+              });
+          }
+        });
+    });
   }
 
   handleFileChange = (event) => {
@@ -94,82 +69,40 @@ export default class FileUpload extends Component {
     });
   };
   fetchFile = (event) => {
-    console.log(event.target.id);
-    axios
-      .get(event.target.id, {
-        params: {},
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("token")}`,
-          Accept: this.props.exerciesDetails.exerciseFileType,
-        },
-        responseType: "blob", // important
-      })
-      .then((response) => {
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute(
-          "download",
-          this.props.exerciesDetails.filename
-            ? this.props.exerciesDetails.filename
-            : this.props.exerciesDetails.objectFilename
-        );
-        document.body.appendChild(link);
-        link.click();
-      });
+    _apiUtils.getBLOB(event.target.id).then((response) => {
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+      const link = document.createElement("a");
+      link.href = url;
+      link.setAttribute(
+        "download",
+        this.props.exerciesDetails.filename
+          ? this.props.exerciesDetails.filename
+          : this.props.exerciesDetails.objectFilename
+      );
+      document.body.appendChild(link);
+      link.click();
+    });
   };
 
   handleClick = (event) => {
     const formData = new FormData();
-    // this.file = this.state.studentDetails.id+"_"+this.file.name;
-    // alert(this.file);
-    // return false;
     formData.append(this.file.name, this.file);
-    axios
-      .get(
-        process.env.REACT_APP_GRAPH_API_URL +
-          `sites/${this.state.groupId}/drives`,
-        {
-          params: {},
-          headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
-      )
+
+    _apiUtils
+      .loadDrivesByGroupId(this.state.groupId)
       .then((driveRes) => {
-        console.log(driveRes.data);
-        axios
-          .get(
-            process.env.REACT_APP_GRAPH_API_URL +
-              `sites/${this.state.groupId}/drive/root/search(q='{${this.state.title}}')`,
-            {
-              params: {},
-              headers: {
-                Authorization: `Bearer ${localStorage.getItem("token")}`,
-              },
-            }
-          )
+        _apiUtils
+          .searchByGroup_Title(this.state.groupId, this.state.title)
           .then((res) => {
-            console.log(res.data);
             // console.log(process.env.REACT_APP_GRAPH_API_URL+"sites/"+process.env.REACT_APP_SHARE_POINT_URL+`/drives/${driveRes.data.value[0].id}/items/${res.data.value[0].id}:/${this.file.name}:/content`);
-            // return false;
             if (res.data.value[0]) {
-              axios
-                .put(
-                  process.env.REACT_APP_GRAPH_API_URL +
-                    `sites/${this.state.groupId}/drives/${
-                      driveRes.data.value[0].id
-                    }/items/${res.data.value[0].id}:/${
-                      this.state.studentDetails.displayName.replace("/", "_") +
-                      "_" +
-                      this.file.name
-                    }:/content`,
-                  // `https://graph.microsoft.com/v1.0/sites/mygurukool.sharepoint.com/drives/b!mMOffAWnMk6LkhxV9lNspegIBJaQEh1Auw7oCGHh4AN3wsxO31WBSJXjoo9fcf91/items/01RYMJ7Z4Y4ILBEY3CBVF3WAF26DLAFX7M:/${this.file.name}:/content`,
+              _apiUtils
+                .uploadStudentExerciseFile(
                   formData,
-                  {
-                    headers: {
-                      Authorization: `Bearer ${localStorage.getItem("token")}`,
-                      "Content-Type": "application/octet-stream",
-                    },
-                  }
+                  this.state.groupId,
+                  driveRes.data.value[0].id,
+                  res.data.value[0].id,
+                  this.state.studentDetails.displayName
                 )
                 .then((response) => {
                   console.log(response.data);

@@ -3,7 +3,6 @@ import "..//App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "./Header";
 import FileUpload from "./FileUpload";
-import axios from "axios";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { css } from "@emotion/core";
@@ -17,20 +16,13 @@ import {
 } from "react-accessible-accordion";
 // import AudioVideo from "./AudioVideo";
 import Video from "./Video";
-import parseOneNotePage from "./utils";
-import maths from "./../assets/maths.gif";
-import maths2 from "./../assets/maths2.png";
-
-import { library } from "@fortawesome/fontawesome-svg-core";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import * as Icons from "@fortawesome/free-solid-svg-icons";
-
+import * as _util from "./utils";
+import * as _apiUtils from "./AxiosUtil";
 import "@fortawesome/fontawesome-free/css/all.css";
 
 // Demo styles, see 'Styles' section below for some notes on use.
 import "react-accessible-accordion/dist/fancy-example.css";
-import stripHtml from "string-strip-html";
-// import parse from 'html-react-parser';
+
 const override = css`
   display: block;
   margin: 0 auto;
@@ -72,17 +64,12 @@ export default class Student extends Component {
       expand: true,
       openedItems: [],
     };
-
-    this.axiosCall = this.axiosCall.bind(this);
     this.displaySubjectIconByName = this.displaySubjectIconByName.bind(this);
   }
   componentDidMount() {
     this.state.isLoading = true;
     //Fetch user Profile
-    this.axiosCall(
-      // "https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/1-9e7210a1-77c7-4b10-8a1b-ab0fb4a9f4dd/sectionGroups"
-      process.env.REACT_APP_GRAPH_API_URL_BETA + "/me"
-    ).then((response) => {
+    _apiUtils.userProfile(this.state.isLoading).then((response) => {
       this.setState({
         studentData: response.data,
       });
@@ -95,56 +82,38 @@ export default class Student extends Component {
         this.state.studentData.displayName.replace("/", "_")
       );
 
-      this.axiosCall(
-        process.env.REACT_APP_GRAPH_API_URL +
-          "sites/root:/sites/" +
-          this.state.groupName
-      ).then((response) => {
+      _apiUtils.loadSite(this.state.groupName).then((response) => {
         this.setState({ groupDetails: response.data });
 
-        this.axiosCall(
-          // `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/${this.state.studentData.value[0].id}/sections`
-          process.env.REACT_APP_GRAPH_API_URL +
-            `sites/${
-              this.state.groupDetails.id
-            }/onenote/sections?$filter=contains(parentSectionGroup/displayName,'${this.state.studentData.displayName.replace(
-              "/",
-              "_"
-            )}')`
-        ).then((response) => {
-          this.state.isLoading = false;
-          this.setState({ sections: response.data });
-          {
-            this.axiosCall(
-              process.env.REACT_APP_GRAPH_API_URL +
-                `sites/${this.state.groupDetails.id}/onenote/sections/${this.state.sections.value[0].id}/pages`
-              // `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/sections/${this.state.sections.value[0].id}/pages`
-            ).then((response) => {
+        _apiUtils
+          .loadSubjects(
+            this.state.groupDetails.id,
+            this.state.studentData.displayName
+          )
+          .then((response) => {
+            this.state.isLoading = false;
+            this.setState({ sections: response.data });
+            {
               this.setState({
                 currentView: this.state.sections.value[0].displayName,
               });
-              this.setState({
-                exercise: response.data,
-                exercisedata: this.state.exercise,
-              });
-            });
-          }
-        });
+              _apiUtils
+                .loadAssignments(
+                  this.state.groupDetails.id,
+                  this.state.sections.value[0].id
+                )
+                .then((response) => {
+                  this.setState({
+                    currentView: this.state.sections.value[0].displayName,
+                  });
+                  this.setState({
+                    exercise: response.data,
+                    exercisedata: this.state.exercise,
+                  });
+                });
+            }
+          });
       });
-      // console.log(this.state.groupDetails.id);
-      console.log(
-        process.env.REACT_APP_GRAPH_API_URL +
-          "/sites/" +
-          this.state.groupDetails.id +
-          "/onenote/sectionGroups/"
-      );
-    });
-  }
-
-  axiosCall(url) {
-    return axios.get(url, {
-      params: {},
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
     });
   }
 
@@ -165,43 +134,51 @@ export default class Student extends Component {
     this.setState({ expand: false, openedItems: [] });
     this.setState({ currentView: event.target.text });
     this.state.isLoading = true;
-    this.axiosCall(
-      process.env.REACT_APP_GRAPH_API_URL +
-        `sites/${this.state.groupDetails.id}/onenote/sections/${event.target.id}/pages`
-      // `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/sections/${event.target.id}/pages`
-    ).then((response) => {
-      this.state.isLoading = false;
-      this.setState({ exercise: response.data });
-      {
-        this.state.exercise &&
-          this.state.exercise.value.map((exe, i) =>
-            this.axiosCall(exe.contentUrl).then((response) => {
-              this.state.exercise.value[i].content = parseOneNotePage(response);
-              this.setState({ exercisedata: this.state.exercise });
-            })
-          );
-      }
-    });
+    _apiUtils
+      .loadAssignments(this.state.groupDetails.id, event.target.id)
+      .then((response) => {
+        this.state.isLoading = false;
+        this.setState({ exercise: response.data });
+        {
+          let sortedExercises =
+            response.data &&
+            response.data.value.sort((a, b) => {
+              return (
+                new Date(a.submissionDate).getTime() -
+                new Date(b.submissionDate).getTime()
+              );
+            });
+          console.log("sortedExercises: " + sortedExercises);
+        }
+
+        {
+          this.state.exercise &&
+            this.state.exercise.value.map((exe, i) =>
+              _apiUtils.loadAssignmentPage(exe.contentUrl).then((response) => {
+                this.state.exercise.value[i].content = _util.parseOneNotePage(
+                  response
+                );
+                this.setState({ exercisedata: this.state.exercise });
+              })
+            );
+        }
+      });
     return false;
   };
 
   displaySubjectIconByName(subjectName, targetId) {
-    this.state.subjectIcon = "";
-    if (subjectName.includes("Math")) {
-      this.state.subjectIcon = maths;
-    } else if (subjectName === "German") {
-      this.state.subjectIcon = maths2;
-    } else {
-      return "";
+    this.setState.subjectIcon = _util.loadIconBySubject(subjectName);
+    //if iconFound
+    if (this.state.subjectIcon.trim() !== "") {
+      return (
+        <img
+          src={this.state.subjectIcon}
+          id={targetId}
+          className="subjectIcon"
+          onClick={this.handleClick}
+        />
+      );
     }
-    return (
-      <img
-        src={this.state.subjectIcon}
-        id={targetId}
-        className="subjectIcon"
-        onClick={this.handleClick}
-      />
-    );
   }
 
   render() {
@@ -343,13 +320,6 @@ export default class Student extends Component {
                                 </button>
                               </div>
                               <div className="col-12">
-                                {/* {exe.content ? (
-                                    <AudioVideo
-                                      vidUrl={exe.content.youtubelink}
-                                    />
-                                  ) : (
-                                    ""
-                                  )} */}
                                 <b>Exercise Audio/ Video Explanation</b>
                                 <ul>
                                   {exe.content && exe.content.youtubelink ? (
