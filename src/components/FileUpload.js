@@ -106,12 +106,14 @@ export default class FileUpload extends Component {
       })
       .then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
-        console.log(
-          "url:  " + url + "filename : " + this.props.exerciesDetails.filename
-        );
         const link = document.createElement("a");
         link.href = url;
-        link.setAttribute("download", this.props.exerciesDetails.filename);
+        link.setAttribute(
+          "download",
+          this.props.exerciesDetails.filename
+            ? this.props.exerciesDetails.filename
+            : this.props.exerciesDetails.objectFilename
+        );
         document.body.appendChild(link);
         link.click();
       });
