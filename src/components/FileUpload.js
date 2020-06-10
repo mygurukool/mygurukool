@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
-import "..//App.css";
+import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import * as _apiUtils from "./AxiosUtil";
+import * as _apiUtils from "./util/AxiosUtil";
 
 export default class FileUpload extends Component {
   constructor(props) {

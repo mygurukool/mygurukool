@@ -1,7 +1,6 @@
 import React, { Component, Fragment } from "react";
 import "..//App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Header from "./Header";
 import FileUpload from "./FileUpload";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
@@ -16,8 +15,8 @@ import {
 } from "react-accessible-accordion";
 // import AudioVideo from "./AudioVideo";
 import Video from "./Video";
-import * as _util from "./utils";
-import * as _apiUtils from "./AxiosUtil";
+import * as _util from "./util/utils";
+import * as _apiUtils from "./util/AxiosUtil";
 import "@fortawesome/fontawesome-free/css/all.css";
 
 // Demo styles, see 'Styles' section below for some notes on use.
@@ -44,9 +43,10 @@ const cb = ({
 export default class Student extends Component {
   constructor(props) {
     super(props);
+    // alert("Student.constructor");
 
     this.state = {
-      studentData: null,
+      studentData: props.studentData,
       displayName: "",
       sections: "",
       tabIndex: 0,
@@ -63,13 +63,45 @@ export default class Student extends Component {
       subjectIcon: "",
       expand: true,
       openedItems: [],
+      showNotebook: false,
+      showVideoConference: false,
     };
     this.displaySubjectIconByName = this.displaySubjectIconByName.bind(this);
+    this.addToList = this.addToList.bind(this);
+    this.addExerciseToList = this.addExerciseToList.bind(this);
   }
+
+  addExerciseToList(id, displaySubjectIconByName) {
+    // this.setState((state) => {
+    //   const sections = state.exercisedata.concat({
+    //     id: id,
+    //     displayName: displaySubjectIconByName,
+    //   });
+    //   return {
+    //     sections,
+    //   };
+    // });
+  }
+
+  addToList(id, displaySubjectIconByName) {
+    this.setState((state) => {
+      const sections = state.sections.concat({
+        id: id,
+        displayName: displaySubjectIconByName,
+      });
+      return {
+        sections,
+      };
+    });
+  }
+
   componentDidMount() {
+    // alert("Student.componentDidMount");
     this.state.isLoading = true;
-    //Fetch user Profile
-    _apiUtils.userProfile(this.state.isLoading).then((response) => {
+    // alert("Student: " + this.state.studentData.displayName);
+
+    //Fetch user Profile (to be deleted when loading sequence is resolved, currently fetching more than once )
+    _apiUtils.userProfile().then((response) => {
       this.setState({
         studentData: response.data,
       });
@@ -81,7 +113,6 @@ export default class Student extends Component {
         "studentName",
         this.state.studentData.displayName.replace("/", "_")
       );
-
       _apiUtils.loadSite(this.state.groupName).then((response) => {
         this.setState({ groupDetails: response.data });
 
@@ -92,19 +123,20 @@ export default class Student extends Component {
           )
           .then((response) => {
             this.state.isLoading = false;
-            this.setState({ sections: response.data });
+            this.setState({ sections: response.data.value });
+            this.addToList("VideoConferenceTab", "Inbuilt VideoConference");
             {
               this.setState({
-                currentView: this.state.sections.value[0].displayName,
+                currentView: this.state.sections[0].displayName,
               });
               _apiUtils
                 .loadAssignments(
                   this.state.groupDetails.id,
-                  this.state.sections.value[0].id
+                  this.state.sections[0].id
                 )
                 .then((response) => {
                   this.setState({
-                    currentView: this.state.sections.value[0].displayName,
+                    currentView: this.state.sections[0].displayName,
                   });
                   this.setState({
                     exercise: response.data,
@@ -117,52 +149,51 @@ export default class Student extends Component {
     });
   }
 
-  handleNotebook = (event) => {
-    return (
-      <iframe
-        width="500"
-        height="200"
-        frameborder="0"
-        scrolling="no"
-        src="https://something.sharepoint.com/personal/something/_layouts/15/WopiFrame.aspx?sourcedoc=something&action=embedview&wdbipreview=true"
-      ></iframe>
-    );
-  };
-
   handleClick = (event) => {
-    console.log(this.state.expand);
-    this.setState({ expand: false, openedItems: [] });
-    this.setState({ currentView: event.target.text });
-    this.state.isLoading = true;
-    _apiUtils
-      .loadAssignments(this.state.groupDetails.id, event.target.id)
-      .then((response) => {
-        this.state.isLoading = false;
-        this.setState({ exercise: response.data });
-        {
-          let sortedExercises =
-            response.data &&
-            response.data.value.sort((a, b) => {
-              return (
-                new Date(a.submissionDate).getTime() -
-                new Date(b.submissionDate).getTime()
-              );
-            });
-          console.log("sortedExercises: " + sortedExercises);
-        }
-
-        {
-          this.state.exercise &&
-            this.state.exercise.value.map((exe, i) =>
-              _apiUtils.loadAssignmentPage(exe.contentUrl).then((response) => {
-                this.state.exercise.value[i].content = _util.parseOneNotePage(
-                  response
+    if (event.target.text === "Inbuilt VideoConference") {
+      this.setState({ showVideoConference: true });
+      this.setState({ showNotebook: false });
+    } else {
+      this.setState({ showVideoConference: false });
+      this.setState({ showNotebook: false });
+      console.log(this.state.expand);
+      this.setState({ expand: false, openedItems: [] });
+      this.setState({ currentView: event.target.text });
+      this.state.isLoading = true;
+      _apiUtils
+        .loadAssignments(this.state.groupDetails.id, event.target.id)
+        .then((response) => {
+          this.state.isLoading = false;
+          this.setState({ exercise: response.data });
+          /*Sort by due date */
+          {
+            let sortedExercises =
+              response.data &&
+              response.data.value.sort((a, b) => {
+                return (
+                  new Date(a.submissionDate).getTime() -
+                  new Date(b.submissionDate).getTime()
                 );
-                this.setState({ exercisedata: this.state.exercise });
-              })
-            );
-        }
-      });
+              });
+            console.log("sortedExercises: " + sortedExercises);
+          }
+
+          {
+            this.state.exercise &&
+              this.state.exercise.value.map((exe, i) =>
+                _apiUtils
+                  .loadAssignmentPage(exe.contentUrl)
+                  .then((response) => {
+                    this.state.exercise.value[
+                      i
+                    ].content = _util.parseOneNotePage(response);
+                    this.setState({ exercisedata: this.state.exercise });
+                    // this.addExerciseToList("exercisedata", "exercisedata");
+                  })
+              );
+          }
+        });
+    }
     return false;
   };
 
@@ -170,10 +201,12 @@ export default class Student extends Component {
     this.setState.subjectIcon = _util.loadIconBySubject(subjectName);
     //if iconFound
     if (this.state.subjectIcon.trim() !== "") {
+      alert(this.setState.subjectIcon + " .. targetId:" + targetId);
       return (
         <img
           src={this.state.subjectIcon}
           id={targetId}
+          alt={this.state.subjectIcon}
           className="subjectIcon"
           onClick={this.handleClick}
         />
@@ -185,23 +218,7 @@ export default class Student extends Component {
     //console.log(this.state.openedItems);
     return (
       <Fragment>
-        <Header />
         <div className="container">
-          <div className="row section-nav">
-            <div className="col-12">
-              <div className="alert alert-primary" role="alert">
-                <span>
-                  {/* Student name */}
-                  {this.state.displayName}
-                </span>
-                <ul className="navbar-nav float-right">
-                  <li className="nav-item">
-                    <i className="far fa-comments"></i>
-                  </li>
-                </ul>
-              </div>
-            </div>
-          </div>
           <div className="row">
             <div className="row sub-excer-section">
               <div className="col-12">
@@ -211,8 +228,8 @@ export default class Student extends Component {
                   role="tablist"
                 >
                   {this.state.sections &&
-                    this.state.sections.value.map((key, i) => (
-                      <li className="nav-item">
+                    this.state.sections.map((key, i) => (
+                      <li key={key.id} className="nav-item">
                         <a
                           className={
                             this.state.currentView === key.displayName
@@ -245,18 +262,7 @@ export default class Student extends Component {
                     > */}
                   {/* Exercise Name */}
                   {/* Notebook
-                  <div>
-                        <iframe
-                          width="500"
-                          height="200"
-                          frameborder="0"
-                          scrolling="no"
-                          src="https://something.sharepoint.com/personal/something/_layouts/15/WopiFrame.aspx?sourcedoc=something&action=embedview&wdbipreview=true"
-                        ></iframe>
-                      </div> */}
-                  {/* <br />
-                      {this.displaySubjectIconByName(key.displayName, key.id)} */}
-                  {/* </a>
+                    </a>
                   </li> */}
                 </ul>
               </div>
@@ -269,98 +275,132 @@ export default class Student extends Component {
               color={"#D77F36"}
               loading={this.state.isLoading}
             />
-
             {/* <Accordion allowZeroExpanded={true} className="testing-color-green"> */}
             <Accordion
               allowZeroExpanded={true}
               onChange={(e) => this.setState({ openedItems: e })} //
               preExpanded={this.state.openedItems}
             >
-              {this.state.exercisedata &&
-                this.state.exercisedata.value.map((exe, i) => (
-                  <AccordionItem key={exe.id} uuid={exe.id}>
-                    {exe.title ? (
-                      <Fragment>
-                        <AccordionItemHeading>
-                          <AccordionItemButton>
-                            <div className="row">
-                              <div className="float-left col-12 exercisetitle">
-                                {exe.title
-                                  ? (this.state.exerciseTitle = exe.title)
-                                  : "No Exercise Data"}
-                                <small className="text-muted float-right">
-                                  {exe.content && exe.content.submissionDate
-                                    ? exe.content.submissionDate
-                                    : ""}
-                                </small>
-                              </div>
-                            </div>
-                          </AccordionItemButton>
-                        </AccordionItemHeading>
-                        <AccordionItemPanel>
-                          <div className="card-body">
-                            <div className="row">
-                              {/* <div className="row testing-color-yellow"> */}
-                              <div className="col-8">
-                                <b>Exercise Instructions</b>
-                                <ul
-                                  dangerouslySetInnerHTML={{
-                                    __html: exe.content
-                                      ? exe.content.instructions
-                                      : "",
-                                  }}
-                                ></ul>
-                              </div>
-                              <div className="col-4">
-                                <button
-                                  type="button"
-                                  className="btn btn-primary turnin"
-                                >
-                                  <i className="fas fa-check"></i> Turn In
-                                </button>
-                              </div>
-                              <div className="col-12">
-                                <b>Exercise Audio/ Video Explanation</b>
-                                <ul>
-                                  {exe.content && exe.content.youtubelink ? (
-                                    <Video vidData={exe.content} />
-                                  ) : (
-                                    ""
-                                  )}
-                                </ul>
-                              </div>
-                            </div>
+              {this.state.showVideoConference ? (
+                <div>
+                  Video Conference
+                  <button onClick={this.closeConf}>Quit Conference</button>
+                  <iframe
+                    width="100%"
+                    height="600"
+                    frameborder="0"
+                    scrolling="no"
+                    //src="https://riot.im/app/#/room/!bScanHsKZTWQPNFXbg:matrix.org"
+                    src="https://meet.jit.si/GuruKoolSchoolVideoConference"
+                  ></iframe>
+                </div>
+              ) : (
+                <Fragment>
+                  {this.state.exercisedata &&
+                    this.state.exercisedata.value.map((exe, i) => (
+                      <AccordionItem key={exe.id} uuid={exe.id}>
+                        {exe.title ? (
+                          <Fragment>
+                            <AccordionItemHeading>
+                              <AccordionItemButton>
+                                <div className="row">
+                                  <div className="float-left col-12 exercisetitle">
+                                    {exe.title
+                                      ? (this.state.exerciseTitle = exe.title)
+                                      : "No Exercise Data"}
+                                    <small className="text-muted float-right">
+                                      {exe.content && exe.content.submissionDate
+                                        ? exe.content.submissionDate
+                                        : ""}
+                                    </small>
+                                  </div>
+                                </div>
+                              </AccordionItemButton>
+                            </AccordionItemHeading>
+                            <AccordionItemPanel>
+                              <div className="card-body">
+                                <div className="row">
+                                  {/* <div className="row testing-color-yellow"> */}
+                                  <div className="col-8">
+                                    <b>Exercise Instructions</b>
+                                    <ul
+                                      dangerouslySetInnerHTML={{
+                                        __html: exe.content
+                                          ? exe.content.instructions
+                                          : "",
+                                      }}
+                                    ></ul>
+                                  </div>
+                                  <div className="col-4">
+                                    <button
+                                      type="button"
+                                      className="btn btn-primary turnin"
+                                    >
+                                      <i className="fas fa-check"></i> Turn In
+                                    </button>
+                                  </div>
+                                  <div className="col-12">
+                                    <b>Exercise Audio/ Video Explanation</b>
+                                    <ul>
+                                      {exe.content &&
+                                      exe.content.youtubelink ? (
+                                        <Video vidData={exe.content} />
+                                      ) : (
+                                        ""
+                                      )}
+                                    </ul>
+                                  </div>
+                                </div>
 
-                            <div className="card card-body fileblock row">
-                              <div className="col-12">
-                                <div></div>
-                                {exe.content ? (
-                                  <FileUpload
-                                    exerciesDetails={exe.content}
-                                    groupData={this.state.groupDetails.id}
-                                    subjectName={this.state.currentView}
-                                    title={exe.title}
-                                    studentDetails={this.state.studentData}
-                                  />
-                                ) : (
-                                  ""
-                                )}
+                                <div className="card card-body fileblock row">
+                                  <div className="col-12">
+                                    <div></div>
+                                    {exe.content ? (
+                                      <FileUpload
+                                        exerciesDetails={exe.content}
+                                        groupData={this.state.groupDetails.id}
+                                        subjectName={this.state.currentView}
+                                        title={exe.title}
+                                        studentDetails={this.state.studentData}
+                                      />
+                                    ) : (
+                                      ""
+                                    )}
+                                  </div>
+                                  <div className="col-12">
+                                    {this.state.formUpload}
+                                  </div>
+                                </div>
                               </div>
-                              <div className="col-12">
-                                {this.state.formUpload}
-                              </div>
-                            </div>
-                          </div>
-                        </AccordionItemPanel>
-                      </Fragment>
-                    ) : (
-                      <h5>
-                        Hurrayyy! You have finished all your assignments of this
-                        subject
-                      </h5>
-                    )}
-                  </AccordionItem>
-                ))}
+                            </AccordionItemPanel>
+                          </Fragment>
+                        ) : (
+                          <h5>
+                            Hurrayyy! You have finished all your assignments of
+                            this subject
+                          </h5>
+                        )}
+                      </AccordionItem>
+                    ))}
+                  {/* {this.state.showNotebook ? (
+                    <div>
+                      Video Conference on Notebook Page
+                      <iframe
+                        width="100%"
+                        height="600"
+                        frameborder="0"
+                        scrolling="no"
+                        src="http://0.0.0.0:8080/webpack-dev-server/"
+                        //src="https://meet.jit.si/testtttttttttts"
+                        // src="https://something.sharepoint.com/personal/someQPrAthing/_layouts/15/WopiFrame.aspx?sourcedoc=something&action=embedview&wdbipreview=true"
+                      ></iframe>
+                      <button onClick={this.closeConf}>Quit Conference</button>
+                    </div>
+                  ) : (
+                    ""
+                  )} */}
+                </Fragment>
+              )}
             </Accordion>
           </div>
         </div>

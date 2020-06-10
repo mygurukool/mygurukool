@@ -1,6 +1,6 @@
-import maths from "./../assets/maths.gif";
-import maths2 from "./../assets/maths2.png";
-
+import maths from "./../../assets/maths.gif";
+import maths2 from "./../../assets/maths2.png";
+import React from "react";
 // parse OneNote Page
 export function parseOneNotePage(page) {
   let parser = new DOMParser();
@@ -73,4 +73,21 @@ export function loadIconBySubject(subjectName) {
     subjectIcon = maths2;
   }
   return subjectIcon;
+}
+
+export function vid() {
+  alert("vid");
+  return (
+    <div>
+      Video Conference
+      {/* <iframe
+        width="500"
+        height="200"
+        frameborder="0"
+        scrolling="no"
+        src="https://meet.jit.si/testtttttttttts"
+        // src="https://something.sharepoint.com/personal/something/_layouts/15/WopiFrame.aspx?sourcedoc=something&action=embedview&wdbipreview=true"
+      ></iframe> */}
+    </div>
+  );
 }
