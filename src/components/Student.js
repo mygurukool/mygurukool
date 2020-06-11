@@ -198,15 +198,14 @@ export default class Student extends Component {
   };
 
   displaySubjectIconByName(subjectName, targetId) {
-    this.setState.subjectIcon = _util.loadIconBySubject(subjectName);
+    let subjectIcon = _util.loadIconBySubject(subjectName);
     //if iconFound
-    if (this.state.subjectIcon.trim() !== "") {
-      alert(this.setState.subjectIcon + " .. targetId:" + targetId);
+    if (subjectIcon.trim() !== "") {
+      //alert(this.setState.subjectIcon + " .. targetId:" + targetId);
       return (
         <img
-          src={this.state.subjectIcon}
+          src={subjectIcon}
           id={targetId}
-          alt={this.state.subjectIcon}
           className="subjectIcon"
           onClick={this.handleClick}
         />
