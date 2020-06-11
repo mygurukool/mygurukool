@@ -56,12 +56,13 @@ export function uploadStudentExerciseFile(
   groupId,
   subjectId,
   exerciseId,
-  studentName
+  studentName,
+  fileName
 ) {
-  axios.put(
+  return axios.put(
     process.env.REACT_APP_GRAPH_API_URL +
       `sites/${groupId}/drives/${subjectId}/items/${exerciseId}:/${
-        studentName.replace("/", "_") + "_" + this.file.name
+        studentName.replace("/", "_") + "_" + fileName
       }:/content`,
     // `https://graph.microsoft.com/v1.0/sites/mygurukool.sharepoint.com/drives/b!mMOffAWnMk6LkhxV9lNspegIBJaQEh1Auw7oCGHh4AN3wsxO31WBSJXjoo9fcf91/items/01RYMJ7Z4Y4ILBEY3CBVF3WAF26DLAFX7M:/${this.file.name}:/content`,
     formData,
@@ -74,12 +75,12 @@ export function uploadStudentExerciseFile(
   );
 }
 
-export function getBLOB(targetId) {
-  axios.get(targetId, {
+export function getBLOB(targetId, exerciseFileType) {
+  return axios.get(targetId, {
     params: {},
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`,
-      Accept: this.props.exerciesDetails.exerciseFileType,
+      Accept: exerciseFileType,
     },
     responseType: "blob", // important
   });

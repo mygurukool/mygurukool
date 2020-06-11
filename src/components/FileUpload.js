@@ -69,19 +69,21 @@ export default class FileUpload extends Component {
     });
   };
   fetchFile = (event) => {
-    _apiUtils.getBLOB(event.target.id).then((response) => {
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-      const link = document.createElement("a");
-      link.href = url;
-      link.setAttribute(
-        "download",
-        this.props.exerciesDetails.filename
-          ? this.props.exerciesDetails.filename
-          : this.props.exerciesDetails.objectFilename
-      );
-      document.body.appendChild(link);
-      link.click();
-    });
+    _apiUtils
+      .getBLOB(event.target.id, this.props.exerciesDetails.exerciseFileType)
+      .then((response) => {
+        const url = window.URL.createObjectURL(new Blob([response.data]));
+        const link = document.createElement("a");
+        link.href = url;
+        link.setAttribute(
+          "download",
+          this.props.exerciesDetails.filename
+            ? this.props.exerciesDetails.filename
+            : this.props.exerciesDetails.objectFilename
+        );
+        document.body.appendChild(link);
+        link.click();
+      });
   };
 
   handleClick = (event) => {
@@ -102,7 +104,8 @@ export default class FileUpload extends Component {
                   this.state.groupId,
                   driveRes.data.value[0].id,
                   res.data.value[0].id,
-                  this.state.studentDetails.displayName
+                  this.state.studentDetails.displayName,
+                  this.file.name
                 )
                 .then((response) => {
                   console.log(response.data);
