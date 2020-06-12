@@ -49,7 +49,7 @@ export function parseOneNotePage(page) {
           content["objectFilename"] = attr.value;
         } else if (attr.name === "type") {
           content["filetype"] = attr.value;
-        } else if (attr.name == "data") {
+        } else if (attr.name === "data") {
           content["fileObject"] = attr.value.replace(
             "siteCollections",
             "sites"

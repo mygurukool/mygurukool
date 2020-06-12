@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import "..//App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import FileUpload from "./FileUpload";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+// import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { css } from "@emotion/core";
 import ClipLoader from "react-spinners/HashLoader";
@@ -13,7 +13,6 @@ import {
   AccordionItemButton,
   AccordionItemPanel,
 } from "react-accessible-accordion";
-// import AudioVideo from "./AudioVideo";
 import Video from "./Video";
 import * as _util from "./util/utils";
 import * as _apiUtils from "./util/AxiosUtil";
@@ -75,7 +74,7 @@ export default class Student extends Component {
   }
 
   componentDidMount() {
-    this.state.isLoading = true;
+    this.setState({ isLoading: true });
 
     //Fetch user Profile
     _apiUtils.userProfile().then((response) => {
@@ -97,7 +96,7 @@ export default class Student extends Component {
             this.state.studentData.displayName //studentData.displayName => StudentName
           )
           .then((response) => {
-            this.state.isLoading = false;
+            this.setState({ isLoading: false });
             //Sections <=> Subjects
             this.setState({ sections: response.data.value });
             //method addToList a temporary hack to add static page; to be deleted
@@ -138,11 +137,11 @@ export default class Student extends Component {
       console.log(this.state.expand);
       this.setState({ expand: false, openedItems: [] });
       this.setState({ currentView: event.target.text });
-      this.state.isLoading = true;
+      this.setState({ isLoading: true });
       _apiUtils
         .loadAssignments(this.state.groupDetails.id, event.target.id)
         .then((response) => {
-          this.state.isLoading = false;
+          this.setState({ isLoading: false });
           this.setState({ exercise: response.data });
           /*Sort by due date */
           {
@@ -157,19 +156,15 @@ export default class Student extends Component {
             console.log("sortedExercises: " + sortedExercises);
           }
 
-          {
-            this.state.exercise &&
-              this.state.exercise.value.map((exe, i) =>
-                _apiUtils
-                  .loadAssignmentPage(exe.contentUrl)
-                  .then((response) => {
-                    this.state.exercise.value[
-                      i
-                    ].content = _util.parseOneNotePage(response);
-                    this.setState({ exercisedata: this.state.exercise });
-                  })
-              );
-          }
+          this.state.exercise &&
+            this.state.exercise.value.map((exe, i) =>
+              _apiUtils.loadAssignmentPage(exe.contentUrl).then((response) => {
+                this.state.exercise.value[i].content = _util.parseOneNotePage(
+                  response
+                );
+                this.setState({ exercisedata: this.state.exercise });
+              })
+            );
         });
     }
     return false;
@@ -282,7 +277,9 @@ export default class Student extends Component {
                                 <div className="row">
                                   <div className="float-left col-12 exercisetitle">
                                     {exe.title
-                                      ? (this.state.exerciseTitle = exe.title)
+                                      ? this.setState({
+                                          exerciseTitle: exe.title,
+                                        })
                                       : "No Exercise Data"}
                                     <small className="text-muted float-right">
                                       {exe.content && exe.content.submissionDate

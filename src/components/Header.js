@@ -1,12 +1,8 @@
 import React, { Component, Fragment } from "react";
 import "..//App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import * as _util from "./util/utils";
-export default class Header extends Component {
-  constructor(props) {
-    super(props);
-  }
 
+export default class Header extends Component {
   render() {
     return (
       <Fragment>
