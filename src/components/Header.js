@@ -18,7 +18,7 @@ export default class Header extends Component {
                 &emsp;
                 {this.props.isSignedIn ? (
                   <a
-                    className="btn-danger"
+                    className="logout"
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
@@ -28,7 +28,7 @@ export default class Header extends Component {
                         process.env.REACT_APP_OAUTH_LOGOUT_URI;
                     }}
                   >
-                    &nbsp;<i class="fas fa-sign-out-alt">&nbsp;Logout</i>&nbsp;
+                    <i class="fas fa-sign-out-alt">&nbsp;Logout</i>
                   </a>
                 ) : (
                   ""

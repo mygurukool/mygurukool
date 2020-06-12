@@ -2,7 +2,7 @@ import React, { Component, Fragment } from "react";
 import "..//App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import FileUpload from "./FileUpload";
-// import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
+import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { css } from "@emotion/core";
 import ClipLoader from "react-spinners/HashLoader";
@@ -13,6 +13,7 @@ import {
   AccordionItemButton,
   AccordionItemPanel,
 } from "react-accessible-accordion";
+// import AudioVideo from "./AudioVideo";
 import Video from "./Video";
 import * as _util from "./util/utils";
 import * as _apiUtils from "./util/AxiosUtil";
@@ -277,9 +278,7 @@ export default class Student extends Component {
                                 <div className="row">
                                   <div className="float-left col-12 exercisetitle">
                                     {exe.title
-                                      ? this.setState({
-                                          exerciseTitle: exe.title,
-                                        })
+                                      ? (this.state.exerciseTitle = exe.title)
                                       : "No Exercise Data"}
                                     <small className="text-muted float-right">
                                       {exe.content && exe.content.submissionDate

@@ -8,7 +8,7 @@ ul li {
   line-height: 35px;
 }
 .icons_pdf {
-  font-size :20px !important;
+  font-size: 20px !important;
   margin-left: 10px;
 }
 .filelink a {
@@ -464,4 +464,9 @@ h2 small {
   /* background-image: url("./icons/add-circle.png");
   background-repeat: no-repeat;
   background-size: 100%; */
+}
+
+.logout {
+  /* color: rgba(255, 0, 0, 0.692); */
+  color: #f8d32c;
 }
