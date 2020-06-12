@@ -5,7 +5,6 @@ import SplitPane from "react-split-pane";
 import Student from "./Student";
 import Communication from "./Communication";
 import Header from "./Header";
-import * as _apiUtils from "./util/AxiosUtil";
 
 const Wrapper = styled.div`
   .Resizer {
@@ -61,61 +60,27 @@ const Wrapper = styled.div`
 
 class Home extends Component {
   constructor() {
-    // alert("SplitView.constructor");
     super();
     this.toggleBtmHeight = this.toggleBtmHeight.bind(this);
     this.state = {
       studentData: null,
+      studentName: "",
     };
+    this.handleStudentData = this.handleStudentData.bind(this);
   }
   componentWillMount() {
-    // alert("SplitView.componentWillMount");
     this.setState({
       btmHeight: "",
       showCommPane: false,
       splitPercentage: "100%",
-      studentData: null,
     });
-    //Fetch user Profile
-    _apiUtils
-      .userProfile()
-      .then((response) => {
-        // alert("SplitView.userProfile response.data  " + response.data);
-        this.setState({
-          studentData: response.data,
-        });
-        this.setState({
-          displayName: this.state.studentData.displayName.replace("/", " "),
-          groupName: this.state.studentData.department,
-        });
-        localStorage.setItem(
-          "studentName",
-          this.state.studentData.displayName.replace("/", "_")
-        );
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    // alert("SplitView.studentData " + this.state.studentData);
   }
-  componentDidMount() {
-    // alert("SplitView.componentDidMount");
-    // this.state.isLoading = true;
-    // //Fetch user Profile
-    // _apiUtils.userProfile().then((response) => {
-    //   this.setState({
-    //     studentData: response.data,
-    //   });
-    //   this.setState({
-    //     displayName: this.state.studentData.displayName.replace("/", " "),
-    //     groupName: this.state.studentData.department,
-    //   });
-    //   localStorage.setItem(
-    //     "studentName",
-    //     this.state.studentData.displayName.replace("/", "_")
-    //   );
-    // });
-  }
+
+  handleStudentData = (studentData) => {
+    this.setState({
+      studentData: studentData,
+    });
+  };
 
   toggleBtmHeight(newSize) {
     this.setState({ btmHeight: newSize + "px" });
@@ -123,14 +88,23 @@ class Home extends Component {
   render() {
     return (
       <Wrapper>
-        <Header isSignedIn={true} />
+        <Header
+          isSignedIn={true}
+          studentName={
+            this.state.studentData ? this.state.studentData.displayName : "User"
+          }
+        />
         <div className="container">
           <div className="row section-nav">
             <div className="col-12">
               <div className="alert alert-primary" role="alert">
                 <span>
-                  {/* Student name */}
-                  {this.state.displayName} ({this.state.groupName})
+                  {/* Group Name*/}
+                  <b>
+                    {this.state.studentData
+                      ? `Group: ${this.state.studentData.department}`
+                      : ""}
+                  </b>
                 </span>
                 <ul className="navbar-nav float-right">
                   <li className="nav-item">
@@ -159,7 +133,7 @@ class Home extends Component {
           defaultSize={this.state.splitPercentage}
           onChange={(size) => this.toggleBtmHeight(size)}
         >
-          <Student studentData={this.state.studentData} />
+          <Student studentData={this.handleStudentData} />
           {this.state.showCommPane ? (
             <Communication
               // color={"red"}

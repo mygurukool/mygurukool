@@ -28,27 +28,15 @@ const override = css`
   border-color: red;
 `;
 
-const cb = ({
-  tag,
-  deleteFrom,
-  deleteTo,
-  insert,
-  rangesArr,
-  proposedReturn,
-}) => {
-  // default action which does nothing different from normal, non-callback operation
-  rangesArr.push(deleteFrom, deleteTo, insert);
-  // you might want to do something different, depending on "tag" contents.
-};
 export default class Student extends Component {
   constructor(props) {
     super(props);
     // alert("Student.constructor");
 
     this.state = {
-      studentData: props.studentData,
+      studentData: null,
       displayName: "",
-      sections: "",
+      sections: "", //Subjects
       tabIndex: 0,
       exercise: "",
       exercisedata: "",
@@ -59,7 +47,6 @@ export default class Student extends Component {
       vidId: "",
       exerciseTitle: "",
       groupDetails: "",
-      groupName: "",
       subjectIcon: "",
       expand: true,
       openedItems: [],
@@ -68,19 +55,11 @@ export default class Student extends Component {
     };
     this.displaySubjectIconByName = this.displaySubjectIconByName.bind(this);
     this.addToList = this.addToList.bind(this);
-    this.addExerciseToList = this.addExerciseToList.bind(this);
+    this.handleStudentDataFetch = this.handleStudentDataFetch.bind(this);
   }
 
-  addExerciseToList(id, displaySubjectIconByName) {
-    // this.setState((state) => {
-    //   const sections = state.exercisedata.concat({
-    //     id: id,
-    //     displayName: displaySubjectIconByName,
-    //   });
-    //   return {
-    //     sections,
-    //   };
-    // });
+  handleStudentDataFetch() {
+    this.props.studentData(this.state.studentData);
   }
 
   addToList(id, displaySubjectIconByName) {
@@ -96,54 +75,54 @@ export default class Student extends Component {
   }
 
   componentDidMount() {
-    // alert("Student.componentDidMount");
     this.state.isLoading = true;
-    // alert("Student: " + this.state.studentData.displayName);
 
-    //Fetch user Profile (to be deleted when loading sequence is resolved, currently fetching more than once )
+    //Fetch user Profile
     _apiUtils.userProfile().then((response) => {
       this.setState({
         studentData: response.data,
       });
-      this.setState({
-        displayName: this.state.studentData.displayName.replace("/", " "),
-        groupName: this.state.studentData.department,
-      });
-      localStorage.setItem(
-        "studentName",
-        this.state.studentData.displayName.replace("/", "_")
-      );
-      _apiUtils.loadSite(this.state.groupName).then((response) => {
+
+      //Pushing StudentData to Home
+      this.handleStudentDataFetch();
+
+      //Profile department is translated to GroupName
+      _apiUtils.loadSite(this.state.studentData.department).then((response) => {
         this.setState({ groupDetails: response.data });
 
+        //load subjects
         _apiUtils
           .loadSubjects(
             this.state.groupDetails.id,
-            this.state.studentData.displayName
+            this.state.studentData.displayName //studentData.displayName => StudentName
           )
           .then((response) => {
             this.state.isLoading = false;
+            //Sections <=> Subjects
             this.setState({ sections: response.data.value });
+            //method addToList a temporary hack to add static page; to be deleted
             this.addToList("VideoConferenceTab", "Inbuilt VideoConference");
-            {
-              this.setState({
-                currentView: this.state.sections[0].displayName,
-              });
-              _apiUtils
-                .loadAssignments(
-                  this.state.groupDetails.id,
-                  this.state.sections[0].id
-                )
-                .then((response) => {
-                  this.setState({
-                    currentView: this.state.sections[0].displayName,
-                  });
-                  this.setState({
-                    exercise: response.data,
-                    exercisedata: this.state.exercise,
-                  });
-                });
-            }
+
+            // // ******commented currentView: no default selection on landingpage******
+            // this.setState({
+            //   currentView: this.state.sections[0].displayName,
+            // });
+            // // ******commented out the code as loading assignments are done also upon *handleclick* ******
+            // // load assignments
+            // _apiUtils
+            //   .loadAssignments(
+            //     this.state.groupDetails.id,
+            //     this.state.sections[0].id
+            //   )
+            //   .then((response) => {
+            //     this.setState({
+            //       currentView: this.state.sections[0].displayName,
+            //     });
+            //     this.setState({
+            //       exercise: response.data,
+            //       exercisedata: this.state.exercise,
+            //     });
+            //   });
           });
       });
     });
@@ -188,7 +167,6 @@ export default class Student extends Component {
                       i
                     ].content = _util.parseOneNotePage(response);
                     this.setState({ exercisedata: this.state.exercise });
-                    // this.addExerciseToList("exercisedata", "exercisedata");
                   })
               );
           }
@@ -201,7 +179,6 @@ export default class Student extends Component {
     let subjectIcon = _util.loadIconBySubject(subjectName);
     //if iconFound
     if (subjectIcon.trim() !== "") {
-      //alert(this.setState.subjectIcon + " .. targetId:" + targetId);
       return (
         <img
           src={subjectIcon}

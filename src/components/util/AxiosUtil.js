@@ -2,7 +2,7 @@ import axios from "axios";
 
 const config = {
   params: {},
-  headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
 };
 
 export function userProfile() {
@@ -11,7 +11,7 @@ export function userProfile() {
     process.env.REACT_APP_GRAPH_API_URL_BETA + "/me",
     {
       params: {},
-      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+      headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
     }
   );
 }
@@ -21,6 +21,7 @@ export function loadSite(groupName) {
 }
 
 export function loadSubjects(groupId, studentName) {
+  //Exlusive MeWoSchule naming convention issue: replacing '/' with '_' is studentName
   return axiosCall(
     `sites/${groupId}/onenote/sections?$filter=contains(parentSectionGroup/displayName,'${studentName.replace(
       "/",
@@ -68,7 +69,7 @@ export function uploadStudentExerciseFile(
     formData,
     {
       headers: {
-        Authorization: `Bearer ${localStorage.getItem("token")}`,
+        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
         "Content-Type": "application/octet-stream",
       },
     }
@@ -79,7 +80,7 @@ export function getBLOB(targetId, exerciseFileType) {
   return axios.get(targetId, {
     params: {},
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`,
+      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
       Accept: exerciseFileType,
     },
     responseType: "blob", // important
@@ -89,6 +90,6 @@ export function getBLOB(targetId, exerciseFileType) {
 function axiosCall(url) {
   return axios.get(process.env.REACT_APP_GRAPH_API_URL + url, {
     params: {},
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
   });
 }
