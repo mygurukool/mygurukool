@@ -26,6 +26,11 @@ ul li {
   width: 21%;
   text-align: right;
 }
+.icon_comment {
+  height: 40%;
+  width: 141%;
+  text-align: right;
+}
 .accordion {
   border: 0px !important;
 }
@@ -197,12 +202,11 @@ header .far {
 .navbar-dark .navbar-brand.logo {
   color: #202121;
 }
-.section-nav .alert-primary {
+/* .section-nav .alert-primary {
   background-color: #49c5b6;
-}
 .section-nav .far {
   color: #fff;
-}
+} */
 .btn-submit {
   background-color: #49c5b6 !important;
   color: #fff;
@@ -469,4 +473,9 @@ h2 small {
 .logout {
   /* color: rgba(255, 0, 0, 0.692); */
   color: #f8d32c;
+}
+
+.container-conference {
+  max-width: 1600px;
+  padding-left: 15px;
 }

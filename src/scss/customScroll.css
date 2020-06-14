@@ -44,7 +44,7 @@
 .rcs-custom-scroll .rcs-custom-scrollbar {
   position: absolute;
   height: 100%;
-  width: 36px;
+  width: 6px;
   right: 3px;
   opacity: 0;
   z-index: 1;
@@ -68,18 +68,18 @@
 }
 .rcs-custom-scroll .rcs-inner-handle {
   height: calc(100% - 12px);
-  width: 45px;
   margin-top: 6px;
   background-color: rgba(78, 183, 245, 0.7);
-  background-color: inherit;
-  background-image: url("./../assets/giraffe-icon.png");
-  background-repeat: no-repeat no-repeat;
-  background-size: cover;
+  border-radius: 3px;
+}
+
+.crazy-scroll .rcs-custom-scrollbar {
+  width: 45px;
 }
 
 .crazy-scroll .rcs-inner-handle {
   background-color: inherit;
-  background-image: url("http://rommguy.github.io/react-custom-scroll/example/giraffe-icon.png");
+  background-image: url("./../assets/giraffe-icon.png");
   background-repeat: no-repeat no-repeat;
-  background-size: cover;
+  /* background-size: cover; */
 }

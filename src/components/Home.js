@@ -51,6 +51,7 @@ class Home extends Component {
     this.toggleBtmHeight = this.toggleBtmHeight.bind(this);
     this.state = {
       studentData: null,
+      cssContainer: "container",
     };
     this.handleStudentData = this.handleStudentData.bind(this);
   }
@@ -80,7 +81,7 @@ class Home extends Component {
             this.state.studentData ? this.state.studentData.displayName : "User"
           }
         />
-        <div className="container">
+        <div className={this.state.cssContainer}>
           <div className="row section-nav">
             <div className="col-12">
               <div className="alert alert-primary" role="alert">
@@ -92,8 +93,10 @@ class Home extends Component {
                       : ""}
                   </b>
                 </span>
-                <ul className="navbar-nav float-right">
-                  <li className="nav-item">
+                <ul className="float-right">
+                  {/* <ul className="navbar-nav float-right"> */}
+                  {/* <li className="nav-item"> */}
+                  <li>
                     <a
                       href="#"
                       onClick={(e) => {
@@ -104,9 +107,15 @@ class Home extends Component {
                             ? "50%"
                             : "100%",
                         });
+                        {
+                          this.state.showCommPane
+                            ? (this.state.cssContainer = "container")
+                            : (this.state.cssContainer =
+                                "container-conference");
+                        }
                       }}
                     >
-                      <i className="far fa-comments"></i>
+                      <i className="far fa-comments fa-1g"></i>
                     </a>
                   </li>
                 </ul>
@@ -115,14 +124,14 @@ class Home extends Component {
           </div>
         </div>
         <SplitPane
+          className="crazy-scroll"
           split="vertical"
           defaultSize={this.state.splitPercentage}
           onChange={(size) => this.toggleBtmHeight(size)}
         >
-          <CustomScroll flex="1">
+          <CustomScroll allowOuterScroll={true} flex="1">
             <Student studentData={this.handleStudentData} />
           </CustomScroll>
-
           {this.state.showCommPane ? (
             <Communication
               // color={"red"}
