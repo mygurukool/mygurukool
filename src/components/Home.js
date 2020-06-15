@@ -5,8 +5,9 @@ import SplitPane from "react-split-pane";
 import Student from "./Student";
 import Communication from "./Communication";
 import Header from "./Header";
-import CustomScroll from "react-custom-scroll";
-import "../scss/customScroll.css";
+// import CustomScroll from "react-custom-scroll";
+// import "../scss/customScroll.css";
+import { Scrollbars } from "react-custom-scrollbars";
 
 const Wrapper = styled.div`
   .Resizer {
@@ -129,9 +130,12 @@ class Home extends Component {
           defaultSize={this.state.splitPercentage}
           onChange={(size) => this.toggleBtmHeight(size)}
         >
-          <CustomScroll allowOuterScroll={true} flex="1">
+          <Scrollbars>
             <Student studentData={this.handleStudentData} />
-          </CustomScroll>
+          </Scrollbars>
+          {/* <CustomScroll allowOuterScroll={true} flex="1">
+            <Student studentData={this.handleStudentData} />
+          </CustomScroll> */}
           {this.state.showCommPane ? (
             <Communication
               // color={"red"}
