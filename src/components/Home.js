@@ -55,6 +55,9 @@ class Home extends Component {
       cssContainer: "container",
     };
     this.handleStudentData = this.handleStudentData.bind(this);
+    this.handleCommunicationPanelSize = this.handleCommunicationPanelSize.bind(
+      this
+    );
   }
   componentWillMount() {
     this.setState({
@@ -68,6 +71,26 @@ class Home extends Component {
     this.setState({
       studentData: studentData,
     });
+  };
+
+  handleCommunicationPanelSize = (resize) => {
+    //Communication Pane
+    //=> resize: -1:close window; 0:minimize(50%); 1:maximize(100%)
+    let size = "50%"; //resize === 0
+    let keepCommuPaneOpen = true;
+    if (resize === 1) {
+      size = "0%";
+    } else if (resize === -1) {
+      size = "100%";
+      keepCommuPaneOpen = false;
+    }
+    this.setState({
+      splitPercentage: size,
+      showCommPane: keepCommuPaneOpen,
+    });
+    keepCommuPaneOpen
+      ? (this.state.cssContainer = "container-conference")
+      : (this.state.cssContainer = "container");
   };
 
   toggleBtmHeight(newSize) {
@@ -100,21 +123,16 @@ class Home extends Component {
                   <li>
                     <a
                       href="#"
-                      onClick={(e) => {
-                        e.preventDefault();
-                        this.setState({
-                          showCommPane: !this.state.showCommPane,
-                          splitPercentage: !this.state.showCommPane
-                            ? "50%"
-                            : "100%",
-                        });
-                        {
-                          this.state.showCommPane
-                            ? (this.state.cssContainer = "container")
-                            : (this.state.cssContainer =
-                                "container-conference");
-                        }
-                      }}
+                      onClick={() =>
+                        this.handleCommunicationPanelSize(
+                          //At this location
+                          // "showCommePane is False"
+                          //        =>Vid conference is open (next action: setInactive=> pane 1: 100%/ -1 )
+                          // "showCommePane is True"
+                          //        => Vid conference is inactive (next action: setInactive=> pane 1: 50%/ 0 )
+                          !this.state.showCommPane ? 0 : -1
+                        )
+                      }
                     >
                       <i className="far fa-comments fa-1g"></i>
                     </a>
@@ -138,8 +156,7 @@ class Home extends Component {
           </CustomScroll> */}
           {this.state.showCommPane ? (
             <Communication
-              // color={"red"}
-              btmHorizontal
+              paneMaximize={this.handleCommunicationPanelSize}
               bottomHeight={this.state.btmHeight}
             />
           ) : (
