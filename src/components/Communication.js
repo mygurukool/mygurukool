@@ -36,14 +36,18 @@ export default class Communication extends Component {
         </a>
         &emsp;Video Conference
         <iframe
+          sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+          // src="https://discord.com/widget?id=722748297999155321&theme=dark"
+          //src="https://titanembeds.com/embed/722758223106408468"
+          //src="https://titanembeds.com/embed/722755053848625172"
+          //src="https://demo.bigbluebutton.org/gl/myg-jpr-jfi#"
+          src="https://meet.jit.si/GuruKoolSchoolVideoConference"
           width="100%"
-          height="700"
+          height="500"
+          allowtransparency="true"
           frameborder="0"
-          scrolling="no"
-          src={process.env.REACT_APP_COMMUNICATION_SERVER}
         ></iframe>
       </div>
-      // </div>
     );
   }
 }

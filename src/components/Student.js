@@ -54,24 +54,11 @@ export default class Student extends Component {
       showVideoConference: false,
     };
     this.displaySubjectIconByName = this.displaySubjectIconByName.bind(this);
-    this.addToList = this.addToList.bind(this);
     this.handleStudentDataFetch = this.handleStudentDataFetch.bind(this);
   }
 
   handleStudentDataFetch() {
     this.props.studentData(this.state.studentData);
-  }
-
-  addToList(id, displaySubjectIconByName) {
-    this.setState((state) => {
-      const sections = state.sections.concat({
-        id: id,
-        displayName: displaySubjectIconByName,
-      });
-      return {
-        sections,
-      };
-    });
   }
 
   componentDidMount() {
@@ -100,8 +87,6 @@ export default class Student extends Component {
             this.setState({ isLoading: false });
             //Sections <=> Subjects
             this.setState({ sections: response.data.value });
-            //method addToList a temporary hack to add static page; to be deleted
-            this.addToList("VideoConferenceTab", "Inbuilt VideoConference");
 
             // // ******commented currentView: no default selection on landingpage******
             // this.setState({
@@ -223,19 +208,6 @@ export default class Student extends Component {
                         </a>
                       </li>
                     ))}
-                  {/* Embed OneNote */}
-                  {/* <li className="nav-item">
-                    <a
-                      className={"nav-link"}
-                      id={"oneNote"}
-                      data-toggle="pill"
-                      href="#?"
-                      onClick={this.handleNotebook}
-                    > */}
-                  {/* Exercise Name */}
-                  {/* Notebook
-                    </a>
-                  </li> */}
                 </ul>
               </div>
             </div>
@@ -253,126 +225,93 @@ export default class Student extends Component {
               onChange={(e) => this.setState({ openedItems: e })} //
               preExpanded={this.state.openedItems}
             >
-              {this.state.showVideoConference ? (
-                <div>
-                  Video Conference
-                  <button onClick={this.closeConf}>Quit Conference</button>
-                  <iframe
-                    width="100%"
-                    height="600"
-                    frameborder="0"
-                    scrolling="no"
-                    //src="https://riot.im/app/#/room/!bScanHsKZTWQPNFXbg:matrix.org"
-                    src="https://meet.jit.si/GuruKoolSchoolVideoConference"
-                  ></iframe>
-                </div>
-              ) : (
-                <Fragment>
-                  {this.state.exercisedata &&
-                    this.state.exercisedata.value.map((exe, i) => (
-                      <AccordionItem key={exe.id} uuid={exe.id}>
-                        {exe.title ? (
-                          <Fragment>
-                            <AccordionItemHeading>
-                              <AccordionItemButton>
-                                <div className="row">
-                                  <div className="float-left col-12 exercisetitle">
-                                    {exe.title
-                                      ? (this.state.exerciseTitle = exe.title)
-                                      : "No Exercise Data"}
-                                    <small className="text-muted float-right">
-                                      {exe.content && exe.content.submissionDate
-                                        ? exe.content.submissionDate
-                                        : ""}
-                                    </small>
-                                  </div>
+              <Fragment>
+                {this.state.exercisedata &&
+                  this.state.exercisedata.value.map((exe, i) => (
+                    <AccordionItem key={exe.id} uuid={exe.id}>
+                      {exe.title ? (
+                        <Fragment>
+                          <AccordionItemHeading>
+                            <AccordionItemButton>
+                              <div className="row">
+                                <div className="float-left col-12 exercisetitle">
+                                  {exe.title
+                                    ? (this.state.exerciseTitle = exe.title)
+                                    : "No Exercise Data"}
+                                  <small className="text-muted float-right">
+                                    {exe.content && exe.content.submissionDate
+                                      ? exe.content.submissionDate
+                                      : ""}
+                                  </small>
                                 </div>
-                              </AccordionItemButton>
-                            </AccordionItemHeading>
-                            <AccordionItemPanel>
-                              <div className="card-body">
-                                <div className="row">
-                                  {/* <div className="row testing-color-yellow"> */}
-                                  <div className="col-8">
-                                    <b>Exercise Instructions</b>
-                                    <ul
-                                      dangerouslySetInnerHTML={{
-                                        __html: exe.content
-                                          ? exe.content.instructions
-                                          : "",
-                                      }}
-                                    ></ul>
-                                  </div>
-                                  <div className="col-4">
-                                    <button
-                                      type="button"
-                                      className="btn btn-primary turnin"
-                                    >
-                                      <i className="fas fa-check"></i> Turn In
-                                    </button>
-                                  </div>
-                                  <div className="col-12">
-                                    <b>Exercise Audio/ Video Explanation</b>
-                                    <ul>
-                                      {exe.content &&
-                                      exe.content.youtubelink ? (
-                                        <Video vidData={exe.content} />
-                                      ) : (
-                                        ""
-                                      )}
-                                    </ul>
-                                  </div>
+                              </div>
+                            </AccordionItemButton>
+                          </AccordionItemHeading>
+                          <AccordionItemPanel>
+                            <div className="card-body">
+                              <div className="row">
+                                {/* <div className="row testing-color-yellow"> */}
+                                <div className="col-8">
+                                  <b>Exercise Instructions</b>
+                                  <ul
+                                    dangerouslySetInnerHTML={{
+                                      __html: exe.content
+                                        ? exe.content.instructions
+                                        : "",
+                                    }}
+                                  ></ul>
                                 </div>
-
-                                <div className="card card-body fileblock row">
-                                  <div className="col-12">
-                                    <div></div>
-                                    {exe.content ? (
-                                      <FileUpload
-                                        exerciesDetails={exe.content}
-                                        groupData={this.state.groupDetails.id}
-                                        subjectName={this.state.currentView}
-                                        title={exe.title}
-                                        studentDetails={this.state.studentData}
-                                      />
+                                <div className="col-4">
+                                  <button
+                                    type="button"
+                                    className="btn btn-primary turnin"
+                                  >
+                                    <i className="fas fa-check"></i> Turn In
+                                  </button>
+                                </div>
+                                <div className="col-12">
+                                  <b>Exercise Audio/ Video Explanation</b>
+                                  <ul>
+                                    {exe.content && exe.content.youtubelink ? (
+                                      <Video vidData={exe.content} />
                                     ) : (
                                       ""
                                     )}
-                                  </div>
-                                  <div className="col-12">
-                                    {this.state.formUpload}
-                                  </div>
+                                  </ul>
                                 </div>
                               </div>
-                            </AccordionItemPanel>
-                          </Fragment>
-                        ) : (
-                          <h5>
-                            Hurrayyy! You have finished all your assignments of
-                            this subject
-                          </h5>
-                        )}
-                      </AccordionItem>
-                    ))}
-                  {/* {this.state.showNotebook ? (
-                    <div>
-                      Video Conference on Notebook Page
-                      <iframe
-                        width="100%"
-                        height="600"
-                        frameborder="0"
-                        scrolling="no"
-                        src="http://0.0.0.0:8080/webpack-dev-server/"
-                        //src="https://meet.jit.si/testtttttttttts"
-                        // src="https://something.sharepoint.com/personal/someQPrAthing/_layouts/15/WopiFrame.aspx?sourcedoc=something&action=embedview&wdbipreview=true"
-                      ></iframe>
-                      <button onClick={this.closeConf}>Quit Conference</button>
-                    </div>
-                  ) : (
-                    ""
-                  )} */}
-                </Fragment>
-              )}
+
+                              <div className="card card-body fileblock row">
+                                <div className="col-12">
+                                  <div></div>
+                                  {exe.content ? (
+                                    <FileUpload
+                                      exerciesDetails={exe.content}
+                                      groupData={this.state.groupDetails.id}
+                                      subjectName={this.state.currentView}
+                                      title={exe.title}
+                                      studentDetails={this.state.studentData}
+                                    />
+                                  ) : (
+                                    ""
+                                  )}
+                                </div>
+                                <div className="col-12">
+                                  {this.state.formUpload}
+                                </div>
+                              </div>
+                            </div>
+                          </AccordionItemPanel>
+                        </Fragment>
+                      ) : (
+                        <h5>
+                          Hurrayyy! You have finished all your assignments of
+                          this subject
+                        </h5>
+                      )}
+                    </AccordionItem>
+                  ))}
+              </Fragment>
             </Accordion>
           </div>
         </div>
