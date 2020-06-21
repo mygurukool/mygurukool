@@ -1,5 +1,9 @@
-import maths from "./../../assets/maths.gif";
-import maths2 from "./../../assets/maths2.png";
+import maths from "./../../assets/mathematics.gif";
+import english from "./../../assets/english.png";
+import german from "./../../assets/german.png";
+import hindi from "./../../assets/hindi.png";
+import history from "./../../assets/history.png";
+
 import React from "react";
 // parse OneNote Page
 export function parseOneNotePage(page) {
@@ -66,28 +70,22 @@ export function parseOneNotePage(page) {
 }
 
 export function loadIconBySubject(subjectName) {
+  // let imgArray = ["Mathematics", "German", "English", "History", "Hindi"];
+  // let subjectIcon = imgArray.includes(subjectName)
+  //   ? subjectName.toLowerCase()
+  //   : "";
+
   let subjectIcon = "";
   if (subjectName.includes("Math")) {
     subjectIcon = maths;
   } else if (subjectName === "German") {
-    subjectIcon = maths2;
+    subjectIcon = german;
+  } else if (subjectName === "History") {
+    subjectIcon = history;
+  } else if (subjectName === "Hindi") {
+    subjectIcon = hindi;
+  } else if (subjectName === "English") {
+    subjectIcon = english;
   }
   return subjectIcon;
-}
-
-export function vid() {
-  alert("vid");
-  return (
-    <div>
-      Video Conference
-      {/* <iframe
-        width="500"
-        height="200"
-        frameborder="0"
-        scrolling="no"
-        src="https://meet.jit.si/testtttttttttts"
-        // src="https://something.sharepoint.com/personal/something/_layouts/15/WopiFrame.aspx?sourcedoc=something&action=embedview&wdbipreview=true"
-      ></iframe> */}
-    </div>
-  );
 }
