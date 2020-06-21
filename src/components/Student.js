@@ -114,45 +114,40 @@ export default class Student extends Component {
   }
 
   handleClick = (event) => {
-    if (event.target.text === "Inbuilt VideoConference") {
-      this.setState({ showVideoConference: true });
-      this.setState({ showNotebook: false });
-    } else {
-      this.setState({ showVideoConference: false });
-      this.setState({ showNotebook: false });
-      console.log(this.state.expand);
-      this.setState({ expand: false, openedItems: [] });
-      this.setState({ currentView: event.target.text });
-      this.setState({ isLoading: true });
-      _apiUtils
-        .loadAssignments(this.state.groupDetails.id, event.target.id)
-        .then((response) => {
-          this.setState({ isLoading: false });
-          this.setState({ exercise: response.data });
-          /*Sort by due date */
-          {
-            let sortedExercises =
-              response.data &&
-              response.data.value.sort((a, b) => {
-                return (
-                  new Date(a.submissionDate).getTime() -
-                  new Date(b.submissionDate).getTime()
-                );
-              });
-            console.log("sortedExercises: " + sortedExercises);
-          }
+    this.setState({ showVideoConference: false });
+    this.setState({ showNotebook: false });
+    console.log(this.state.expand);
+    this.setState({ expand: false, openedItems: [] });
+    this.setState({ currentView: event.target.text });
+    this.setState({ isLoading: true });
+    _apiUtils
+      .loadAssignments(this.state.groupDetails.id, event.target.id)
+      .then((response) => {
+        this.setState({ isLoading: false });
+        this.setState({ exercise: response.data });
+        /*Sort by due date */
+        {
+          let sortedExercises =
+            response.data &&
+            response.data.value.sort((a, b) => {
+              return (
+                new Date(a.submissionDate).getTime() -
+                new Date(b.submissionDate).getTime()
+              );
+            });
+          console.log("sortedExercises: " + sortedExercises);
+        }
 
-          this.state.exercise &&
-            this.state.exercise.value.map((exe, i) =>
-              _apiUtils.loadAssignmentPage(exe.contentUrl).then((response) => {
-                this.state.exercise.value[i].content = _util.parseOneNotePage(
-                  response
-                );
-                this.setState({ exercisedata: this.state.exercise });
-              })
-            );
-        });
-    }
+        this.state.exercise &&
+          this.state.exercise.value.map((exe, i) =>
+            _apiUtils.loadAssignmentPage(exe.contentUrl).then((response) => {
+              this.state.exercise.value[i].content = _util.parseOneNotePage(
+                response
+              );
+              this.setState({ exercisedata: this.state.exercise });
+            })
+          );
+      });
     return false;
   };
 
