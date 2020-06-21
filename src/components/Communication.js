@@ -35,6 +35,9 @@ export default class Communication extends Component {
           )}{" "}
         </a>
         &emsp;Video Conference
+        {/* {localStorage.getItem("currentView")
+          ? +localStorage.getItem("currentView") + "Conference room"
+          : "Video Conference"} */}
         <iframe
           sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
           // src="https://discord.com/widget?id=722748297999155321&theme=dark"
@@ -43,7 +46,7 @@ export default class Communication extends Component {
           //src="https://demo.bigbluebutton.org/gl/myg-jpr-jfi#"
           src="https://meet.jit.si/GuruKoolSchoolVideoConference"
           width="100%"
-          height="500"
+          height="700"
           allowtransparency="true"
           frameborder="0"
         ></iframe>
