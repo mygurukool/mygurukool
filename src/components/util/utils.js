@@ -1,10 +1,9 @@
-import maths from "./../../assets/mathematics.gif";
+import mathematics from "./../../assets/mathematics.gif";
 import english from "./../../assets/english.png";
 import german from "./../../assets/german.png";
 import hindi from "./../../assets/hindi.png";
 import history from "./../../assets/history.png";
 
-import React from "react";
 // parse OneNote Page
 export function parseOneNotePage(page) {
   let parser = new DOMParser();
@@ -70,22 +69,10 @@ export function parseOneNotePage(page) {
 }
 
 export function loadIconBySubject(subjectName) {
-  // let imgArray = ["Mathematics", "German", "English", "History", "Hindi"];
-  // let subjectIcon = imgArray.includes(subjectName)
-  //   ? subjectName.toLowerCase()
-  //   : "";
-
+  let imgArray = [mathematics, german, english, history, hindi];
   let subjectIcon = "";
-  if (subjectName.includes("Math")) {
-    subjectIcon = maths;
-  } else if (subjectName === "German") {
-    subjectIcon = german;
-  } else if (subjectName === "History") {
-    subjectIcon = history;
-  } else if (subjectName === "Hindi") {
-    subjectIcon = hindi;
-  } else if (subjectName === "English") {
-    subjectIcon = english;
-  }
+  imgArray.map((icon) =>
+    icon.includes(subjectName.toLowerCase()) ? (subjectIcon = icon) : ""
+  );
   return subjectIcon;
 }
