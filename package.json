@@ -2,6 +2,7 @@
   "name": "mygurukool",
   "version": "0.1.0",
   "private": true,
+  "homepage": "naveenb.github.io/mygurukool",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
@@ -26,6 +27,7 @@
     "react-custom-scroll": "^4.2.0",
     "react-custom-scrollbars": "^4.2.1",
     "react-dom": "^16.13.1",
+    "react-google-login": "^5.1.20",
     "react-html-converter": "^0.3.2",
     "react-html-parser": "^2.0.2",
     "react-indicators": "^0.3.15",
@@ -44,6 +46,8 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
+    "predeploy": "pnpm run build",
+    "deploy": "gh-pages -d build",
     "eject": "react-scripts eject"
   },
   "eslintConfig": {
@@ -60,5 +64,8 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "gh-pages": "^3.0.0"
   }
 }
