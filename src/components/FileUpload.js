@@ -70,7 +70,7 @@ export default class FileUpload extends Component {
   };
   fetchFile = (event) => {
     _apiUtils
-      .getBLOB(event.target.id, this.props.exerciesDetails.exerciseFileType)
+      .getBLOB(event.target.id, this.props.exerciesDetails.filetype)
       .then((response) => {
         const url = window.URL.createObjectURL(new Blob([response.data]));
         const link = document.createElement("a");
