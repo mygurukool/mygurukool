@@ -4,6 +4,10 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "./Header";
 import { Redirect } from "react-router";
 import * as _apiUtils from "./util/AxiosUtil";
+import google from "./../assets/google.png";
+import msteams from "./../assets/msteams.png";
+import microsoft from "./../assets/microsoft.png";
+import GoogleSession from "./GoogleSession";
 
 export default class Session extends Component {
   constructor(props) {
@@ -28,8 +32,11 @@ export default class Session extends Component {
           <div className="row section-nav">
             <div className="col-12">
               <div className="alert alert-success">
-                Please sign in using your Microsoft Work or School account.
+                Please sign in using your School account.
               </div>
+              {/* <div className="alert alert-success">
+                Please sign in using your Microsoft Work or School account.
+              </div> */}
               <button
                 className="btn btn-lg btn-submit btn-block"
                 type="button"
@@ -55,8 +62,23 @@ export default class Session extends Component {
                     random;
                 }}
               >
-                Login to the School App
+                <img src={microsoft} className="msTeamsIcon" />
+                Login With Microsoft Account
               </button>
+              {/* <button
+                className="btn btn-lg btn-submit btn-block"
+                type="button"
+                onClick={(e): void => {
+                  // return <Redirect to={{ pathname: "/googleSession" }} />;
+                  window.location.href = "/googleSession";
+                }}
+              >
+                <img src={google} className="googleIcon" />
+                Login with Google Account
+              </button> */}
+              <div>
+                <GoogleSession />
+              </div>
             </div>
           </div>
         </div>

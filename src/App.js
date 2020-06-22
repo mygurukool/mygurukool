@@ -3,6 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import Auth from "./components/Auth";
 import Session from "./components/Session";
+import GoogleSession from "./components/GoogleSession";
 import Home from "./components/Home";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Route } from "react-router-dom";
@@ -35,6 +36,14 @@ function App() {
           render={(props) => (
             <div className="App">
               <Auth {...props} />
+            </div>
+          )}
+        />
+        <Route
+          path="/googleSession"
+          render={() => (
+            <div className="App">
+              <GoogleSession />
             </div>
           )}
         />
