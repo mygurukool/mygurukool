@@ -1,4 +1,4 @@
-const MICROSOFT = "Microsoft";
-const GOOGLE = "Google";
-const LOGIN_PROVIDER = "loginProvider";
-const ACCESS_TOKEN = "token";
+export const MICROSOFT = "Microsoft";
+export const GOOGLE = "Google";
+export const LOGIN_PROVIDER = "loginProvider";
+export const ACCESS_TOKEN = "token";
