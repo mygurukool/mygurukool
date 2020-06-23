@@ -1,5 +1,4 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
 import Auth from "./components/Auth";
 import Session from "./components/Session";
@@ -7,7 +6,6 @@ import GoogleSession from "./components/GoogleSession";
 import Home from "./components/Home";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { BrowserRouter, Route } from "react-router-dom";
-import { Redirect } from "react-router";
 
 function App() {
   return (

@@ -4,9 +4,6 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import { GoogleLogin, GoogleLogout } from "react-google-login";
 import { Redirect } from "react-router";
 
-const CLIENT_ID =
-  "629959808842-k1hnr6f2pkfbv9n1fnekpn8gkl659crc.apps.googleusercontent.com";
-
 export default class GoogleSession extends Component {
   constructor(props) {
     super(props);
@@ -23,16 +20,14 @@ export default class GoogleSession extends Component {
   }
 
   login(response) {
-    if (response.access_token) {
+    if (response.accessToken) {
       this.setState((state) => ({
         isLogined: true,
-        accessToken: response.access_token,
+        accessToken: response.accessToken,
       }));
-      sessionStorage.setItem("token", response.access_token);
-      alert("sessionStorage: " + response.access_token);
-      return <Redirect to="/home" />;
-    } else {
-      alert("no sessionStorage: " + response.access_token);
+      sessionStorage.setItem("token", response.accessToken);
+      // <Redirect to="/home" />;
+      // window.location.href = "localhost:3000";
     }
   }
 
@@ -52,6 +47,11 @@ export default class GoogleSession extends Component {
   }
 
   render() {
+    if (this.state.isLogined) {
+      // redirect to home if signed up
+      return <Redirect to={{ pathname: "/home" }} />;
+    }
+
     return (
       <Fragment>
         <div className="container">
@@ -59,7 +59,7 @@ export default class GoogleSession extends Component {
             <div className="col-12">
               {this.state.isLogined ? (
                 <GoogleLogout
-                  clientId={CLIENT_ID}
+                  clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
                   buttonText="Logout"
                   onLogoutSuccess={this.logout}
                   onFailure={this.handleLogoutFailure}
@@ -67,12 +67,13 @@ export default class GoogleSession extends Component {
               ) : (
                 <GoogleLogin
                   className="btn btn-lg btn-submit btn-block float-right"
-                  clientId={CLIENT_ID}
+                  clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
                   buttonText="Sign-in with Google Login"
                   onSuccess={this.login}
                   onFailure={this.handleLoginFailure}
                   cookiePolicy={"single_host_origin"}
                   responseType="token" //code,
+                  redirectUri="http://localhost:3000/home"
                 />
               )}
               {this.state.accessToken ? (

@@ -7,18 +7,37 @@ import * as _apiUtils from "./util/AxiosUtil";
 import google from "./../assets/google.png";
 import msteams from "./../assets/msteams.png";
 import microsoft from "./../assets/microsoft.png";
-import GoogleSession from "./GoogleSession";
+// import GoogleSession from "./GoogleSession";
+import { GoogleLogin } from "react-google-login";
+import * as Constants from "./util/constants";
 
 export default class Session extends Component {
   constructor(props) {
     super(props);
-    this.state = { isSignedIn: false };
+    this.state = { isSignedIn: false, accessToken: "" };
+    this.googleLogin = this.googleLogin.bind(this);
+    this.googleHandleLoginFailure = this.googleHandleLoginFailure.bind(this);
   }
 
   handleSubmit = (event) => {
     event.preventDefault();
     this.setState({ isSignedIn: true });
   };
+
+  googleLogin(response) {
+    if (response.accessToken) {
+      this.setState((state) => ({
+        isSignedIn: true,
+        accessToken: response.accessToken,
+      }));
+      sessionStorage.setItem("token", response.accessToken);
+      sessionStorage.setItem("loginProvider", Constants.GOOGLE);
+    }
+  }
+
+  googleHandleLoginFailure(response) {
+    alert("Google Login Failed");
+  }
 
   render() {
     if (this.state.isSignedIn) {
@@ -40,7 +59,7 @@ export default class Session extends Component {
               <button
                 className="btn btn-lg btn-submit btn-block"
                 type="button"
-                onClick={(e): void => {
+                onClick={(e) => {
                   e.preventDefault();
                   let stateNow = new Date()
                     .toISOString()
@@ -77,7 +96,16 @@ export default class Session extends Component {
                 Login with Google Account
               </button> */}
               <div>
-                <GoogleSession />
+                {/* <GoogleSession /> */}
+                <GoogleLogin
+                  className="btn btn-lg btn-submit btn-block float-right"
+                  clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
+                  buttonText="Sign-in with Google Login"
+                  onSuccess={this.googleLogin}
+                  onFailure={this.googleHandleLoginFailure}
+                  cookiePolicy={"single_host_origin"}
+                  responseType="token" //code,
+                />
               </div>
             </div>
           </div>
