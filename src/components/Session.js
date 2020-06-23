@@ -9,7 +9,7 @@ import msteams from "./../assets/msteams.png";
 import microsoft from "./../assets/microsoft.png";
 // import GoogleSession from "./GoogleSession";
 import { GoogleLogin } from "react-google-login";
-import * as Constants from "./util/constants";
+import * as _constants from "./util/constants";
 
 export default class Session extends Component {
   constructor(props) {
@@ -17,6 +17,7 @@ export default class Session extends Component {
     this.state = { isSignedIn: false, accessToken: "" };
     this.googleLogin = this.googleLogin.bind(this);
     this.googleHandleLoginFailure = this.googleHandleLoginFailure.bind(this);
+    sessionStorage.setItem(_constants.LOGIN_PROVIDER, "");
   }
 
   handleSubmit = (event) => {
@@ -30,8 +31,8 @@ export default class Session extends Component {
         isSignedIn: true,
         accessToken: response.accessToken,
       }));
-      sessionStorage.setItem("token", response.accessToken);
-      sessionStorage.setItem("loginProvider", Constants.GOOGLE);
+      sessionStorage.setItem(_constants.ACCESS_TOKEN, response.accessToken);
+      sessionStorage.setItem(_constants.LOGIN_PROVIDER, _constants.GOOGLE);
     }
   }
 
@@ -104,7 +105,7 @@ export default class Session extends Component {
                   onSuccess={this.googleLogin}
                   onFailure={this.googleHandleLoginFailure}
                   cookiePolicy={"single_host_origin"}
-                  responseType="token" //code,
+                  responseType={_constants.ACCESS_TOKEN} //code,
                 />
               </div>
             </div>

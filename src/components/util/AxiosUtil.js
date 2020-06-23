@@ -1,4 +1,5 @@
 import axios from "axios";
+import * as _constants from "./constants";
 
 export function userProfile() {
   return axios.get(
@@ -6,7 +7,11 @@ export function userProfile() {
     process.env.REACT_APP_GRAPH_API_URL_BETA + "/me",
     {
       params: {},
-      headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
+      headers: {
+        Authorization: `Bearer ${sessionStorage.getItem(
+          _constants.ACCESS_TOKEN
+        )}`,
+      },
     }
   );
 }
@@ -64,7 +69,9 @@ export function uploadStudentExerciseFile(
     formData,
     {
       headers: {
-        Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+        Authorization: `Bearer ${sessionStorage.getItem(
+          _constants.ACCESS_TOKEN
+        )}`,
         "Content-Type": "application/octet-stream",
       },
     }
@@ -75,7 +82,9 @@ export function getBLOB(targetId, exerciseFileType) {
   return axios.get(targetId, {
     params: {},
     headers: {
-      Authorization: `Bearer ${sessionStorage.getItem("token")}`,
+      Authorization: `Bearer ${sessionStorage.getItem(
+        _constants.ACCESS_TOKEN
+      )}`,
       Accept: exerciseFileType,
     },
     responseType: "blob", // important
@@ -85,6 +94,10 @@ export function getBLOB(targetId, exerciseFileType) {
 function axiosCall(url) {
   return axios.get(process.env.REACT_APP_GRAPH_API_URL + url, {
     params: {},
-    headers: { Authorization: `Bearer ${sessionStorage.getItem("token")}` },
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem(
+        _constants.ACCESS_TOKEN
+      )}`,
+    },
   });
 }
