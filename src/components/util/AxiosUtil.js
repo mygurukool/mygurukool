@@ -92,6 +92,15 @@ export function getBLOB(targetId, exerciseFileType) {
 }
 
 function axiosCall(url) {
+  let api_url = process.env.REACT_APP_GRAPH_API_URL + url;
+
+  console.log(sessionStorage.getItem('loginProvider'));
+  console.log(sessionStorage.getItem('token'));
+
+  if (sessionStorage.getItem('loginProvider') === 'Google') {
+    api_url = 'https://classroom.googleapis.com/v1/courses'
+  }
+  
   return axios.get(process.env.REACT_APP_GRAPH_API_URL + url, {
     params: {},
     headers: {
