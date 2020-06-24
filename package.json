@@ -2,7 +2,7 @@
   "name": "mygurukool",
   "version": "0.1.0",
   "private": true,
-  "homepage": "naveenb.github.io/mygurukool",
+  "homepage": ".",
   "dependencies": {
     "@fortawesome/fontawesome-free": "^5.13.0",
     "@fortawesome/fontawesome-svg-core": "^1.2.28",
