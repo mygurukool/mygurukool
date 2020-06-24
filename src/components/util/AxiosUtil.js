@@ -21,11 +21,6 @@ export function loadSite(groupName) {
 }
 
 export function loadSubjects(groupId, studentName) {
-  console.log(sessionStorage.getItem('loginProvider'))
-  console.log(sessionStorage.getItem('token'))
-  if (sessionStorage.getItem('loginProvider') === 'Google') {
-    return axiosCall('https://classroom.googleapis.com/v1/courses')
-  } else {
   //Exlusive MeWoSchule naming convention issue: replacing '/' with '_' is studentName
   return axiosCall(
     `sites/${groupId}/onenote/sections?$filter=contains(parentSectionGroup/displayName,'${studentName.replace(
