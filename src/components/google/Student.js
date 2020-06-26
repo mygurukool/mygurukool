@@ -37,9 +37,15 @@ export default class Student extends Component {
   constructor(props) {
     super(props);
   }
+
   componentDidMount() {
     isLoading = true;
+    _apiUtils.userProfile().then((response) => {
+      alert("Google Student component: " + response);
+      console.log(response);
+    });
   }
+
   render() {
     let data;
     let vidData = {
