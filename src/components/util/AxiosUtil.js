@@ -36,6 +36,10 @@ export function loadSubjects(groupId, studentName) {
   );
 }
 
+export function loadGoogleAssignments(courseId) {
+  return axiosCall(`/v1/courses/${courseId}/courseWork`)
+}
+
 export function loadAssignments(groupId, exerciseId) {
   return axiosCall(`sites/${groupId}/onenote/sections/${exerciseId}/pages`);
   // `https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/sections/${this.state.sections.value[0].id}/pages`
