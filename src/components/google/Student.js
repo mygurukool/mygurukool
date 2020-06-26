@@ -33,6 +33,10 @@ const override = css`
   border-color: red;
 `;
 let isLoading = false;
+let studentData = {
+  displayName: "Name",
+  department: "Group Name",
+};
 export default class Student extends Component {
   constructor(props) {
     super(props);
@@ -41,8 +45,9 @@ export default class Student extends Component {
   componentDidMount() {
     isLoading = true;
     _apiUtils.userProfile().then((response) => {
-      alert("Google Student component: " + response);
-      console.log(response);
+      studentData.displayName = response.data.name;
+      studentData.department = response.data.family_name;
+      this.props.studentData(studentData);
     });
   }
 
