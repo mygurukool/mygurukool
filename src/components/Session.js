@@ -7,8 +7,7 @@ import * as _apiUtils from "./util/AxiosUtil";
 import google from "./../assets/google.png";
 import msteams from "./../assets/msteams.png";
 import microsoft from "./../assets/microsoft.png";
-// import GoogleSession from "./GoogleSession";
-import { GoogleLogin } from "react-google-login";
+
 import * as _constants from "./util/constants";
 
 export default class Session extends Component {
@@ -85,29 +84,36 @@ export default class Session extends Component {
                 <img src={microsoft} className="msTeamsIcon" />
                 Login With Microsoft Account
               </button>
-              {/* <button
+
+              <button
                 className="btn btn-lg btn-submit btn-block"
                 type="button"
-                onClick={(e): void => {
-                  // return <Redirect to={{ pathname: "/googleSession" }} />;
-                  window.location.href = "/googleSession";
+                onClick={(e) => {
+                  e.preventDefault();
+                  let stateNow = new Date()
+                    .toISOString()
+                    .replace(/[^0-9]/g, "")
+                    .slice(0, -3);
+                  let random = Math.random().toString(36).substring(7);
+
+                  window.location.href =
+                    "https://accounts.google.com/o/oauth2/v2/auth?client_id=" +
+                    process.env.REACT_APP_GOOGLE_CLIENT_ID +
+                    "&response_type=id_token%20token&redirect_uri=" +
+                    process.env.REACT_APP_OAUTH_REDIRECT_URI +
+                    "&response_mode=fragment&scope=openid%20" +
+                    process.env.REACT_APP_GOOGLE_OAUTH_SCOPES +
+                    //    "&prompt=consent" +
+                    "&state=" +
+                    stateNow +
+                    "&nonce=" +
+                    random;
                 }}
               >
                 <img src={google} className="googleIcon" />
-                Login with Google Account
-              </button> */}
-              <div>
-                {/* <GoogleSession /> */}
-                <GoogleLogin
-                  className="btn btn-lg btn-submit btn-block float-right"
-                  clientId={process.env.REACT_APP_GOOGLE_CLIENT_ID}
-                  buttonText="Sign-in with Google Login"
-                  onSuccess={this.googleLogin}
-                  onFailure={this.googleHandleLoginFailure}
-                  cookiePolicy={"single_host_origin"}
-                  responseType={_constants.ACCESS_TOKEN} //code,
-                />
-              </div>
+                Login With Google Account
+              </button>
+
             </div>
           </div>
         </div>
