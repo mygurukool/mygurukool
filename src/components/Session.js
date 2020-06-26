@@ -52,6 +52,8 @@ export default class Session extends Component {
                     .slice(0, -3);
                   let random = Math.random().toString(36).substring(7);
 
+                  sessionStorage.setItem(_constants.LOGIN_PROVIDER, _constants.MICROSOFT);
+
                   window.location.href =
                     "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id=" +
                     process.env.REACT_APP_CLIENT_ID +
@@ -80,6 +82,8 @@ export default class Session extends Component {
                     .replace(/[^0-9]/g, "")
                     .slice(0, -3);
                   let random = Math.random().toString(36).substring(7);
+
+                  sessionStorage.setItem(_constants.LOGIN_PROVIDER, _constants.GOOGLE);
 
                   window.location.href =
                     "https://accounts.google.com/o/oauth2/v2/auth?client_id=" +
