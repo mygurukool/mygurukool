@@ -2,9 +2,11 @@ import axios from "axios";
 import * as _constants from "./constants";
 
 export function userProfile() {
+  let api_url = (sessionStorage.getItem('loginProvider') === _constants.GOOGLE) ?
+                process.env.REACT_APP_GOOGLE_USERINFO_API : process.env.REACT_APP_GRAPH_API_URL_BETA;
+
   return axios.get(
-    // "https://graph.microsoft.com/v1.0/groups/1661d94e-9dca-4f38-8e51-7dc96f063c83/onenote/notebooks/1-9e7210a1-77c7-4b10-8a1b-ab0fb4a9f4dd/sectionGroups"
-    process.env.REACT_APP_GRAPH_API_URL_BETA + "/me",
+    api_url + "me",
     {
       params: {},
       headers: {
@@ -18,6 +20,10 @@ export function userProfile() {
 
 export function loadSite(groupName) {
   return axiosCall("sites/root:/sites/" + groupName);
+}
+
+export function loadGoogleSubjects() {
+  return axiosCall("courses")
 }
 
 export function loadSubjects(groupId, studentName) {
@@ -92,16 +98,12 @@ export function getBLOB(targetId, exerciseFileType) {
 }
 
 function axiosCall(url) {
-  let api_url = process.env.REACT_APP_GRAPH_API_URL + url;
+  let api_url = (sessionStorage.getItem('loginProvider') === _constants.GOOGLE) ?
+                process.env.REACT_APP_GOOGLE_CLASSROOM_API : process.env.REACT_APP_GRAPH_API_URL;
 
-  console.log(sessionStorage.getItem('loginProvider'));
-  console.log(sessionStorage.getItem('token'));
+  console.log(api_url);
 
-  if (sessionStorage.getItem('loginProvider') === 'Google') {
-    api_url = 'https://classroom.googleapis.com/v1/courses'
-  }
-  
-  return axios.get(process.env.REACT_APP_GRAPH_API_URL + url, {
+  return axios.get(api_url + url, {
     params: {},
     headers: {
       Authorization: `Bearer ${sessionStorage.getItem(
