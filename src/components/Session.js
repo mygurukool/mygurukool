@@ -14,30 +14,15 @@ export default class Session extends Component {
   constructor(props) {
     super(props);
     this.state = { isSignedIn: false, accessToken: "" };
-    this.googleLogin = this.googleLogin.bind(this);
-    this.googleHandleLoginFailure = this.googleHandleLoginFailure.bind(this);
+
     sessionStorage.setItem(_constants.LOGIN_PROVIDER, "");
+    sessionStorage.setItem(_constants.ACCESS_TOKEN, "");
   }
 
   handleSubmit = (event) => {
     event.preventDefault();
     this.setState({ isSignedIn: true });
   };
-
-  googleLogin(response) {
-    if (response.accessToken) {
-      this.setState((state) => ({
-        isSignedIn: true,
-        accessToken: response.accessToken,
-      }));
-      sessionStorage.setItem(_constants.ACCESS_TOKEN, response.accessToken);
-      sessionStorage.setItem(_constants.LOGIN_PROVIDER, _constants.GOOGLE);
-    }
-  }
-
-  googleHandleLoginFailure(response) {
-    alert("Google Login Failed");
-  }
 
   render() {
     if (this.state.isSignedIn) {
