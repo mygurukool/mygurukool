@@ -37,62 +37,68 @@ let studentData = {
   displayName: "Name",
   department: "Group Name",
 };
+
 export default class Student extends Component {
   constructor(props) {
     super(props);
+    this.state = {
+      courses: "",
+      assignments: "",
+    };
+    this.loadAssignment = this.loadAssignment.bind(this);
   }
 
   componentDidMount() {
     isLoading = true;
-    _apiUtils.userProfile().then((response) => {
-      studentData.displayName = response.data.name;
-      studentData.department = response.data.family_name;
-      this.props.studentData(studentData);
-    });
+    _apiUtils
+      .userProfile()
+      .then((response) => {
+        studentData.displayName = response.data.name;
+        studentData.department = response.data.family_name;
+        this.props.studentData(studentData);
+
+        // load courses
+        _apiUtils
+          .loadGoogleSubjects()
+          .then((subjectRes) => {
+            isLoading = false;
+            this.setState({
+              courses: subjectRes.data.courses,
+            });
+          })
+          .catch((error) => {
+            console.error("Error during loadGoogleSubjects:", error);
+          });
+      })
+      .catch((error) => {
+        console.error("Error during google userProfile:", error);
+      });
   }
 
+  loadAssignment(index) {
+    isLoading = true;
+    //TODO: course id by indexof should be replaced by courseId being attached to Tab id
+    _apiUtils
+      .loadGoogleAssignments(this.state.courses[index].id)
+      .then((response) => {
+        console.log(response.data.courseWork);
+        this.setState({
+          assignments: response.data.courseWork,
+        });
+      })
+      .catch((error) => {
+        console.error("Error during google userProfile:", error);
+      });
+    isLoading = false;
+  }
   render() {
-    let data;
-    let vidData = {
-      youtubelink: "https://www.youtube.com/watch?v=DuDCZRuApXI",
-      youtubename: "React CommentBox Tutorial Example",
-    };
-    let classwork = [
-      {
-        name: "Mathematics",
-        assignments: [
-          {
-            title: "Addition",
-            submissionDate: "21.12.2020",
-            content: "Math Addition Content",
-            vidData: {
-              youtubelink: "https://www.youtube.com/watch?v=DuDCZRuApXI",
-              youtubename: "React CommentBox Tutorial Example",
-            },
-          },
-          {
-            title: "Substraction",
-            submissionDate: "21.12.2020",
-            content: "Math Substraction Content",
-          },
-        ],
-      },
-      {
-        name: "German",
-        assignments: [
-          {
-            title: "Grammar",
-            submissionDate: "21.12.2020",
-            content: "Grammar Content",
-          },
-        ],
-      },
-    ];
-
     return (
       <Fragment>
         <div className="container">
-          <Tabs>
+          <Tabs
+            defaultIndex={0}
+            onSelect={(index) => this.loadAssignment(index)}
+          >
             <div className="row">
               <div className="row sub-excer-section">
                 <div className="col-12">
@@ -102,34 +108,40 @@ export default class Student extends Component {
                     role="tablist"
                   >
                     <TabList>
-                      {classwork.map((classwork) => (
-                        <Tab>
-                          <div className="column">{classwork.name}</div>
-                          <div className="column">
-                            <img
-                              src={_util.loadIconBySubject(classwork.name)}
-                              className="subjectIcon"
-                            />
-                          </div>
-                        </Tab>
-                      ))}
+                      {this.state.courses &&
+                        this.state.courses.map((course) => (
+                          <Tab>
+                            <div className="column">{course.name}</div>
+                            {_util.loadIconBySubject(course.name) ? (
+                              <div className="column">
+                                <img
+                                  src={_util.loadIconBySubject(course.name)}
+                                  className="subjectIcon"
+                                />
+                              </div>
+                            ) : (
+                              ""
+                            )}
+                          </Tab>
+                        ))}
                     </TabList>
                   </ul>
                 </div>
               </div>
             </div>
             <div className="tabcontent col-12">
-              {/* <ClipLoader
+              <ClipLoader
                 css={override}
                 size={30}
                 color={"#D77F36"}
-                loading={this.state.isLoading}
-              /> */}
+                loading={isLoading}
+              />
               <Accordion allowZeroExpanded={true}>
-                {classwork.map((items) => (
-                  <Fragment>
+                {/* //TODO: Dummy map iteration to refresh display of second tab ..  */}
+                {this.state.assignments &&
+                  this.state.assignments.map(() => (
                     <TabPanel>
-                      {items.assignments.map((assignment) => (
+                      {this.state.assignments.map((assignment) => (
                         <AccordionItem>
                           <AccordionItemHeading>
                             <AccordionItemButton>
@@ -139,8 +151,17 @@ export default class Student extends Component {
                                     ? assignment.title
                                     : "No Exercise Data"}
                                   <small className="text-muted float-right">
-                                    {assignment.submissionDate
-                                      ? assignment.submissionDate
+                                    {assignment.dueDate
+                                      ? "Due Date " +
+                                        assignment.dueDate.day +
+                                        "." +
+                                        assignment.dueDate.month +
+                                        "." +
+                                        assignment.dueDate.year +
+                                        ",  Time: " +
+                                        assignment.dueTime.hours +
+                                        ":" +
+                                        assignment.dueTime.minutes
                                       : ""}
                                   </small>
                                 </div>
@@ -153,17 +174,23 @@ export default class Student extends Component {
                                 {/* <div className="row testing-color-yellow"> */}
                                 <div className="col-8">
                                   <b>Exercise Instructions</b>
-
-                                  <ul
-
-                                  // dangerouslySetInnerHTML={{
-                                  //   __html: exe.content
-                                  //     ? exe.content.instructions
-                                  //     : "",
-                                  // }}
-                                  >
-                                    {assignment.content}
-                                  </ul>
+                                  {assignment.materials &&
+                                    assignment.materials.map((material) =>
+                                      material && material.form ? (
+                                        <ul>
+                                          <iframe
+                                            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                                            src={material.form.formUrl}
+                                            width="100%"
+                                            height="700"
+                                            allowtransparency="true"
+                                            frameborder="0"
+                                          ></iframe>
+                                        </ul>
+                                      ) : (
+                                        ""
+                                      )
+                                    )}
                                 </div>
                                 <div className="col-4">
                                   <button
@@ -176,12 +203,20 @@ export default class Student extends Component {
                                 <div className="col-12">
                                   <b>Exercise Audio/ Video Explanation</b>
                                   <ul>
-                                    {/* {vidData.youtubelink} */}
-                                    {/* {exe.content && exe.content.youtubelink ? ( */}
-                                    <Video vidData={vidData} />
-                                    {/* ) : (
-                                      ""
-                                    )} */}
+                                    {assignment.materials &&
+                                      assignment.materials.map((material) =>
+                                        material && material.youtubeVideo ? (
+                                          <Video
+                                            id={material.youtubeVideo.id}
+                                            name={material.youtubeVideo.title}
+                                            thumbnailUrl={
+                                              material.youtubeVideo.thumbnailUrl
+                                            }
+                                          />
+                                        ) : (
+                                          ""
+                                        )
+                                      )}
                                   </ul>
                                 </div>
                               </div>
@@ -209,8 +244,7 @@ export default class Student extends Component {
                         </AccordionItem>
                       ))}
                     </TabPanel>
-                  </Fragment>
-                ))}
+                  ))}
               </Accordion>
             </div>
           </Tabs>

@@ -1,13 +1,16 @@
 import React from "react";
 import ModalVideo from "react-modal-video";
 import "../scss/modal-video.scss";
+import * as _constants from "./util/constants";
 
 export default class Video extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
       // vidLink: props.youtubelink,
-      vidId: "",
+      id: "",
+      title: "",
+      thumbnailUrl: "",
       isOpen: false,
     };
     this.openModal = this.openModal.bind(this);
@@ -19,16 +22,22 @@ export default class Video extends React.Component {
 
   extractVideoIds() {
     //TODO: function should also extract video channel eg: youtube, youku, etc
-
-    // exctract vid Id
-    if (this.props.vidData.youtubelink) {
-      this.props.vidData.youtubelink = this.props.vidData.youtubelink
-        .split(/[\/]+/)
-        .pop();
-      //should the url has "=" before the vid id
-      this.props.vidData.youtubelink = this.props.vidData.youtubelink
-        .split(/[\=]+/)
-        .pop();
+    if (sessionStorage.getItem("loginProvider") === _constants.GOOGLE) {
+      //TODO: this.setState({id: this.props.id, ....})  was throwing
+      //Unhandled Rejection (Error): Maximum update depth exceeded
+      this.state.id = this.props.id;
+      this.state.title = this.props.title;
+      this.state.thumbnailUrl = this.props.thumbnailUrl;
+    } else {
+      // exctract video Id from youtubelink
+      if (this.props.vidData.youtubelink) {
+        this.props.vidData.youtubelink = this.props.vidData.youtubelink
+          .split(/[\/]+/)
+          .pop();
+        //should the url has "=" before the vid id
+        this.state.id = this.props.vidData.youtubelink.split(/[\=]+/).pop();
+      }
+      this.state.title = this.props.vidData.youtubename;
     }
   }
 
@@ -39,19 +48,26 @@ export default class Video extends React.Component {
         <ModalVideo
           channel="youtube"
           isOpen={this.state.isOpen}
-          videoId={this.props.vidData.youtubelink}
+          videoId={this.state.id}
           onClose={() => this.setState({ isOpen: false })}
         />
-        {this.props.vidData.youtubename ? this.props.vidData.youtubename : ""}
+        {this.state.title ? this.state.title : ""}
         <br />
-        <button
-          type="button"
-          className="btn btn-video margin-5px"
-          onClick={this.openModal}
-        >
-          <i class="fas fa-video"></i>
-          <b> Im Video, Click me!!</b>
-        </button>
+        {this.state.thumbnailUrl ? (
+          <button type="button" className="btn btn-video margin-5px">
+            <img src={this.state.thumbnailUrl} onClick={this.openModal} />
+            <b> Im Video, Click me!!</b>
+          </button>
+        ) : (
+          <button
+            type="button"
+            className="btn btn-video margin-5px"
+            onClick={this.openModal}
+          >
+            <i class="fas fa-video"></i>
+            <b> Im Video, Click me!!</b>
+          </button>
+        )}
       </div>
     );
   }
