@@ -170,9 +170,16 @@ export default class Student extends Component {
                           </AccordionItemHeading>
                           <AccordionItemPanel>
                             <div className="card-body">
+                              <div className="row float-right">
+                                <button
+                                  type="button"
+                                  className="btn btn-primary turnin"
+                                >
+                                  <i className="fas fa-check"></i> Turn In
+                                </button>
+                              </div>
                               <div className="row">
-                                {/* <div className="row testing-color-yellow"> */}
-                                <div className="col-8">
+                                <div className="col-12">
                                   <b>Exercise Instructions</b>
                                   {assignment.materials &&
                                     assignment.materials.map((material) =>
@@ -191,14 +198,6 @@ export default class Student extends Component {
                                         ""
                                       )
                                     )}
-                                </div>
-                                <div className="col-4">
-                                  <button
-                                    type="button"
-                                    className="btn btn-primary turnin"
-                                  >
-                                    <i className="fas fa-check"></i> Turn In
-                                  </button>
                                 </div>
                                 <div className="col-12">
                                   <b>Exercise Audio/ Video Explanation</b>
