@@ -2,20 +2,19 @@ import axios from "axios";
 import * as _constants from "./constants";
 
 export function userProfile() {
-  let api_url = (sessionStorage.getItem('loginProvider') === _constants.GOOGLE) ?
-                process.env.REACT_APP_GOOGLE_USERINFO_API : process.env.REACT_APP_GRAPH_API_URL_BETA;
+  let api_url =
+    sessionStorage.getItem("loginProvider") === _constants.GOOGLE
+      ? process.env.REACT_APP_GOOGLE_USERINFO_API
+      : process.env.REACT_APP_GRAPH_API_URL_BETA;
 
-  return axios.get(
-    api_url + "me",
-    {
-      params: {},
-      headers: {
-        Authorization: `Bearer ${sessionStorage.getItem(
-          _constants.ACCESS_TOKEN
-        )}`,
-      },
-    }
-  );
+  return axios.get(api_url + "me", {
+    params: {},
+    headers: {
+      Authorization: `Bearer ${sessionStorage.getItem(
+        _constants.ACCESS_TOKEN
+      )}`,
+    },
+  });
 }
 
 export function loadSite(groupName) {
@@ -23,7 +22,7 @@ export function loadSite(groupName) {
 }
 
 export function loadGoogleSubjects() {
-  return axiosCall("courses")
+  return axiosCall("courses");
 }
 
 export function loadSubjects(groupId, studentName) {
@@ -37,7 +36,7 @@ export function loadSubjects(groupId, studentName) {
 }
 
 export function loadGoogleAssignments(courseId) {
-  return axiosCall(`/v1/courses/${courseId}/courseWork`)
+  return axiosCall(`courses/${courseId}/courseWork`);
 }
 
 export function loadAssignments(groupId, exerciseId) {
@@ -102,8 +101,10 @@ export function getBLOB(targetId, exerciseFileType) {
 }
 
 function axiosCall(url) {
-  let api_url = (sessionStorage.getItem('loginProvider') === _constants.GOOGLE) ?
-                process.env.REACT_APP_GOOGLE_CLASSROOM_API : process.env.REACT_APP_GRAPH_API_URL;
+  let api_url =
+    sessionStorage.getItem("loginProvider") === _constants.GOOGLE
+      ? process.env.REACT_APP_GOOGLE_CLASSROOM_API
+      : process.env.REACT_APP_GRAPH_API_URL;
 
   console.log(api_url);
 
