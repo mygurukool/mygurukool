@@ -32,6 +32,8 @@ export default class Header extends Component {
 
                       if (provider === _constants.GOOGLE) {
                         _apiUtils.googleLogout(token).then(function (response) {
+                          console.log(response)
+                          window.location.reload(true)
                           window.location.href = process.env.REACT_APP_OAUTH_LOGOUT_URI
                         })
                       } else {
