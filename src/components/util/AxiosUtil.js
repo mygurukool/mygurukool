@@ -17,6 +17,10 @@ export function userProfile() {
   });
 }
 
+export function googleLogout(token) {
+  return axios.get("https://accounts.google.com/o/oauth2/revoke?token=" + token)
+}
+
 export function loadSite(groupName) {
   return axiosCall("sites/root:/sites/" + groupName);
 }
