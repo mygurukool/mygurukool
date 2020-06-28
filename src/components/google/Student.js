@@ -92,6 +92,14 @@ export default class Student extends Component {
     isLoading = false;
   }
   render() {
+    //TODO: should be remove once google/ ms student class is sync
+    // filetype will not be filled as google doesnt have an option of *BLOB* to download
+    let tempExerciseDetails = {
+      filename: "",
+      filetype: "",
+      filelink: "",
+      fileThumbnailLink: "",
+    };
     return (
       <Fragment>
         <div className="container">
@@ -151,6 +159,7 @@ export default class Student extends Component {
                                     ? assignment.title
                                     : "No Exercise Data"}
                                   <small className="text-muted float-right">
+                                    {/* TODO: Proper DateFormat*/}
                                     {assignment.dueDate
                                       ? "Due Date " +
                                         assignment.dueDate.day +
@@ -181,6 +190,11 @@ export default class Student extends Component {
                               <div className="row">
                                 <div className="col-12">
                                   <b>Exercise Instructions</b>
+                                  {assignment.description ? (
+                                    <ul>{assignment.description}</ul>
+                                  ) : (
+                                    ""
+                                  )}
                                   {assignment.materials &&
                                     assignment.materials.map((material) =>
                                       material && material.form ? (
@@ -222,17 +236,29 @@ export default class Student extends Component {
 
                               <div className="card card-body fileblock row">
                                 <div className="col-12">
-                                  {/* {exe.content ? ( */}
-                                  <FileUpload
-                                    exerciesDetails="{exe.content}"
-                                    groupData="{this.state.groupDetails.id}"
-                                    subjectName="{this.state.currentView}"
-                                    title="{exe.title}"
-                                    studentDetails="{this.state.studentData}"
-                                  />
-                                  {/* ) : (
-                                    ""
-                                  )} */}
+                                  {assignment.materials &&
+                                    assignment.materials.map((material) =>
+                                      material && material.driveFile
+                                        ? (alert(
+                                            "tempExerciseDetails.filename " +
+                                              tempExerciseDetails.filename
+                                          ),
+                                          (tempExerciseDetails.filename =
+                                            material.driveFile.driveFile.title),
+                                          (tempExerciseDetails.filelink =
+                                            material.driveFile.driveFile.alternateLink),
+                                          (tempExerciseDetails.fileThumbnailLink =
+                                            material.driveFile.driveFile.thumbnailUrl),
+                                          (
+                                            <FileUpload
+                                              exerciesDetails={
+                                                tempExerciseDetails
+                                              }
+                                              subjectName={this.studentData}
+                                            />
+                                          ))
+                                        : ""
+                                    )}
                                 </div>
                                 <div className="col-12">
                                   {/* {this.state.formUpload} */}

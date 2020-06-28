@@ -29,6 +29,7 @@ export default class FileUpload extends Component {
       this
     );
     this.msUploadStudentExercises = this.msUploadStudentExercises.bind(this);
+    alert(this.props.exerciesDetails.filename);
   }
 
   componentDidMount() {
