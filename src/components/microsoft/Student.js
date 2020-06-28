@@ -289,7 +289,9 @@ export default class Student extends Component {
                                       groupData={this.state.groupDetails.id}
                                       subjectName={this.state.currentView}
                                       title={exe.title}
-                                      studentDetails={this.state.studentData}
+                                      studentName={
+                                        this.state.studentData.displayName
+                                      }
                                     />
                                   ) : (
                                     ""

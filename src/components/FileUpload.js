@@ -16,7 +16,6 @@ export default class FileUpload extends Component {
       groupId: props.groupData,
       subjectName: props.subjectName,
       title: props.title,
-      studentDetails: props.studentDetails,
       fileName: "",
       exerciseFiles: "",
       showFlash: false,
@@ -130,7 +129,7 @@ export default class FileUpload extends Component {
                   this.state.groupId,
                   driveRes.data.value[0].id,
                   res.data.value[0].id,
-                  this.state.studentDetails.displayName,
+                  this.props.studentName,
                   this.file.name
                 )
                 .then((response) => {
@@ -335,8 +334,7 @@ export default class FileUpload extends Component {
                 <tr>
                   <td className="filename">
                     {exe.name.replace(
-                      this.state.studentDetails.displayName.replace("/", "_") +
-                        "_",
+                      this.props.studentName.replace("/", "_") + "_",
                       ""
                     )}
                   </td>
