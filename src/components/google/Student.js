@@ -239,11 +239,11 @@ export default class Student extends Component {
                                   {assignment.materials &&
                                     assignment.materials.map((material) =>
                                       material && material.driveFile
-                                        ? (alert(
-                                            "tempExerciseDetails.filename " +
-                                              tempExerciseDetails.filename
-                                          ),
-                                          (tempExerciseDetails.filename =
+                                        ? // alert(
+                                          //     "tempExerciseDetails.filename " +
+                                          //       tempExerciseDetails.filename
+                                          //   ),
+                                          ((tempExerciseDetails.filename =
                                             material.driveFile.driveFile.title),
                                           (tempExerciseDetails.filelink =
                                             material.driveFile.driveFile.alternateLink),
