@@ -71,8 +71,15 @@ export function parseOneNotePage(page) {
 export function loadIconBySubject(subjectName) {
   let imgArray = [mathematics, german, english, history, hindi];
   let subjectIcon = "";
+  //TODO:
+  //1: find a better solution to load all icons from a given path, instead of the array
+  //2: replace the string functions *substring, lastIndexOf, etc* with a clean solution like *Object Name*
   imgArray.map((icon) =>
-    icon.includes(subjectName.toLowerCase()) ? (subjectIcon = icon) : ""
+    subjectName
+      .toLowerCase()
+      .includes(icon.substring(icon.lastIndexOf("/") + 1, icon.indexOf(".")))
+      ? (subjectIcon = icon)
+      : ""
   );
   return subjectIcon;
 }
