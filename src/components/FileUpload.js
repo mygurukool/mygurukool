@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import * as _apiUtils from "./util/AxiosUtil";
+import * as _constants from "./util/constants";
 
 export default class FileUpload extends Component {
   constructor(props) {
@@ -25,8 +26,18 @@ export default class FileUpload extends Component {
     this.handleUploadClick = this.handleUploadClick.bind(this);
     this.fetchFile = this.fetchFile.bind(this);
     this.displayFile = this.displayFile.bind(this);
+    this.msLoadStudentUploadedFiles = this.msLoadStudentUploadedFiles.bind(
+      this
+    );
+    this.msUploadStudentExercises = this.msUploadStudentExercises.bind(this);
   }
+
   componentDidMount() {
+    if (sessionStorage.getItem("loginProvider") === _constants.MICROSOFT)
+      this.msLoadStudentUploadedFiles();
+  }
+
+  msLoadStudentUploadedFiles() {
     _apiUtils.loadDrivesByGroupId(this.state.groupId).then((driveRes) => {
       _apiUtils
         .searchByGroup_Title(this.state.groupId, this.state.title)
@@ -69,24 +80,39 @@ export default class FileUpload extends Component {
     });
   };
   fetchFile = (event) => {
-    _apiUtils
-      .getBLOB(event.target.id, this.props.exerciesDetails.filetype)
-      .then((response) => {
-        const url = window.URL.createObjectURL(new Blob([response.data]));
-        const link = document.createElement("a");
-        link.href = url;
-        link.setAttribute(
-          "download",
-          this.props.exerciesDetails.filename
-            ? this.props.exerciesDetails.filename
-            : this.props.exerciesDetails.objectFilename
-        );
-        document.body.appendChild(link);
-        link.click();
-      });
+    let resData;
+    if (sessionStorage.getItem("loginProvider") === _constants.MICROSOFT) {
+      _apiUtils
+        .getBLOB(event.target.id, this.props.exerciesDetails.filetype)
+        .then((response) => {
+          resData = response.data;
+        });
+    } else {
+      alert("******Google BLOB******");
+    }
+    if (resData !== null) {
+      const url = window.URL.createObjectURL(new Blob([resData]));
+      const link = document.createElement("a");
+      link.href = url;
+      //TODO: BLOB(file attached within the exercise) is related to objectFile,
+      // then why filename check is done instead of directly using objectFilename?
+      link.setAttribute(
+        "download",
+        this.props.exerciesDetails.filename
+          ? this.props.exerciesDetails.filename
+          : this.props.exerciesDetails.objectFilename
+      );
+      document.body.appendChild(link);
+      link.click();
+    }
   };
 
   handleClick = (event) => {
+    if (sessionStorage.getItem("loginProvider") === _constants.MICROSOFT)
+      this.msUploadStudentExercises();
+  };
+
+  msUploadStudentExercises() {
     const formData = new FormData();
     formData.append(this.file.name, this.file);
 
@@ -132,15 +158,27 @@ export default class FileUpload extends Component {
       .catch((error) => {
         console.log(error);
       });
-  };
+  }
   displayFile() {
+    //truncate file extention  **START**
+    let fileNameToDisplay = this.props.exerciesDetails.objectFilename
+      ? this.props.exerciesDetails.objectFilename
+      : this.props.exerciesDetails.filename
+      ? this.props.exerciesDetails.filename
+      : "no filename";
+
+    //execute only if filename has "."
+    if (fileNameToDisplay.indexOf(".") !== -1)
+      fileNameToDisplay = fileNameToDisplay.substring(
+        0,
+        fileNameToDisplay.indexOf(".")
+      );
+    //truncate file extention  **END**
     return (
       <Fragment>
         {this.props.exerciesDetails.objectFilename ? (
           <tr className="testing-color-blue col-12">
-            <td>
-              {this.props.exerciesDetails.objectFilename.replace(".PDF", "")}
-            </td>
+            <td>{fileNameToDisplay}</td>
             <td className="filelink icons">
               <a href="#?">
                 <i
@@ -174,7 +212,7 @@ export default class FileUpload extends Component {
         {this.props.exerciesDetails.filename &&
         this.props.exerciesDetails.filelink ? (
           <tr className="testing-color-blue col-12">
-            <td>{this.props.exerciesDetails.filename.replace(".PDF", "")}</td>
+            <td>{fileNameToDisplay}</td>
             <td className="filelink icons">
               <a href={this.props.exerciesDetails.filelink} target="_blank">
                 <i class="fas fa-eye fa-2x"></i>
