@@ -1,11 +1,13 @@
 import axios from "axios";
 import * as _constants from "./constants";
+import * as _gconsts from "./gConsts";
+import * as _msconsts from "./msConsts";
 
 export function userProfile() {
   let api_url =
     sessionStorage.getItem("loginProvider") === _constants.GOOGLE
-      ? process.env.REACT_APP_GOOGLE_USERINFO_API
-      : process.env.REACT_APP_GRAPH_API_URL_BETA;
+      ? _gconsts.REACT_APP_GOOGLE_USERINFO_API
+      : _msconsts.REACT_APP_GRAPH_API_URL_BETA;
 
   return axios.get(api_url + "me", {
     params: {},
@@ -18,7 +20,9 @@ export function userProfile() {
 }
 
 export function googleLogout(token) {
-  return axios.get("https://accounts.google.com/o/oauth2/revoke?token=" + token)
+  return axios.get(
+    "https://accounts.google.com/o/oauth2/revoke?token=" + token
+  );
 }
 
 export function loadSite(groupName) {
@@ -26,7 +30,7 @@ export function loadSite(groupName) {
 }
 
 export function loadGoogleSubjects() {
-  return axiosCall("courses");
+  return axiosCall("courses?courseStates=" + _gconsts.COURSE_STATUS);
 }
 
 export function loadSubjects(groupId, studentName) {
@@ -49,8 +53,8 @@ export function loadAssignments(groupId, exerciseId) {
 }
 
 export function loadAssignmentPage(pageUrl) {
-  //replacing process.env.REACT_APP_GRAPH_API_URL as the url include
-  return axiosCall(pageUrl.replace(process.env.REACT_APP_GRAPH_API_URL, ""));
+  //replacing _msconsts.REACT_APP_GRAPH_API_URL as the url include
+  return axiosCall(pageUrl.replace(_msconsts.REACT_APP_GRAPH_API_URL, ""));
 }
 
 export function getStudentUploadedExerciseFiles(driveId, titleId) {
@@ -74,7 +78,7 @@ export function uploadStudentExerciseFile(
   fileName
 ) {
   return axios.put(
-    process.env.REACT_APP_GRAPH_API_URL +
+    _msconsts.REACT_APP_GRAPH_API_URL +
       `sites/${groupId}/drives/${subjectId}/items/${exerciseId}:/${
         studentName.replace("/", "_") + "_" + fileName
       }:/content`,
@@ -107,8 +111,8 @@ export function getBLOB(targetId, exerciseFileType) {
 function axiosCall(url) {
   let api_url =
     sessionStorage.getItem("loginProvider") === _constants.GOOGLE
-      ? process.env.REACT_APP_GOOGLE_CLASSROOM_API
-      : process.env.REACT_APP_GRAPH_API_URL;
+      ? _gconsts.REACT_APP_GOOGLE_CLASSROOM_API
+      : _msconsts.REACT_APP_GRAPH_API_URL;
 
   console.log(api_url);
 
