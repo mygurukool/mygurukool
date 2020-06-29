@@ -1,6 +1,8 @@
 import React, { Component, Fragment } from "react";
 import * as _apiUtils from "./util/AxiosUtil";
 import * as _constants from "./util/constants";
+import * as _gconsts from "./util/gConsts";
+import * as _msconsts from "./util/msConsts";
 import "..//App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 
@@ -25,21 +27,29 @@ export default class Header extends Component {
                     onClick={(e) => {
                       e.preventDefault();
 
-                      let provider = sessionStorage.getItem(_constants.LOGIN_PROVIDER)
-                      let token    = sessionStorage.getItem(_constants.ACCESS_TOKEN)
+                      let provider = sessionStorage.getItem(
+                        _constants.LOGIN_PROVIDER
+                      );
+                      let token = sessionStorage.getItem(
+                        _constants.ACCESS_TOKEN
+                      );
 
                       sessionStorage.clear();
 
                       if (provider === _constants.GOOGLE) {
-                        _apiUtils.googleLogout(token).then(function (response) {
-                          console.log(response)
-                        }).then(function () {
-                          window.location.href = process.env.REACT_APP_OAUTH_LOGOUT_URI
-                        })
+                        _apiUtils
+                          .googleLogout(token)
+                          .then(function (response) {
+                            console.log(response);
+                          })
+                          .then(function () {
+                            window.location.href =
+                              process.env.REACT_APP_OAUTH_LOGOUT_URI;
+                          });
                       } else {
                         window.location.href =
-                          "https://login.microsoftonline.com/common/oauth2/v2.0/logout?post_logout_redirect_uri="
-                          + process.env.REACT_APP_OAUTH_LOGOUT_URI
+                          "https://login.microsoftonline.com/common/oauth2/v2.0/logout?post_logout_redirect_uri=" +
+                          process.env.REACT_APP_OAUTH_LOGOUT_URI;
                       }
                     }}
                   >

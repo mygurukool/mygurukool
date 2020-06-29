@@ -5,10 +5,11 @@ import Header from "./Header";
 import { Redirect } from "react-router";
 import * as _apiUtils from "./util/AxiosUtil";
 import google from "./../assets/google.png";
-import msteams from "./../assets/msteams.png";
 import microsoft from "./../assets/microsoft.png";
 
 import * as _constants from "./util/constants";
+import * as _gconsts from "./util/gConsts";
+import * as _msconsts from "./util/msConsts";
 
 export default class Session extends Component {
   constructor(props) {
@@ -52,7 +53,10 @@ export default class Session extends Component {
                     .slice(0, -3);
                   let random = Math.random().toString(36).substring(7);
 
-                  sessionStorage.setItem(_constants.LOGIN_PROVIDER, _constants.MICROSOFT);
+                  sessionStorage.setItem(
+                    _constants.LOGIN_PROVIDER,
+                    _constants.MICROSOFT
+                  );
 
                   window.location.href =
                     "https://login.microsoftonline.com/organizations/oauth2/v2.0/authorize?client_id=" +
@@ -60,7 +64,7 @@ export default class Session extends Component {
                     "&response_type=id_token%20token&redirect_uri=" +
                     process.env.REACT_APP_OAUTH_REDIRECT_URI +
                     "&response_mode=fragment&scope=openid%20" +
-                    process.env.REACT_APP_OAUTH_SCOPES +
+                    _msconsts.REACT_APP_OAUTH_SCOPES +
                     //    "&prompt=consent" +
                     "&state=" +
                     stateNow +
@@ -83,7 +87,10 @@ export default class Session extends Component {
                     .slice(0, -3);
                   let random = Math.random().toString(36).substring(7);
 
-                  sessionStorage.setItem(_constants.LOGIN_PROVIDER, _constants.GOOGLE);
+                  sessionStorage.setItem(
+                    _constants.LOGIN_PROVIDER,
+                    _constants.GOOGLE
+                  );
 
                   window.location.href =
                     "https://accounts.google.com/o/oauth2/v2/auth?client_id=" +
@@ -91,7 +98,7 @@ export default class Session extends Component {
                     "&response_type=id_token%20token&redirect_uri=" +
                     process.env.REACT_APP_OAUTH_REDIRECT_URI +
                     "&response_mode=fragment&scope=openid%20" +
-                    process.env.REACT_APP_GOOGLE_OAUTH_SCOPES +
+                    _gconsts.REACT_APP_GOOGLE_OAUTH_SCOPES +
                     //    "&prompt=consent" +
                     "&state=" +
                     stateNow +
@@ -102,7 +109,6 @@ export default class Session extends Component {
                 <img src={google} className="googleIcon" />
                 Login With Google Account
               </button>
-
             </div>
           </div>
         </div>
