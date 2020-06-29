@@ -74,12 +74,21 @@ export function loadIconBySubject(subjectName) {
   //TODO:
   //1: find a better solution to load all icons from a given path, instead of the array
   //2: replace the string functions *substring, lastIndexOf, etc* with a clean solution like *Object Name*
-  imgArray.map((icon) =>
-    subjectName
-      .toLowerCase()
-      .includes(icon.substring(icon.lastIndexOf("/") + 1, icon.indexOf(".")))
-      ? (subjectIcon = icon)
-      : ""
-  );
+  imgArray.map(function (icon) {
+    let lastIndexOfbackSlash = icon.lastIndexOf("/");
+    if (
+      subjectName
+        .toLowerCase()
+        .includes(
+          icon.substring(
+            lastIndexOfbackSlash + 1,
+            icon.indexOf(".", lastIndexOfbackSlash)
+          )
+        )
+    ) {
+      subjectIcon = icon;
+    }
+    return subjectIcon;
+  });
   return subjectIcon;
 }

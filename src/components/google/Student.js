@@ -44,6 +44,7 @@ export default class Student extends Component {
     this.state = {
       courses: "",
       assignments: "",
+      studentName: "",
     };
     this.loadAssignment = this.loadAssignment.bind(this);
   }
@@ -56,7 +57,7 @@ export default class Student extends Component {
         studentData.displayName = response.data.name;
         studentData.department = response.data.family_name;
         this.props.studentData(studentData);
-
+        this.setState({ studentName: response.data.name });
         // load courses
         _apiUtils
           .loadGoogleSubjects()
@@ -92,14 +93,15 @@ export default class Student extends Component {
     isLoading = false;
   }
   render() {
-    //TODO: should be remove once google/ ms student class is sync
+    //TODO: should be removed once google/ ms student class is sync
     // filetype will not be filled as google doesnt have an option of *BLOB* to download
-    let tempExerciseDetails = {
-      filename: "",
-      filetype: "",
-      filelink: "",
-      fileThumbnailLink: "",
-    };
+    // let tempExerciseDetails = {
+    //   filename: "",
+    //   filetype: "",
+    //   filelink: "",
+    //   fileThumbnailLink: "",
+    // };
+    let aStudentName = this.state.studentName; // -- damn hack..!
     return (
       <Fragment>
         <div className="container">
@@ -237,28 +239,35 @@ export default class Student extends Component {
                               <div className="card card-body fileblock row">
                                 <div className="col-12">
                                   {assignment.materials &&
-                                    assignment.materials.map((material) =>
-                                      material && material.driveFile
-                                        ? // alert(
-                                          //     "tempExerciseDetails.filename " +
-                                          //       tempExerciseDetails.filename
-                                          //   ),
-                                          ((tempExerciseDetails.filename =
-                                            material.driveFile.driveFile.title),
-                                          (tempExerciseDetails.filelink =
-                                            material.driveFile.driveFile.alternateLink),
-                                          (tempExerciseDetails.fileThumbnailLink =
-                                            material.driveFile.driveFile.thumbnailUrl),
-                                          (
-                                            <FileUpload
-                                              exerciesDetails={
-                                                tempExerciseDetails
-                                              }
-                                              subjectName={this.studentData}
-                                            />
-                                          ))
-                                        : ""
-                                    )}
+                                    assignment.materials.map(function (
+                                      material
+                                    ) {
+                                      if (material && material.driveFile) {
+                                        let tempExerciseDetails = {
+                                          filename: "",
+                                          filetype: "",
+                                          filelink: "",
+                                          fileThumbnailLink: "",
+                                        };
+
+                                        tempExerciseDetails.filename =
+                                          material.driveFile.driveFile.title;
+                                        tempExerciseDetails.filelink =
+                                          material.driveFile.driveFile.alternateLink;
+                                        tempExerciseDetails.fileThumbnailLink =
+                                          material.driveFile.driveFile.thumbnailUrl;
+
+                                        return (
+                                          <FileUpload
+                                            exerciesDetails={
+                                              tempExerciseDetails
+                                            }
+                                            subjectName={aStudentName}
+                                          />
+                                        );
+                                      }
+                                      return "";
+                                    })}
                                 </div>
                                 <div className="col-12">
                                   {/* {this.state.formUpload} */}
