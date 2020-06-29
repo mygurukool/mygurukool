@@ -5,7 +5,7 @@ import FileUpload from "../FileUpload";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { css } from "@emotion/core";
-import ClipLoader from "react-spinners/HashLoader";
+import PacmanLoader from "react-spinners/PacmanLoader";
 import {
   Accordion,
   AccordionItem,
@@ -211,10 +211,11 @@ export default class Student extends Component {
             </div>
           </div>
           <div className="tabcontent col-12">
-            <ClipLoader
+            <PacmanLoader
               css={override}
-              size={30}
-              color={"#D77F36"}
+              size={20}
+              // color={"#D77F36"}
+              color={"rgb(54, 215, 183)"}
               loading={this.state.isLoading}
             />
             {/* <Accordion allowZeroExpanded={true} className="testing-color-green"> */}

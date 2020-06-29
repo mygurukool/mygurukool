@@ -212,6 +212,15 @@ export default class FileUpload extends Component {
         {this.props.exerciesDetails.filename &&
         this.props.exerciesDetails.filelink ? (
           <tr className="testing-color-blue col-12">
+            {/* {this.props.exerciesDetails.fileThumbnailLink ? (
+              <img
+                src={this.props.exerciesDetails.fileThumbnailLink}
+                className="thumbnailIcon"
+                display="block"
+              />
+            ) : (
+              ""
+            )} */}
             <td>{fileNameToDisplay}</td>
             <td className="filelink icons">
               <a href={this.props.exerciesDetails.filelink} target="_blank">

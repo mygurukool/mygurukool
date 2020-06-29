@@ -5,7 +5,7 @@ import FileUpload from "../FileUpload";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { css } from "@emotion/core";
-import ClipLoader from "react-spinners/HashLoader";
+import PacmanLoader from "react-spinners/PacmanLoader";
 import {
   Accordion,
   AccordionItem,
@@ -18,7 +18,7 @@ import Video from "../Video";
 import * as _util from "../util/utils";
 import * as _apiUtils from "../util/AxiosUtil";
 import * as _constants from "../util/constants";
-
+import "@fortawesome/fontawesome-free/css/all.css";
 // Demo styles, see 'Styles' section below for some notes on use.
 // import "react-accessible-accordion/dist/fancy-example.css";
 
@@ -31,6 +31,7 @@ const override = css`
   display: block;
   margin: 0 auto;
   border-color: red;
+  // background-image: url("../../assets/giraffe-icon.png");
 `;
 let isLoading = false;
 let studentData = {
@@ -93,14 +94,6 @@ export default class Student extends Component {
     isLoading = false;
   }
   render() {
-    //TODO: should be removed once google/ ms student class is sync
-    // filetype will not be filled as google doesnt have an option of *BLOB* to download
-    // let tempExerciseDetails = {
-    //   filename: "",
-    //   filetype: "",
-    //   filelink: "",
-    //   fileThumbnailLink: "",
-    // };
     let aStudentName = this.state.studentName; // -- damn hack..!
     return (
       <Fragment>
@@ -140,10 +133,11 @@ export default class Student extends Component {
               </div>
             </div>
             <div className="tabcontent col-12">
-              <ClipLoader
+              <PacmanLoader
                 css={override}
-                size={30}
-                color={"#D77F36"}
+                size={20}
+                // color={"#D77F36"}
+                color={"rgb(54, 215, 183)"}
                 loading={isLoading}
               />
               <Accordion allowZeroExpanded={true}>
@@ -243,6 +237,8 @@ export default class Student extends Component {
                                       material
                                     ) {
                                       if (material && material.driveFile) {
+                                        //TODO: should be removed once google/ ms student class is sync
+                                        // filetype will not be filled as google doesnt have an option of *BLOB* to download
                                         let tempExerciseDetails = {
                                           filename: "",
                                           filetype: "",
