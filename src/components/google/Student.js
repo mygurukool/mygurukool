@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import "../../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import FileUpload from "../FileUpload";
+import Messaging from "../Messaging";
 import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
 import "react-tabs/style/react-tabs.css";
 import { css } from "@emotion/core";
@@ -95,6 +96,7 @@ export default class Student extends Component {
   }
   render() {
     let aStudentName = this.state.studentName; // -- damn hack..!
+    let hasNoDriveFile = true;
     return (
       <Fragment>
         <div className="container">
@@ -209,7 +211,7 @@ export default class Student extends Component {
                                       )
                                     )}
                                 </div>
-                                <div className="col-12">
+                                <div className="col-6">
                                   <b>Exercise Audio/ Video Explanation</b>
                                   <ul>
                                     {assignment.materials &&
@@ -228,15 +230,28 @@ export default class Student extends Component {
                                       )}
                                   </ul>
                                 </div>
+                                <div className="col-6 ">
+                                  <Messaging userName={aStudentName} />
+                                </div>
                               </div>
 
                               <div className="card card-body fileblock row">
                                 <div className="col-12">
+                                  {hasNoDriveFile
+                                    ? ((hasNoDriveFile = true),
+                                      (
+                                        <FileUpload
+                                          exerciesDetails={""}
+                                          subjectName={aStudentName}
+                                        />
+                                      ))
+                                    : ""}
                                   {assignment.materials &&
                                     assignment.materials.map(function (
                                       material
                                     ) {
                                       if (material && material.driveFile) {
+                                        hasNoDriveFile = false;
                                         //TODO: should be removed once google/ ms student class is sync
                                         // filetype will not be filled as google doesnt have an option of *BLOB* to download
                                         let tempExerciseDetails = {
@@ -262,7 +277,6 @@ export default class Student extends Component {
                                           />
                                         );
                                       }
-                                      return "";
                                     })}
                                 </div>
                                 <div className="col-12">

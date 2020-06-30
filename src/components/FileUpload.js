@@ -251,7 +251,7 @@ export default class FileUpload extends Component {
         {!this.props.exerciesDetails.objectFilename &&
         (!this.props.exerciesDetails.filename ||
           !this.props.exerciesDetails.filelink) ? (
-          <tr>
+          <tr className="testing-color-blue col-12">
             <td></td>
             <td></td>
             <td className="float-right">
