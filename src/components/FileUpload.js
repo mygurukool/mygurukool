@@ -77,7 +77,11 @@ export default class FileUpload extends Component {
       // -- ---------------------------------------------------------------------------------------
       // -- TODO: there are 4 types of attachments: "driveFile", "youTubeVideo", "link" and "form".
       // --       -> currently we only deal with "driveFile", so there other 3 are pending. -------
-      response.data.studentSubmissions[0].assignmentSubmission.attachments.map((attachment) => (
+      let submission = response.data.studentSubmissions[0]
+
+      if (! submission || ! submission.assignmentSubmission.attachments) return;
+
+      submission.assignmentSubmission.attachments.map((attachment) => (
         exerciseFiles.value.push({
           name:   attachment.driveFile.title,
           webUrl: attachment.driveFile.alternateLink
