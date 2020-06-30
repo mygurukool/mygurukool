@@ -19,6 +19,8 @@ export default class FileUpload extends Component {
       fileName: "",
       exerciseFiles: "",
       showFlash: false,
+      courseId: props.courseId,
+      assignmentId : props.assignmentId
     };
     this.handleFileChange = this.handleFileChange.bind(this);
     this.cancelClick = this.cancelClick.bind(this);
@@ -28,13 +30,19 @@ export default class FileUpload extends Component {
     this.msLoadStudentUploadedFiles = this.msLoadStudentUploadedFiles.bind(
       this
     );
+    this.googleLoadStudentUploadedFiles = this.googleLoadStudentUploadedFiles.bind(
+      this
+    );
     this.msUploadStudentExercises = this.msUploadStudentExercises.bind(this);
     // alert(this.props.exerciesDetails.filename);
   }
 
   componentDidMount() {
-    if (sessionStorage.getItem("loginProvider") === _constants.MICROSOFT)
+    if (sessionStorage.getItem("loginProvider") === _constants.MICROSOFT) {
       this.msLoadStudentUploadedFiles();
+    } else {
+      this.googleLoadStudentUploadedFiles();
+    }
   }
 
   msLoadStudentUploadedFiles() {
@@ -56,6 +64,32 @@ export default class FileUpload extends Component {
           }
         });
     });
+  }
+
+  googleLoadStudentUploadedFiles() {
+    _apiUtils.getGoogleStudentUploadedExerciseFiles(this.state.courseId, this.state.assignmentId).then((response) => {
+      let exerciseFiles = { value: [] }
+
+      // -- data mapper ---------------------------------------------------------------------------
+      // -- school app / api currently expects here an array of objects with "name" and "webUrl" as
+      // -- keys to the file name and file url: so we map Google's "title" and "alternateLink" back
+      // -- to file "name" and file "webUrl" -> should be done in API.js (current AxiosUtils.js)
+      // -- ---------------------------------------------------------------------------------------
+      // -- TODO: there are 4 types of attachments: "driveFile", "youTubeVideo", "link" and "form".
+      // --       -> currently we only deal with "driveFile", so there other 3 are pending. -------
+      let submission = response.data.studentSubmissions[0]
+
+      if (! submission || ! submission.assignmentSubmission.attachments) return;
+
+      submission.assignmentSubmission.attachments.map((attachment) => (
+        exerciseFiles.value.push({
+          name:   attachment.driveFile.title,
+          webUrl: attachment.driveFile.alternateLink
+        })
+      ))
+
+      this.setState({ exerciseFiles: exerciseFiles })
+    })
   }
 
   handleFileChange = (event) => {

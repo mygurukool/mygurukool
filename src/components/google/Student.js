@@ -274,6 +274,9 @@ export default class Student extends Component {
                                               tempExerciseDetails
                                             }
                                             subjectName={aStudentName}
+                                            studentName={aStudentName}
+                                            courseId={assignment.courseId}
+                                            assignmentId={assignment.id}
                                           />
                                         );
                                       }

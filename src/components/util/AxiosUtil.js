@@ -57,6 +57,11 @@ export function loadAssignmentPage(pageUrl) {
   return axiosCall(pageUrl.replace(_msconsts.REACT_APP_GRAPH_API_URL, ""));
 }
 
+export function getGoogleStudentUploadedExerciseFiles(courseId, assignmentId = "-") {
+  // -- if no assigment Id is specified, returns submissions for all assignments.
+  return axiosCall(`courses/${courseId}/courseWork/${assignmentId}/studentSubmissions`);
+}
+
 export function getStudentUploadedExerciseFiles(driveId, titleId) {
   return axiosCall(`sites/root/drives/${driveId}/items/${titleId}/children`);
 }
