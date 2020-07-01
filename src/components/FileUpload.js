@@ -199,10 +199,10 @@ export default class FileUpload extends Component {
   }
   displayFile() {
     //truncate file extention  **START**
-    let fileNameToDisplay = this.props.exerciesDetails.objectFilename
-      ? this.props.exerciesDetails.objectFilename
-      : this.props.exerciesDetails.filename
-      ? this.props.exerciesDetails.filename
+    let fileNameToDisplay = this.props.exerciseDetails.objectFilename
+      ? this.props.exerciseDetails.objectFilename
+      : this.props.exerciseDetails.filename
+      ? this.props.exerciseDetails.filename
       : "no filename";
 
     //execute only if filename has "."
