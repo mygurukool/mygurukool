@@ -2,13 +2,13 @@ import React, { Component, Fragment } from "react";
 import { MessageBox, MessageList, Input, Button } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 
-let msgList = {
-  position: "left",
+let studentMsg = {
+  position: "right",
   replyButton: true,
   type: "text",
   theme: "white",
   view: "list",
-  title: "Author name: SomeUser",
+  title: "From: MyGuruKool Student",
   text: "How do I solve this issue",
   status: "read",
   date: +new Date(),
@@ -17,15 +17,32 @@ let msgList = {
     alert("onReplyMessageClick");
   },
 };
+
+let teacherMsg = {
+  position: "left",
+  replyButton: true,
+  type: "text",
+  theme: "white",
+  view: "list",
+  title: "From: Teacher",
+  text: "Read through Chapter 1",
+  status: "sent",
+  date: +new Date(),
+  onReplyMessageClick: () => {
+    console.log("onReplyMessageClick");
+    alert("onReplyMessageClick");
+  },
+};
+
 const REPLY = "Reply";
-const SEND = "Send";
+const ASK = "Ask";
 export default class Messaging extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showMessageBlock: false,
       show: true,
-      messageList: [msgList], //TODO: Dev hack, msglist tobe del for prod
+      messageList: [studentMsg, teacherMsg], //TODO: Dev hack, msglist tobe del for prod
     };
     this.cancelClick = this.cancelClick.bind(this);
     this.showInputElement = this.showInputElement.bind(this);
@@ -95,65 +112,68 @@ export default class Messaging extends Component {
   showInputElement(type) {
     let message;
     let defaultPlaceHolder = type === REPLY ? "Reply..." : "Type here...";
+    let cssName = type === ASK ? "card col-12" : "card row-12";
     return (
       <Fragment>
-        {type === REPLY ? (
-          //  <div class="card card-body">
-          <MessageBox reply={this.state.replyEventObj} position={"left"} />
-        ) : (
-          ""
-        )}
-        <Input
-          placeholder={defaultPlaceHolder}
-          defaultValue=""
-          ref="input"
-          multiline={true}
-          autofocus={true}
-          // buttonsFloat='left'
-          onKeyPress={(e) => {
-            message = e.target.value;
-            if (e.shiftKey && e.charCode === 13) {
-              return true;
-            }
-            if (e.charCode === 13) {
-              this.refs.input.clear();
-              this.addMessage(message, type);
-              e.preventDefault();
-              return false;
-            }
-          }}
-          rightButtons={
-            type === SEND ? (
-              <Button
-                text={type}
-                onClick={(e) => this.addMessage(message, type)}
-              />
-            ) : (
-              ""
-            )
-          }
-        />
-        {/* TODO: Damn hack.. INPUT -> rightButtons={ option should be explored
-         */}
-        {type === REPLY ? (
-          <div class="row float-right">
-            <Button
-              text={type}
-              onClick={(e) => this.addMessage(message, type)}
-            />{" "}
-            <Button
-              text="Cancel"
-              onClick={(e) =>
-                this.setState({
-                  showReplyBlock: false,
-                })
+        <br />
+        <div class="card row-12">
+          {type === REPLY ? (
+            <MessageBox reply={this.state.replyEventObj} position={"right"} />
+          ) : (
+            ""
+          )}
+
+          {/* <div class="row"> */}
+          <div class={cssName}>
+            <Input
+              placeholder={defaultPlaceHolder}
+              defaultValue=""
+              ref="input"
+              multiline={true}
+              autofocus={true}
+              // buttonsFloat="left"
+              onKeyPress={(e) => {
+                message = e.target.value;
+                if (e.shiftKey && e.charCode === 13) {
+                  this.refs.input.clear();
+                  return true;
+                }
+                if (e.charCode === 13) {
+                  this.refs.input.clear();
+                  this.addMessage(message, type);
+                  e.preventDefault();
+                  return false;
+                }
+              }}
+              rightButtons={
+                type === ASK ? (
+                  <Button
+                    text={type}
+                    onClick={(e) => this.addMessage(message, type)}
+                  />
+                ) : (
+                  <div class="col-2">
+                    <Button
+                      text={type}
+                      onClick={(e) => this.addMessage(message, type)}
+                    />{" "}
+                    <Button
+                      text="Cancel"
+                      onClick={(e) =>
+                        this.setState({
+                          showReplyBlock: false,
+                        })
+                      }
+                    />
+                    {/* <br /> */}
+                  </div>
+                )
               }
             />
           </div>
-        ) : (
-          // </div>
-          ""
-        )}
+          {/* </div> */}
+        </div>
+        <br />
       </Fragment>
     );
   }
@@ -182,22 +202,6 @@ export default class Messaging extends Component {
         {this.state.showMessageBlock === true ? (
           <div class="card card-body fileblock col-12">
             <div className="container">
-              <div className="chat-list">
-                {/* <MessageBox
-                  reply={{
-                    photoURL: "https://facebook.github.io/react/img/logo.svg",
-                    title: "elit magna",
-                    titleColor: "#8717ae",
-                    message: "Aliqua amet incididunt id nostrud",
-                  }}
-                  onReplyMessageClick={() => console.log("reply clicked!")}
-                  position={"left"}
-                  type={"text"}
-                  text={
-                    "Tempor duis do voluptate enim duis velit veniam aute ullamco dolore duis irure."
-                  }
-                /> */}
-              </div>
               <div className="right-panel">
                 <MessageList
                   className="message-list"
@@ -210,11 +214,10 @@ export default class Messaging extends Component {
                 {/* Show the Reply Block, only when Reply is Clicked */}
                 {this.state.showReplyBlock ? this.showInputElement(REPLY) : ""}
                 {/* Comment Input area */}
-                {this.showInputElement(SEND)}
+                {this.showInputElement(ASK)}
               </div>
             </div>
             <div className="form-group">
-              <br />
               <button
                 type="reset"
                 onClick={this.cancelClick}
@@ -222,13 +225,6 @@ export default class Messaging extends Component {
               >
                 <i class="far fa-times-circle"></i> Close
               </button>
-              {/* <button
-                type="button"
-                className="btn btn-success upload-btn"
-                onClick={this.cancelClick}
-              >
-                <i class="fas fa-cloud-upload-alt"></i> Submit
-              </button> */}
             </div>
           </div>
         ) : (
