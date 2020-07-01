@@ -20,7 +20,7 @@ export default class FileUpload extends Component {
       exerciseFiles: "",
       showFlash: false,
       courseId: props.courseId,
-      assignmentId : props.assignmentId
+      assignmentId: props.assignmentId,
     };
     this.handleFileChange = this.handleFileChange.bind(this);
     this.cancelClick = this.cancelClick.bind(this);
@@ -34,7 +34,6 @@ export default class FileUpload extends Component {
       this
     );
     this.msUploadStudentExercises = this.msUploadStudentExercises.bind(this);
-    // alert(this.props.exerciesDetails.filename);
   }
 
   componentDidMount() {
@@ -67,29 +66,34 @@ export default class FileUpload extends Component {
   }
 
   googleLoadStudentUploadedFiles() {
-    _apiUtils.getGoogleStudentUploadedExerciseFiles(this.state.courseId, this.state.assignmentId).then((response) => {
-      let exerciseFiles = { value: [] }
+    _apiUtils
+      .getGoogleStudentUploadedExerciseFiles(
+        this.state.courseId,
+        this.state.assignmentId
+      )
+      .then((response) => {
+        let exerciseFiles = { value: [] };
 
-      // -- data mapper ---------------------------------------------------------------------------
-      // -- school app / api currently expects here an array of objects with "name" and "webUrl" as
-      // -- keys to the file name and file url: so we map Google's "title" and "alternateLink" back
-      // -- to file "name" and file "webUrl" -> should be done in API.js (current AxiosUtils.js)
-      // -- ---------------------------------------------------------------------------------------
-      // -- TODO: there are 4 types of attachments: "driveFile", "youTubeVideo", "link" and "form".
-      // --       -> currently we only deal with "driveFile", so there other 3 are pending. -------
-      let submission = response.data.studentSubmissions[0]
+        // -- data mapper ---------------------------------------------------------------------------
+        // -- school app / api currently expects here an array of objects with "name" and "webUrl" as
+        // -- keys to the file name and file url: so we map Google's "title" and "alternateLink" back
+        // -- to file "name" and file "webUrl" -> should be done in API.js (current AxiosUtils.js)
+        // -- ---------------------------------------------------------------------------------------
+        // -- TODO: there are 4 types of attachments: "driveFile", "youTubeVideo", "link" and "form".
+        // --       -> currently we only deal with "driveFile", so there other 3 are pending. -------
+        let submission = response.data.studentSubmissions[0];
 
-      if (! submission || ! submission.assignmentSubmission.attachments) return;
+        if (!submission || !submission.assignmentSubmission.attachments) return;
 
-      submission.assignmentSubmission.attachments.map((attachment) => (
-        exerciseFiles.value.push({
-          name:   attachment.driveFile.title,
-          webUrl: attachment.driveFile.alternateLink
-        })
-      ))
+        submission.assignmentSubmission.attachments.map((attachment) =>
+          exerciseFiles.value.push({
+            name: attachment.driveFile.title,
+            webUrl: attachment.driveFile.alternateLink,
+          })
+        );
 
-      this.setState({ exerciseFiles: exerciseFiles })
-    })
+        this.setState({ exerciseFiles: exerciseFiles });
+      });
   }
 
   handleFileChange = (event) => {
@@ -117,7 +121,7 @@ export default class FileUpload extends Component {
     let resData;
     if (sessionStorage.getItem("loginProvider") === _constants.MICROSOFT) {
       _apiUtils
-        .getBLOB(event.target.id, this.props.exerciesDetails.filetype)
+        .getBLOB(event.target.id, this.props.exerciseDetails.filetype)
         .then((response) => {
           resData = response.data;
         });
@@ -132,9 +136,9 @@ export default class FileUpload extends Component {
       // then why filename check is done instead of directly using objectFilename?
       link.setAttribute(
         "download",
-        this.props.exerciesDetails.filename
-          ? this.props.exerciesDetails.filename
-          : this.props.exerciesDetails.objectFilename
+        this.props.exerciseDetails.filename
+          ? this.props.exerciseDetails.filename
+          : this.props.exerciseDetails.objectFilename
       );
       document.body.appendChild(link);
       link.click();
@@ -210,14 +214,14 @@ export default class FileUpload extends Component {
     //truncate file extention  **END**
     return (
       <Fragment>
-        {this.props.exerciesDetails.objectFilename ? (
+        {this.props.exerciseDetails.objectFilename ? (
           <tr className="testing-color-blue col-12">
             <td>{fileNameToDisplay}</td>
             <td className="filelink icons">
               <a href="#?">
                 <i
                   class="fas fa-eye fa-2x"
-                  id={this.props.exerciesDetails.fileObject}
+                  id={this.props.exerciseDetails.fileObject}
                   onClick={this.fetchFile}
                 ></i>
               </a>{" "}
@@ -225,7 +229,7 @@ export default class FileUpload extends Component {
               <a href="#?">
                 <i
                   class="fas fa-download fa-2x"
-                  id={this.props.exerciesDetails.fileObject}
+                  id={this.props.exerciseDetails.fileObject}
                   onClick={this.fetchFile}
                 ></i>
               </a>
@@ -243,12 +247,12 @@ export default class FileUpload extends Component {
         ) : (
           ""
         )}
-        {this.props.exerciesDetails.filename &&
-        this.props.exerciesDetails.filelink ? (
+        {this.props.exerciseDetails.filename &&
+        this.props.exerciseDetails.filelink ? (
           <tr className="testing-color-blue col-12">
-            {/* {this.props.exerciesDetails.fileThumbnailLink ? (
+            {/* {this.props.exerciseDetails.fileThumbnailLink ? (
               <img
-                src={this.props.exerciesDetails.fileThumbnailLink}
+                src={this.props.exerciseDetails.fileThumbnailLink}
                 className="thumbnailIcon"
                 display="block"
               />
@@ -257,12 +261,12 @@ export default class FileUpload extends Component {
             )} */}
             <td>{fileNameToDisplay}</td>
             <td className="filelink icons">
-              <a href={this.props.exerciesDetails.filelink} target="_blank">
+              <a href={this.props.exerciseDetails.filelink} target="_blank">
                 <i class="fas fa-eye fa-2x"></i>
               </a>
               &nbsp;&nbsp;
-              {this.props.exerciesDetails.filelink.indexOf("htm") === -1 ? (
-                <a href={this.props.exerciesDetails.filelink} target="_blank">
+              {this.props.exerciseDetails.filelink.indexOf("htm") === -1 ? (
+                <a href={this.props.exerciseDetails.filelink} target="_blank">
                   <i class="fas fa-download fa-2x"></i>
                 </a>
               ) : (
@@ -282,11 +286,11 @@ export default class FileUpload extends Component {
         ) : (
           ""
         )}
-        {!this.props.exerciesDetails.objectFilename &&
-        (!this.props.exerciesDetails.filename ||
-          !this.props.exerciesDetails.filelink) ? (
+        {!this.props.exerciseDetails.objectFilename &&
+        (!this.props.exerciseDetails.filename ||
+          !this.props.exerciseDetails.filelink) ? (
           <tr className="testing-color-blue col-12">
-            <td></td>
+            <td>{"no exercise material"}</td>
             <td></td>
             <td className="float-right">
               <a
