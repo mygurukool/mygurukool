@@ -286,7 +286,7 @@ export default class Student extends Component {
                                   <div></div>
                                   {exe.content ? (
                                     <FileUpload
-                                      exerciesDetails={exe.content}
+                                      exerciseDetails={exe.content}
                                       groupData={this.state.groupDetails.id}
                                       subjectName={this.state.currentView}
                                       title={exe.title}
