@@ -1,6 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { MessageBox, MessageList, Input, Button } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
+import * as _constant from "./util/constants";
 
 let studentMsg = {
   position: "right",
@@ -46,6 +47,7 @@ export default class Messaging extends Component {
     };
     this.cancelClick = this.cancelClick.bind(this);
     this.showInputElement = this.showInputElement.bind(this);
+    this.startTimeOut = this.startTimeOut.bind(this);
   }
   cancelClick = (event) => {
     this.setState({
@@ -54,6 +56,13 @@ export default class Messaging extends Component {
     });
     console.log(this.state.messageList);
   };
+
+  startTimeOut() {
+    setTimeout(() => {
+      this.setState({ showMessageBlock: false });
+    }, _constant.MESSAGE_WINDOW_TIMEOUT);
+    return false;
+  }
 
   componentWillMount() {
     // setInterval(this.addMessage.bind(this), 3000);
@@ -110,6 +119,7 @@ export default class Messaging extends Component {
        "Send" (Direct message) / "Reply" (Comment existing msg)
   */
   showInputElement(type) {
+    this.startTimeOut();
     let message;
     let defaultPlaceHolder = type === REPLY ? "Reply..." : "Type here...";
     let inputCssName = type === ASK ? "card col-12" : "card row-12";
@@ -134,6 +144,7 @@ export default class Messaging extends Component {
               autofocus={true}
               // buttonsFloat="left"
               onKeyPress={(e) => {
+                this.startTimeOut();
                 message = e.target.value;
                 if (e.shiftKey && e.charCode === 13) {
                   this.refs.input.clear();
