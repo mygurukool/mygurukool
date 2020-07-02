@@ -34,6 +34,7 @@ export default class FileUpload extends Component {
       this
     );
     this.msUploadStudentExercises = this.msUploadStudentExercises.bind(this);
+    this.buildUploadBlock = this.buildUploadBlock.bind(this);
   }
 
   componentDidMount() {
@@ -44,6 +45,55 @@ export default class FileUpload extends Component {
     }
   }
 
+  buildUploadBlock(fileNameToDisplay, fileLink) {
+    return (
+      <tr className="testing-color-blue col-12">
+        {/*  **** Google file thumbnail link 
+         {this.props.exerciseDetails.fileThumbnailLink ? (
+        <img
+          src={this.props.exerciseDetails.fileThumbnailLink}
+          className="thumbnailIcon"
+          display="block"
+        />
+      ) : (
+        ""
+      )} */}
+
+        {fileNameToDisplay === null ? (
+          <td>{"no exercise material"}</td>
+        ) : (
+          <Fragment>
+            <td>{fileNameToDisplay}</td>
+            <td className="filelink icons">
+              <a href={fileLink} target="_blank">
+                <i className="fas fa-eye fa-2x"></i>
+              </a>
+              &nbsp;&nbsp;
+              {fileLink && fileLink.indexOf("htm") === -1 ? (
+                <a href={fileLink} target="_blank">
+                  <i className="fas fa-download fa-2x"></i>
+                </a>
+              ) : (
+                <a href="#?">
+                  <i
+                    className="fas fa-download fa-2x"
+                    id={this.props.exerciseDetails.fileObject}
+                    onClick={this.fetchFile}
+                  ></i>
+                </a>
+              )}
+            </td>
+          </Fragment>
+        )}
+        <button
+          className="btn btn-primary float-right"
+          onClick={this.handleUploadClick}
+        >
+          <i className="fas fa-upload"></i> Upload Exercise
+        </button>
+      </tr>
+    );
+  }
   msLoadStudentUploadedFiles() {
     _apiUtils.loadDrivesByGroupId(this.state.groupId).then((driveRes) => {
       _apiUtils
@@ -214,97 +264,24 @@ export default class FileUpload extends Component {
     //truncate file extention  **END**
     return (
       <Fragment>
-        {this.props.exerciseDetails.objectFilename ? (
-          <tr className="testing-color-blue col-12">
-            <td>{fileNameToDisplay}</td>
-            <td className="filelink icons">
-              <a href="#?">
-                <i
-                  className="fas fa-eye fa-2x"
-                  id={this.props.exerciseDetails.fileObject}
-                  onClick={this.fetchFile}
-                ></i>
-              </a>{" "}
-              &nbsp;&nbsp;
-              <a href="#?">
-                <i
-                  className="fas fa-download fa-2x"
-                  id={this.props.exerciseDetails.fileObject}
-                  onClick={this.fetchFile}
-                ></i>
-              </a>
-            </td>
-            <td className="float-right">
-              <a
-                href="#?"
-                onClick={this.handleUploadClick}
-                className="btn btn-primary"
-              >
-                <i className="fas fa-upload"></i> Upload Exercise
-              </a>
-            </td>
-          </tr>
-        ) : (
-          ""
-        )}
+        {this.props.exerciseDetails.objectFilename
+          ? this.buildUploadBlock(
+              fileNameToDisplay,
+              this.props.exerciseDetails.fileObject
+            )
+          : ""}
         {this.props.exerciseDetails.filename &&
-        this.props.exerciseDetails.filelink ? (
-          <tr className="testing-color-blue col-12">
-            {/* {this.props.exerciseDetails.fileThumbnailLink ? (
-              <img
-                src={this.props.exerciseDetails.fileThumbnailLink}
-                className="thumbnailIcon"
-                display="block"
-              />
-            ) : (
-              ""
-            )} */}
-            <td>{fileNameToDisplay}</td>
-            <td className="filelink icons">
-              <a href={this.props.exerciseDetails.filelink} target="_blank">
-                <i className="fas fa-eye fa-2x"></i>
-              </a>
-              &nbsp;&nbsp;
-              {this.props.exerciseDetails.filelink.indexOf("htm") === -1 ? (
-                <a href={this.props.exerciseDetails.filelink} target="_blank">
-                  <i className="fas fa-download fa-2x"></i>
-                </a>
-              ) : (
-                ""
-              )}
-            </td>
-            <td className="float-right">
-              <a
-                href="#?"
-                onClick={this.handleUploadClick}
-                className="btn btn-primary"
-              >
-                <i className="fas fa-upload"></i> Upload Exercise
-              </a>
-            </td>
-          </tr>
-        ) : (
-          ""
-        )}
+        this.props.exerciseDetails.filelink
+          ? this.buildUploadBlock(
+              fileNameToDisplay,
+              this.props.exerciseDetails.filelink
+            )
+          : ""}
         {!this.props.exerciseDetails.objectFilename &&
         (!this.props.exerciseDetails.filename ||
-          !this.props.exerciseDetails.filelink) ? (
-          <tr className="testing-color-blue col-12">
-            <td>{"no exercise material"}</td>
-            <td></td>
-            <td className="float-right">
-              <a
-                href="#?"
-                onClick={this.handleUploadClick}
-                className="btn btn-primary"
-              >
-                <i className="fas fa-upload"></i> Upload Exercise
-              </a>
-            </td>
-          </tr>
-        ) : (
-          ""
-        )}
+          !this.props.exerciseDetails.filelink)
+          ? this.buildUploadBlock(null, null)
+          : ""}
       </Fragment>
     );
   }
