@@ -112,11 +112,12 @@ export default class Messaging extends Component {
   showInputElement(type) {
     let message;
     let defaultPlaceHolder = type === REPLY ? "Reply..." : "Type here...";
-    let cssName = type === ASK ? "card col-12" : "card row-12";
+    let inputCssName = type === ASK ? "card col-12" : "card row-12";
+    let replyCssName = type === REPLY ? "card row-12" : "";
     return (
       <Fragment>
         <br />
-        <div className="card row-12">
+        <div className={replyCssName}>
           {type === REPLY ? (
             <MessageBox reply={this.state.replyEventObj} position={"right"} />
           ) : (
@@ -124,7 +125,7 @@ export default class Messaging extends Component {
           )}
 
           {/* <div className="row"> */}
-          <div className={cssName}>
+          <div className={inputCssName}>
             <Input
               placeholder={defaultPlaceHolder}
               defaultValue=""
@@ -230,6 +231,7 @@ export default class Messaging extends Component {
         ) : (
           ""
         )}
+        <br />
       </div>
     );
   }
