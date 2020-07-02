@@ -113,6 +113,42 @@ export function getBLOB(targetId, exerciseFileType) {
   });
 }
 
+// -- Google Drive
+export function googleDriveGetFiles(params = {}) {
+  // -- get/list all files or folders in the users Google Drive.
+  // -- pass "fields": "*" in params to retrive all file fields.
+  // --
+  // -- use the parameter "q" to apply a search filter:
+  // -- https://developers.google.com/drive/api/v3/search-files
+
+  return axiosGet(_gconsts.GOOGLE_DRIVE_API + "files", params);
+}
+
+export function googleDriveUploadFile(name, content, mime, folderId) {
+  const meta = { name : name, mimeType: mime }
+  if (typeof folderId !== 'undefined') meta.parents = [ folderId ]
+
+  const metaBlob    = new Blob([JSON.stringify(meta)], {type: 'application/json'})
+  const contentBlob = new Blob([content], {type: mime});
+
+  let data = new FormData()
+
+  data.append('json', metaBlob)
+  data.append('file', contentBlob)
+
+  const upl = "files?uploadType=multipart"
+  const url = _gconsts.GOOGLE_DRIVE_UPLOAD_API + upl
+
+  return axios.post(url,
+    data, { headers: {
+      Authorization: `Bearer ${sessionStorage.getItem(
+        _constants.ACCESS_TOKEN
+      )}`
+    } },
+  )
+}
+
+// -- helpers
 function axiosCall(url) {
   let api_url =
     sessionStorage.getItem("loginProvider") === _constants.GOOGLE
@@ -129,4 +165,14 @@ function axiosCall(url) {
       )}`,
     },
   });
+}
+
+function axiosGet(url, params = {}) {
+  return axios.get(url, {
+    params: params, headers: {
+      Authorization: `Bearer ${sessionStorage.getItem(
+        _constants.ACCESS_TOKEN
+      )}`,
+    },
+  })
 }
