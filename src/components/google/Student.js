@@ -18,7 +18,6 @@ import {
 import Video from "../Video";
 import * as _util from "../util/utils";
 import * as _apiUtils from "../util/AxiosUtil";
-import * as _constants from "../util/constants";
 import "@fortawesome/fontawesome-free/css/all.css";
 // Demo styles, see 'Styles' section below for some notes on use.
 // import "react-accessible-accordion/dist/fancy-example.css";
@@ -47,8 +46,54 @@ export default class Student extends Component {
       courses: "",
       assignments: "",
       studentName: "",
+      material: { formUrls: [] },
     };
     this.loadAssignment = this.loadAssignment.bind(this);
+    this.extractMaterials = this.extractMaterials.bind(this);
+  }
+
+  extractMaterials(assginmentMaterials) {
+    let materialObj = {
+      formUrls: [],
+      youtubeVideos: [],
+      exerciseDetails: [],
+    };
+    assginmentMaterials &&
+      assginmentMaterials.map(function (material, i) {
+        //FORMS
+        if (material && material.form) {
+          let formUrl = material.form.formUrl;
+          materialObj.formUrls[i] = formUrl;
+        }
+
+        //VIDEO
+        if (material && material.youtubeVideo) {
+          let youtube = { id: "", title: "", thumbnailUrl: "" };
+          youtube.id = material.youtubeVideo.id;
+          youtube.name = material.youtubeVideo.title;
+          youtube.thumbnailUrl = material.youtubeVideo.thumbnailUrl;
+          materialObj.youtubeVideos[i] = youtube;
+        }
+
+        //DRIVE
+        if (material && material.driveFile) {
+          let tempExerciseDetails = {
+            filename: "",
+            filelink: "",
+            fileThumbnailLink: "",
+            //below are, as of now not applicable for google
+            //filetype: "",  // google doesnt have an option of *BLOB* to download
+            //objectFilename: "",
+          };
+          tempExerciseDetails.filename = material.driveFile.driveFile.title;
+          tempExerciseDetails.filelink =
+            material.driveFile.driveFile.alternateLink;
+          tempExerciseDetails.fileThumbnailLink =
+            material.driveFile.driveFile.thumbnailUrl;
+          materialObj.exerciseDetails[i] = tempExerciseDetails;
+        }
+      });
+    this.state.material = materialObj;
   }
 
   componentDidMount() {
@@ -94,9 +139,10 @@ export default class Student extends Component {
       });
     isLoading = false;
   }
+
   render() {
-    let aStudentName = this.state.studentName; // -- damn hack..!
-    let hasNoDriveFile = true;
+    let hasDriveFiles = false;
+    console.log(hasDriveFiles + "  << ontop hasDriveFiles");
     return (
       <Fragment>
         <div className="container">
@@ -114,8 +160,11 @@ export default class Student extends Component {
                   >
                     <TabList>
                       {this.state.courses &&
-                        this.state.courses.map((course) => (
-                          <Tab>
+                        this.state.courses.map((course, i) => (
+                          <Tab
+                            key={course.name}
+                            className="nav nav-pills mb-3 sub-nav"
+                          >
                             <div className="column">{course.name}</div>
                             {_util.loadIconBySubject(course.name) ? (
                               <div className="column">
@@ -142,157 +191,156 @@ export default class Student extends Component {
                 color={"rgb(54, 215, 183)"}
                 loading={isLoading}
               />
-              <Accordion allowZeroExpanded={true}>
-                {/* //TODO: Dummy map iteration to refresh display of second tab ..  */}
-                {this.state.assignments &&
-                  this.state.assignments.map(() => (
+              {/* Loop to build TabPanel ( Count same as tabs count)  */}
+              {this.state.courses &&
+                this.state.courses.map(() => (
+                  <Accordion allowZeroExpanded={true}>
                     <TabPanel>
-                      {this.state.assignments.map((assignment) => (
-                        <AccordionItem>
-                          <AccordionItemHeading>
-                            <AccordionItemButton>
-                              <div className="row">
-                                <div className="float-left col-12 exercisetitle">
-                                  {assignment.title
-                                    ? assignment.title
-                                    : "No Exercise Data"}
-                                  <small className="text-muted float-right">
-                                    {/* TODO: Proper DateFormat*/}
-                                    {assignment.dueDate
-                                      ? "Due Date " +
-                                        assignment.dueDate.day +
-                                        "." +
-                                        assignment.dueDate.month +
-                                        "." +
-                                        assignment.dueDate.year +
-                                        ",  Time: " +
-                                        assignment.dueTime.hours +
-                                        ":" +
-                                        assignment.dueTime.minutes
-                                      : ""}
-                                  </small>
+                      {this.state.assignments &&
+                        this.state.assignments.map((assignment, i) => (
+                          <AccordionItem>
+                            <AccordionItemHeading>
+                              <AccordionItemButton>
+                                <div className="row">
+                                  <div className="float-left col-12 exercisetitle">
+                                    {assignment.title
+                                      ? assignment.title
+                                      : "No Exercise Data"}
+                                    <small className="text-muted float-right">
+                                      {/* TODO: Proper DateFormat*/}
+                                      {assignment.dueDate
+                                        ? "Due Date " +
+                                          assignment.dueDate.day +
+                                          "." +
+                                          assignment.dueDate.month +
+                                          "." +
+                                          assignment.dueDate.year +
+                                          ",  Time: " +
+                                          assignment.dueTime.hours +
+                                          ":" +
+                                          assignment.dueTime.minutes
+                                        : ""}
+                                    </small>
+                                  </div>
                                 </div>
-                              </div>
-                            </AccordionItemButton>
-                          </AccordionItemHeading>
-                          <AccordionItemPanel>
-                            <div className="card-body">
-                              <div className="row float-right">
-                                <button
-                                  type="button"
-                                  className="btn btn-primary turnin"
-                                >
-                                  <i className="fas fa-check"></i> Turn In
-                                </button>
-                              </div>
-                              <div className="row">
-                                <div className="col-12">
-                                  <b>Exercise Instructions</b>
-                                  {assignment.description ? (
-                                    <ul>{assignment.description}</ul>
-                                  ) : (
-                                    ""
-                                  )}
-                                  {assignment.materials &&
-                                    assignment.materials.map((material) =>
-                                      material && material.form ? (
-                                        <ul>
-                                          <iframe
-                                            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                                            src={material.form.formUrl}
-                                            width="100%"
-                                            height="700"
-                                            allowtransparency="true"
-                                            frameborder="0"
-                                          ></iframe>
-                                        </ul>
-                                      ) : (
-                                        ""
-                                      )
+                              </AccordionItemButton>
+                            </AccordionItemHeading>
+                            <AccordionItemPanel>
+                              <div className="card-body">
+                                <div className="row float-right">
+                                  <button
+                                    type="button"
+                                    className="btn btn-primary turnin"
+                                  >
+                                    <i className="fas fa-check"></i> Turn In
+                                  </button>
+                                </div>
+                                <div className="row">
+                                  <div className="col-12">
+                                    <b>Exercise Instructions</b>
+                                    {assignment.description ? (
+                                      <ul>{assignment.description}</ul>
+                                    ) : (
+                                      ""
                                     )}
-                                </div>
-                                <div className="col-6">
-                                  <b>Exercise Audio/ Video Explanation</b>
-                                  <ul>
-                                    {assignment.materials &&
-                                      assignment.materials.map((material) =>
-                                        material && material.youtubeVideo ? (
-                                          <Video
-                                            id={material.youtubeVideo.id}
-                                            name={material.youtubeVideo.title}
-                                            thumbnailUrl={
-                                              material.youtubeVideo.thumbnailUrl
-                                            }
-                                          />
-                                        ) : (
-                                          ""
+                                    {console.log(
+                                      "assignment.title " + assignment.title
+                                    )}
+                                    {this.extractMaterials(
+                                      assignment.materials
+                                    )}
+                                    {this.state.material.formUrls &&
+                                      this.state.material.formUrls.map(
+                                        (formUrl) => (
+                                          <ul>
+                                            <iframe
+                                              sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                                              src={formUrl}
+                                              width="100%"
+                                              height="700"
+                                              allowtransparency="true"
+                                              frameBorder="0"
+                                            ></iframe>
+                                          </ul>
                                         )
                                       )}
-                                  </ul>
+                                  </div>
+                                  <div className="col-12">
+                                    <b>Exercise Audio/ Video Explanation</b>
+                                    {/* <div className="col-6"> */}
+                                    {this.state.material.youtubeVideos &&
+                                      this.state.material.youtubeVideos.map(
+                                        (youtube) =>
+                                          youtube ? (
+                                            <Video
+                                              id={youtube.id}
+                                              name={youtube.title}
+                                              thumbnailUrl={
+                                                youtube.thumbnailUrl
+                                              }
+                                            />
+                                          ) : (
+                                            ""
+                                          )
+                                      )}
+                                  </div>
+                                  <div className="col-12">
+                                    <Messaging
+                                      userName={this.state.studentName}
+                                    />
+                                  </div>
+                                  {/* </div> */}
                                 </div>
-                                <div className="col-6 ">
-                                  <Messaging userName={aStudentName} />
-                                </div>
-                              </div>
-
-                              <div className="card card-body fileblock row">
-                                <div className="col-12">
-                                  {hasNoDriveFile
-                                    ? ((hasNoDriveFile = true),
-                                      (
-                                        <FileUpload
-                                          exerciesDetails={""}
-                                          subjectName={aStudentName}
-                                        />
-                                      ))
-                                    : ""}
-                                  {assignment.materials &&
-                                    assignment.materials.map(function (
-                                      material
-                                    ) {
-                                      if (material && material.driveFile) {
-                                        hasNoDriveFile = false;
-                                        //TODO: should be removed once google/ ms student class is sync
-                                        // filetype will not be filled as google doesnt have an option of *BLOB* to download
-                                        let tempExerciseDetails = {
-                                          filename: "",
-                                          filetype: "",
-                                          filelink: "",
-                                          fileThumbnailLink: "",
-                                        };
-
-                                        tempExerciseDetails.filename =
-                                          material.driveFile.driveFile.title;
-                                        tempExerciseDetails.filelink =
-                                          material.driveFile.driveFile.alternateLink;
-                                        tempExerciseDetails.fileThumbnailLink =
-                                          material.driveFile.driveFile.thumbnailUrl;
-
-                                        return (
+                                <div className="card card-body fileblock row">
+                                  <div className="col-12">
+                                    {this.state.material.exerciseDetails &&
+                                      this.state.material.exerciseDetails.map(
+                                        (exerciseDetail) =>
+                                          exerciseDetail
+                                            ? ((hasDriveFiles = true),
+                                              console.log(
+                                                hasDriveFiles +
+                                                  "  << hasDriveFiles"
+                                              ),
+                                              (
+                                                <FileUpload
+                                                  exerciseDetails={
+                                                    exerciseDetail
+                                                  }
+                                                  studentName={
+                                                    this.state.studentName
+                                                  }
+                                                  courseId={assignment.courseId}
+                                                  assignmentId={assignment.id}
+                                                />
+                                              ))
+                                            : ""
+                                      )}
+                                    {!hasDriveFiles
+                                      ? (console.log(
+                                          hasDriveFiles + "  << Single mode"
+                                        ),
+                                        (
                                           <FileUpload
-                                            exerciesDetails={
-                                              tempExerciseDetails
-                                            }
-                                            subjectName={aStudentName}
-                                            studentName={aStudentName}
+                                            exerciseDetails={""}
+                                            studentName={this.state.studentName}
                                             courseId={assignment.courseId}
                                             assignmentId={assignment.id}
                                           />
-                                        );
-                                      }
-                                    })}
-                                </div>
-                                <div className="col-12">
-                                  {/* {this.state.formUpload} */}
+                                        ))
+                                      : ""}
+                                  </div>
+                                  <div className="col-12">
+                                    {/* {this.state.formUpload} */}
+                                  </div>
                                 </div>
                               </div>
-                            </div>
-                          </AccordionItemPanel>
-                        </AccordionItem>
-                      ))}
+                            </AccordionItemPanel>
+                          </AccordionItem>
+                        ))}
                     </TabPanel>
-                  ))}
-              </Accordion>
+                  </Accordion>
+                ))}
             </div>
           </Tabs>
         </div>
