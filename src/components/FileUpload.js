@@ -220,7 +220,7 @@ export default class FileUpload extends Component {
             <td className="filelink icons">
               <a href="#?">
                 <i
-                  class="fas fa-eye fa-2x"
+                  className="fas fa-eye fa-2x"
                   id={this.props.exerciseDetails.fileObject}
                   onClick={this.fetchFile}
                 ></i>
@@ -228,7 +228,7 @@ export default class FileUpload extends Component {
               &nbsp;&nbsp;
               <a href="#?">
                 <i
-                  class="fas fa-download fa-2x"
+                  className="fas fa-download fa-2x"
                   id={this.props.exerciseDetails.fileObject}
                   onClick={this.fetchFile}
                 ></i>
@@ -240,7 +240,7 @@ export default class FileUpload extends Component {
                 onClick={this.handleUploadClick}
                 className="btn btn-primary"
               >
-                <i class="fas fa-upload"></i> Upload Exercise
+                <i className="fas fa-upload"></i> Upload Exercise
               </a>
             </td>
           </tr>
@@ -262,12 +262,12 @@ export default class FileUpload extends Component {
             <td>{fileNameToDisplay}</td>
             <td className="filelink icons">
               <a href={this.props.exerciseDetails.filelink} target="_blank">
-                <i class="fas fa-eye fa-2x"></i>
+                <i className="fas fa-eye fa-2x"></i>
               </a>
               &nbsp;&nbsp;
               {this.props.exerciseDetails.filelink.indexOf("htm") === -1 ? (
                 <a href={this.props.exerciseDetails.filelink} target="_blank">
-                  <i class="fas fa-download fa-2x"></i>
+                  <i className="fas fa-download fa-2x"></i>
                 </a>
               ) : (
                 ""
@@ -279,7 +279,7 @@ export default class FileUpload extends Component {
                 onClick={this.handleUploadClick}
                 className="btn btn-primary"
               >
-                <i class="fas fa-upload"></i> Upload Exercise
+                <i className="fas fa-upload"></i> Upload Exercise
               </a>
             </td>
           </tr>
@@ -298,7 +298,7 @@ export default class FileUpload extends Component {
                 onClick={this.handleUploadClick}
                 className="btn btn-primary"
               >
-                <i class="fas fa-upload"></i> Upload Exercise
+                <i className="fas fa-upload"></i> Upload Exercise
               </a>
             </td>
           </tr>
@@ -330,7 +330,7 @@ export default class FileUpload extends Component {
               <td colspan="2" className="filelink icons">
                 {this.state.fileUploadedName ? (
                   <a href={this.state.fileUploadedName.webUrl} target="_blank">
-                    <i class="fas fa-eye fa-2x"></i>
+                    <i className="fas fa-eye fa-2x"></i>
                   </a>
                 ) : (
                   ""
@@ -343,11 +343,11 @@ export default class FileUpload extends Component {
         </table>
         <div>
           {this.state.hideFileUpload === false ? (
-            <div class="card card-body fileblock col-12">
-              <div class="custom-file">
+            <div className="card card-body fileblock col-12">
+              <div className="custom-file">
                 <input
                   type="file"
-                  class="custom-file-input"
+                  className="custom-file-input"
                   id="customFile"
                   onChange={this.handleFileChange}
                 />
@@ -362,14 +362,14 @@ export default class FileUpload extends Component {
                   onClick={this.cancelClick}
                   className="btn btn-danger"
                 >
-                  <i class="far fa-times-circle"></i> Cancel
+                  <i className="far fa-times-circle"></i> Cancel
                 </button>{" "}
                 <button
                   type="button"
                   className="btn btn-success upload-btn"
                   onClick={this.handleClick}
                 >
-                  <i class="fas fa-cloud-upload-alt"></i> Submit
+                  <i className="fas fa-cloud-upload-alt"></i> Submit
                 </button>
               </div>
             </div>
@@ -388,7 +388,7 @@ export default class FileUpload extends Component {
                   </td>
                   <td className="file_icons">
                     <a href={exe.webUrl} target="_blank">
-                      <i class="fas fa-eye fa-2x"></i>
+                      <i className="fas fa-eye fa-2x"></i>
                     </a>
                   </td>
                 </tr>
