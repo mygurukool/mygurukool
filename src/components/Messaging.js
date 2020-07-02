@@ -116,15 +116,15 @@ export default class Messaging extends Component {
     return (
       <Fragment>
         <br />
-        <div class="card row-12">
+        <div className="card row-12">
           {type === REPLY ? (
             <MessageBox reply={this.state.replyEventObj} position={"right"} />
           ) : (
             ""
           )}
 
-          {/* <div class="row"> */}
-          <div class={cssName}>
+          {/* <div className="row"> */}
+          <div className={cssName}>
             <Input
               placeholder={defaultPlaceHolder}
               defaultValue=""
@@ -152,7 +152,7 @@ export default class Messaging extends Component {
                     onClick={(e) => this.addMessage(message, type)}
                   />
                 ) : (
-                  <div class="col-2">
+                  <div className="col-2">
                     <Button
                       text={type}
                       onClick={(e) => this.addMessage(message, type)}
@@ -197,10 +197,10 @@ export default class Messaging extends Component {
           className="btn btn-primary turnin"
           onClick={() => this.setState({ showMessageBlock: true })}
         >
-          <i class="fas fa-question-circle"></i> Feel free to ask!!
+          <i className="fas fa-question-circle"></i> Feel free to ask!!
         </button>
         {this.state.showMessageBlock === true ? (
-          <div class="card card-body fileblock col-12">
+          <div className="card card-body fileblock col-12">
             <div className="container">
               <div className="right-panel">
                 <MessageList
@@ -223,7 +223,7 @@ export default class Messaging extends Component {
                 onClick={this.cancelClick}
                 className="btn btn-danger float-right"
               >
-                <i class="far fa-times-circle"></i> Close
+                <i className="far fa-times-circle"></i> Close
               </button>
             </div>
           </div>

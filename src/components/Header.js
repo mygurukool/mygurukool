@@ -53,7 +53,7 @@ export default class Header extends Component {
                       }
                     }}
                   >
-                    <i class="fas fa-sign-out-alt">&nbsp;Logout</i>
+                    <i className="fas fa-sign-out-alt">&nbsp;Logout</i>
                   </a>
                 ) : (
                   ""

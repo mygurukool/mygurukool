@@ -16,19 +16,23 @@ export default class Communication extends Component {
       <div className="nav-item">
         &emsp;
         <a href="#">
-          <i class="fas fa-window-close" id={-1} onClick={this.handleClick}></i>
+          <i
+            className="fas fa-window-close"
+            id={-1}
+            onClick={this.handleClick}
+          ></i>
         </a>{" "}
         &emsp;
         <a href="#">
           {this.state.resize ? (
             <i
-              class="far fa-window-minimize fa-1g"
+              className="far fa-window-minimize fa-1g"
               id={0}
               onClick={this.handleClick}
             ></i>
           ) : (
             <i
-              class="far fa-window-maximize fa-1g"
+              className="far fa-window-maximize fa-1g"
               id={1}
               onClick={this.handleClick}
             ></i>
