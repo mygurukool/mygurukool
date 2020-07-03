@@ -38,7 +38,6 @@
     "react-scripts": "2.1.8",
     "react-spinners": "^0.8.3",
     "react-split-pane": "^0.1.91",
-    "react-tabs": "^3.1.0",
     "string-strip-html": "^4.4.0",
     "styled-components": "^5.1.1"
   },

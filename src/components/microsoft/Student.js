@@ -2,8 +2,6 @@ import React, { Component, Fragment } from "react";
 import "../../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import FileUpload from "../FileUpload";
-import { Tab, Tabs, TabList, TabPanel } from "react-tabs";
-import "react-tabs/style/react-tabs.css";
 import { css } from "@emotion/core";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import {
