@@ -1,52 +1,15 @@
 import React from "react";
-import styled from "styled-components";
 import { Component } from "react";
 import SplitPane from "react-split-pane";
 // import Student from "./microsoft/Student";
 import Classwork from "./Classwork";
-import Communication from "./Communication";
+import Conference from "./communication/Conference";
 import Header from "./Header";
 // import CustomScroll from "react-custom-scroll";
 // import "../scss/customScroll.css";
 import { Scrollbars } from "react-custom-scrollbars";
 import * as _constants from "./util/constants";
-
-const Wrapper = styled.div`
-  .Resizer {
-    -moz-box-sizing: border-box;
-    -webkit-box-sizing: border-box;
-    box-sizing: border-box;
-    background: #000;
-    opacity: 0.2;
-    z-index: 1;
-    -moz-background-clip: padding;
-    -webkit-background-clip: padding;
-    background-clip: padding-box;
-  }
-
-  .Resizer:hover {
-    -webkit-transition: all 2s ease;
-    transition: all 2s ease;
-  }
-
-  .Resizer.vertical {
-    width: 11px;
-    margin: 0 -5px;
-    border-left: 5px solid rgba(255, 255, 255, 0);
-    border-right: 5px solid rgba(255, 255, 255, 0);
-    cursor: col-resize;
-  }
-
-  .Resizer.vertical:hover {
-    border-left: 5px solid rgba(0, 0, 0, 0.5);
-    border-right: 5px solid rgba(0, 0, 0, 0.5);
-  }
-  .Pane1 {
-    display: flex;
-    min-height: 0;
-    min-width: 100;
-  }
-`;
+import { Wrapper } from "./util/Wrapper";
 
 class Home extends Component {
   constructor() {
@@ -57,14 +20,12 @@ class Home extends Component {
       cssContainer: "container",
     };
     this.handleStudentData = this.handleStudentData.bind(this);
-    this.handleCommunicationPanelSize = this.handleCommunicationPanelSize.bind(
-      this
-    );
+    this.handleConferencePanelSize = this.handleConferencePanelSize.bind(this);
   }
   componentWillMount() {
     this.setState({
       btmHeight: "",
-      showCommPane: false,
+      showConfPane: false,
       splitPercentage: "100%",
     });
     if (
@@ -84,22 +45,22 @@ class Home extends Component {
     });
   };
 
-  handleCommunicationPanelSize = (resize) => {
-    //Communication Pane
+  handleConferencePanelSize = (resize) => {
+    //Conference Pane
     //=> resize: -1:close window; 0:minimize(50%); 1:maximize(100%)
     let size = "50%"; //resize === 0
-    let keepCommuPaneOpen = true;
+    let keepConfPaneOpen = true;
     if (resize === 1) {
       size = "0%";
     } else if (resize === -1) {
       size = "100%";
-      keepCommuPaneOpen = false;
+      keepConfPaneOpen = false;
     }
     this.setState({
       splitPercentage: size,
-      showCommPane: keepCommuPaneOpen,
+      showConfPane: keepConfPaneOpen,
     });
-    keepCommuPaneOpen
+    keepConfPaneOpen
       ? (this.state.cssContainer = "container-conference")
       : (this.state.cssContainer = "container");
   };
@@ -135,13 +96,13 @@ class Home extends Component {
                     <a
                       href="#"
                       onClick={() =>
-                        this.handleCommunicationPanelSize(
+                        this.handleConferencePanelSize(
                           //At this location
-                          // "showCommePane is False"
+                          // "showConfPane is False"
                           //        =>Vid conference is open (next action: setInactive=> pane 1: 100%/ -1 )
-                          // "showCommePane is True"
+                          // "showConfPane is True"
                           //        => Vid conference is inactive (next action: setInactive=> pane 1: 50%/ 0 )
-                          !this.state.showCommPane ? 0 : -1
+                          !this.state.showConfPane ? 0 : -1
                         )
                       }
                     >
@@ -166,9 +127,9 @@ class Home extends Component {
           {/* <CustomScroll allowOuterScroll={true} flex="1">
             <Student studentData={this.handleStudentData} />
           </CustomScroll> */}
-          {this.state.showCommPane ? (
-            <Communication
-              paneMaximize={this.handleCommunicationPanelSize}
+          {this.state.showConfPane ? (
+            <Conference
+              paneMaximize={this.handleConferencePanelSize}
               bottomHeight={this.state.btmHeight}
             />
           ) : (

@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
 import { MessageBox, MessageList, Input, Button } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
-import * as _constant from "./util/constants";
+import * as _constant from "../util/constants";
 
 let studentMsg = {
   position: "right",
@@ -37,35 +37,31 @@ let teacherMsg = {
 
 const REPLY = "Reply";
 const ASK = "Ask";
-export default class Messaging extends Component {
+export default class Comments extends Component {
   constructor(props) {
     super(props);
     this.state = {
       showMessageBlock: false,
-      show: true,
       messageList: [studentMsg, teacherMsg], //TODO: Dev hack, msglist tobe del for prod
     };
-    this.cancelClick = this.cancelClick.bind(this);
+    // this.cancelClick = this.cancelClick.bind(this);
     this.showInputElement = this.showInputElement.bind(this);
     this.startTimeOut = this.startTimeOut.bind(this);
   }
-  cancelClick = (event) => {
-    this.setState({
-      showMessageBlock: false,
-      showReplyBlock: false,
-    });
-    console.log(this.state.messageList);
-  };
+  // cancelClick = (event) => {
+  //   this.setState({
+  //     showMessageBlock: false,
+  //     showReplyBlock: false,
+  //   });
+  //   console.log(this.state.messageList);
+  // };
 
   startTimeOut() {
-    setTimeout(() => {
-      this.setState({ showMessageBlock: false });
-    }, _constant.MESSAGE_WINDOW_TIMEOUT);
-    return false;
+    // this.props.resetTimeout(true);
   }
 
-  componentWillMount() {
-    // setInterval(this.addMessage.bind(this), 3000);
+  componentDidMount() {
+    // this.startTimeOut();
   }
 
   getRandomColor() {
@@ -204,44 +200,24 @@ export default class Messaging extends Component {
   render() {
     return (
       <div>
-        <button
-          type="button"
-          className="btn btn-primary turnin"
-          onClick={() => this.setState({ showMessageBlock: true })}
-        >
-          <i className="fas fa-question-circle"></i> Feel free to ask!!
-        </button>
-        {this.state.showMessageBlock === true ? (
-          <div className="card card-body fileblock col-12">
-            <div className="container">
-              <div className="right-panel">
-                <MessageList
-                  className="message-list"
-                  lockable={true}
-                  downButtonBadge={10}
-                  dataSource={this.state.messageList}
-                  onReplyClick={(e) => this.replyMessage(e)}
-                  replyButton={true}
-                />
-                {/* Show the Reply Block, only when Reply is Clicked */}
-                {this.state.showReplyBlock ? this.showInputElement(REPLY) : ""}
-                {/* Comment Input area */}
-                {this.showInputElement(ASK)}
-              </div>
-            </div>
-            <div className="form-group">
-              <button
-                type="reset"
-                onClick={this.cancelClick}
-                className="btn btn-danger float-right"
-              >
-                <i className="far fa-times-circle"></i> Close
-              </button>
+        <div className="card card-body fileblock col-12">
+          <div className="container">
+            <div className="right-panel">
+              <MessageList
+                className="message-list"
+                lockable={true}
+                downButtonBadge={10}
+                dataSource={this.state.messageList}
+                onReplyClick={(e) => this.replyMessage(e)}
+                replyButton={true}
+              />
+              {/* Show the Reply Block, only when Reply is Clicked */}
+              {this.state.showReplyBlock ? this.showInputElement(REPLY) : ""}
+              {/* Comment Input area */}
+              {this.showInputElement(ASK)}
             </div>
           </div>
-        ) : (
-          ""
-        )}
+        </div>
         <br />
       </div>
     );

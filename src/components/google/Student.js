@@ -2,8 +2,7 @@ import React, { Component, Fragment } from "react";
 import "../../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import FileUpload from "../FileUpload";
-import Messaging from "../Messaging";
-import "react-tabs/style/react-tabs.css";
+import Interaction from "../communication/Interaction";
 import { css } from "@emotion/core";
 import PacmanLoader from "react-spinners/PacmanLoader";
 import {
@@ -280,7 +279,9 @@ export default class Student extends Component {
                                   )}
                               </div>
                               <div className="col-12">
-                                <Messaging userName={this.state.studentName} />
+                                <Interaction
+                                  userName={this.state.studentName}
+                                />
                               </div>
                               {/* </div> */}
                             </div>

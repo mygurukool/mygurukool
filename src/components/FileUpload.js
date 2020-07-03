@@ -196,8 +196,29 @@ export default class FileUpload extends Component {
   };
 
   handleClick = (event) => {
-    if (sessionStorage.getItem("loginProvider") === _constants.MICROSOFT)
+    if (sessionStorage.getItem("loginProvider") === _constants.MICROSOFT) {
       this.msUploadStudentExercises();
+    } else {
+      _apiUtils
+        .googleDriveGetFiles({ fields: "*", q: "name contains 'test'" })
+        .then((response) => {
+          console.log(response);
+        });
+      //googleDriveUploadFile(name, content, mime, folderId)
+      alert("Submit Clicked");
+      // let folderId =
+      //   "0BzJfQgFkF_jafjRtSDUxazlqaVFtVVZLQ2ZPX1dMaFNzektPZ293WW5IOWlHU0VfODdWcjg";
+      // _apiUtils
+      //   .googleDriveUploadFile(
+      //     this.file.name,
+      //     this.file,
+      //     "application/octet-stream",
+      //     folderId
+      //   )
+      //   .then((response) => {
+      //     console.log(response);
+      //   });
+    }
   };
 
   msUploadStudentExercises() {

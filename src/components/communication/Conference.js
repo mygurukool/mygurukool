@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-export default class Communication extends Component {
+export default class Conference extends Component {
   constructor(props) {
     super(props);
     this.state = { resize: false };
@@ -7,7 +7,7 @@ export default class Communication extends Component {
 
   handleClick = (e) => {
     this.state.resize = !this.state.resize;
-    //Communication Pane=> size/e.target.id: -1:close window; 0:minimize(50%); 1:maximize
+    //Conference Pane=> size/e.target.id: -1:close window; 0:minimize(50%); 1:maximize
     this.props.paneMaximize(parseInt(e.target.id));
   };
 
