@@ -48,16 +48,21 @@ export default class Comments extends Component {
     this.showInputElement = this.showInputElement.bind(this);
     this.startTimeOut = this.startTimeOut.bind(this);
   }
-  // cancelClick = (event) => {
-  //   this.setState({
-  //     showMessageBlock: false,
-  //     showReplyBlock: false,
-  //   });
-  //   console.log(this.state.messageList);
-  // };
+
+  cancelClick = (event) => {
+    this.setState({
+      showMessageBlock: false,
+      showReplyBlock: false,
+    });
+    console.log(this.state.messageList);
+  };
 
   startTimeOut() {
     // this.props.resetTimeout(true);
+    setTimeout(() => {
+      this.setState({ showMessageBlock: false });
+    }, _constant.MESSAGE_WINDOW_TIMEOUT);
+    return false;
   }
 
   componentDidMount() {
@@ -200,24 +205,44 @@ export default class Comments extends Component {
   render() {
     return (
       <div>
-        <div className="card card-body fileblock col-12">
-          <div className="container">
-            <div className="right-panel">
-              <MessageList
-                className="message-list"
-                lockable={true}
-                downButtonBadge={10}
-                dataSource={this.state.messageList}
-                onReplyClick={(e) => this.replyMessage(e)}
-                replyButton={true}
-              />
-              {/* Show the Reply Block, only when Reply is Clicked */}
-              {this.state.showReplyBlock ? this.showInputElement(REPLY) : ""}
-              {/* Comment Input area */}
-              {this.showInputElement(ASK)}
+        <button
+          type="button"
+          className="btn btn-primary turnin"
+          onClick={() => this.setState({ showMessageBlock: true })}
+        >
+          <i className="fas fa-question-circle"></i> Feel free to ask!!
+        </button>
+        {this.state.showMessageBlock === true ? (
+          <div className="card card-body fileblock col-12">
+            <div className="container">
+              <div className="right-panel">
+                <MessageList
+                  className="message-list"
+                  lockable={true}
+                  downButtonBadge={10}
+                  dataSource={this.state.messageList}
+                  onReplyClick={(e) => this.replyMessage(e)}
+                  replyButton={true}
+                />
+                {/* Show the Reply Block, only when Reply is Clicked */}
+                {this.state.showReplyBlock ? this.showInputElement(REPLY) : ""}
+                {/* Comment Input area */}
+                {this.showInputElement(ASK)}
+              </div>
+            </div>
+            <div className="form-group">
+              <button
+                type="reset"
+                onClick={this.cancelClick}
+                className="btn btn-danger float-right"
+              >
+                <i className="far fa-times-circle"></i> Close
+              </button>
             </div>
           </div>
-        </div>
+        ) : (
+          ""
+        )}
         <br />
       </div>
     );

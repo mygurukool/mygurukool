@@ -3,6 +3,8 @@ import SplitPane from "react-split-pane";
 import { Scrollbars } from "react-custom-scrollbars";
 import { Wrapper } from "../util/Wrapper";
 import Comments from "./Comments";
+import Audio from "./Audio";
+import "../../scss/customScroll.css";
 export default class Interaction extends Component {
   constructor(props) {
     super(props);
@@ -10,7 +12,7 @@ export default class Interaction extends Component {
       showMessageBlock: false,
       btmHeight: "",
       splitPercentage: "100%",
-      interactionTimeout: 5000, //_constant.MESSAGE_WINDOW_TIMEOUT,
+      interactionTimeout: 9000, //_constant.MESSAGE_WINDOW_TIMEOUT,
     };
     this.toggleBtmHeight = this.toggleBtmHeight.bind(this);
     this.startTimeOut = this.startTimeOut.bind(this);
@@ -29,57 +31,70 @@ export default class Interaction extends Component {
     // console.log(this.state.messageList);
   };
 
-  startTimeOut() {
-    setTimeout(() => {
+  startTimeOut(v) {
+    this.state.interactionTimeout = setTimeout(() => {
       this.setState({ showMessageBlock: false });
-    }, this.state.interactionTimeout);
+    }, v);
     return false;
   }
 
-  resetTimeOut(reset) {
-    if (reset) this.setState({ interactionTimeout: 5000 });
-  }
+  resetTimeOut = (reset) => {
+    if (reset) {
+      //this.state.interactionTimeout = 19000;
+      // alert("resetTimeOut " + this.state.interactionTimeout);
+      clearTimeout(this.state.interactionTimeout);
+      this.startTimeOut(19000);
+    }
+  };
 
   render() {
     return (
+      <Comments
+        userName={this.props.userName}
+        resetTimeout={this.resetTimeOut}
+      />
       // <Wrapper>
-      <div>
-        <button
-          type="button"
-          className="btn btn-primary turnin"
-          onClick={() => this.setState({ showMessageBlock: true })}
-        >
-          <i className="fas fa-question-circle"></i> Feel free to ask!!
-        </button>
-        {this.state.showMessageBlock === true ? (
-          <Fragment>
-            {this.startTimeOut()}
-            {/* <SplitPane
-                className="crazy-scroll"
-                split="vertical"
-                defaultSize={this.state.splitPercentage}
-                onChange={(size) => this.toggleBtmHeight(size)}
-              > */}
-            <Comments
-              userName={this.props.userName}
-              // resetTimeout={this.resetTimeOut}
-            />
-            {/* <Scrollbars>this.commentBlock()</Scrollbars> */}
-            {/* {"Audio here"} */}
-            {/* </SplitPane> */}
-            <button
-              type="button"
-              onClick={() => this.setState({ showMessageBlock: false })}
-              className="btn btn-danger float-right"
-            >
-              <i className="far fa-times-circle"></i> Close Interaction
-            </button>
-            <br />
-          </Fragment>
-        ) : (
-          ""
-        )}
-      </div>
+      //   <div>
+      //     <button
+      //       type="button"
+      //       className="btn btn-primary turnin"
+      //       onClick={() => this.setState({ showMessageBlock: true })}
+      //     >
+      //       <i className="fas fa-question-circle"></i> Feel free to ask!!
+      //     </button>
+      //     {this.state.showMessageBlock === true ? (
+      //     <div className="row-12">
+      //       {this.startTimeOut(5000)}
+      //       <SplitPane
+      //         className="crazy-scroll"
+      //         split="vertical"
+      //         defaultSize={this.state.splitPercentage}
+      //         onChange={(size) => this.toggleBtmHeight(size)}
+      //       >
+      //         <div>
+      //           <Comments
+      //             userName={this.props.userName}
+      //             resetTimeout={this.resetTimeOut}
+      //           />
+      //         </div>
+      //         {/* {"Audio here"} */}
+      //         <div>
+      //           <Audio />
+      //         </div>
+      //       </SplitPane>
+      //       <button
+      //         type="button"
+      //         onClick={() => this.setState({ showMessageBlock: false })}
+      //         className="btn btn-danger float-right"
+      //       >
+      //         <i className="far fa-times-circle"></i> Close Interaction
+      //       </button>
+      //       <br />
+      //     </div>
+      //     // {/* ) : (
+      //     //   ""
+      //     // )} */}
+      //   </div>
       // </Wrapper>
     );
   }
