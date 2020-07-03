@@ -113,6 +113,11 @@ export function getBLOB(targetId, exerciseFileType) {
   });
 }
 
+// -- Google Classroom
+export function googleClassroomStudentCourseDetails(courseId, studentId ="me") {
+  return axiosGet(_gconsts.REACT_APP_GOOGLE_CLASSROOM_API + `courses/${courseId}/students/${studentId}`)
+}
+
 // -- Google Drive
 export function googleDriveGetFiles(params = {}) {
   // -- get/list all files or folders in the users Google Drive.
