@@ -148,6 +148,29 @@ export function googleDriveUploadFile(name, content, mime, folderId) {
   )
 }
 
+export function googleDriveUpdateFile(name, content, mime, fileId) {
+  const meta = { name : name, mimeType: mime }
+
+  const metaBlob    = new Blob([JSON.stringify(meta)], {type: 'application/json'})
+  const contentBlob = new Blob([content], {type: mime});
+
+  let data = new FormData()
+
+  data.append('json', metaBlob)
+  data.append('file', contentBlob)
+
+  const upl = "files/" + fileId + "?uploadType=multipart"
+  const url = _gconsts.GOOGLE_DRIVE_UPLOAD_API + upl
+
+  return axios.patch(url,
+    data, { headers: {
+      Authorization: `Bearer ${sessionStorage.getItem(
+        _constants.ACCESS_TOKEN
+      )}`
+    } },
+  )
+}
+
 // -- helpers
 function axiosCall(url) {
   let api_url =
