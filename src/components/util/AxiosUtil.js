@@ -129,6 +129,10 @@ export function googleDriveGetFiles(params = {}) {
   return axiosGet(_gconsts.GOOGLE_DRIVE_API + "files", params);
 }
 
+export function googleDriveDownloadFile(fileId) {
+  return axiosGet(_gconsts.GOOGLE_DRIVE_API + `files/${fileId}?alt=media`)
+}
+
 export function googleDriveUploadFile(name, content, mime, folderId) {
   const meta = { name : name, mimeType: mime }
   if (typeof folderId !== 'undefined') meta.parents = [ folderId ]
