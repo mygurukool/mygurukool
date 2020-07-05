@@ -6,7 +6,7 @@ import * as _msconsts from "./msConsts";
 export function userProfile() {
   let api_url =
     sessionStorage.getItem("loginProvider") === _constants.GOOGLE
-      ? _gconsts.REACT_APP_GOOGLE_USERINFO_API
+      ? _gconsts.GOOGLE_USERINFO_API
       : _msconsts.REACT_APP_GRAPH_API_URL_BETA;
 
   return axios.get(api_url + "me", {
@@ -114,8 +114,36 @@ export function getBLOB(targetId, exerciseFileType) {
 }
 
 // -- Google Classroom
+export function googleClassroomGetCourses() {
+  return axiosGet(_gconsts.GOOGLE_CLASSROOM_API + "courses")
+}
+
 export function googleClassroomStudentCourseDetails(courseId, studentId ="me") {
-  return axiosGet(_gconsts.REACT_APP_GOOGLE_CLASSROOM_API + `courses/${courseId}/students/${studentId}`)
+  return axiosGet(_gconsts.GOOGLE_CLASSROOM_API + `courses/${courseId}/students/${studentId}`)
+}
+
+export function googleClassroomTeacherCourseDetails(courseId, teacherId ="me") {
+  return axiosGet(_gconsts.GOOGLE_CLASSROOM_API + `courses/${courseId}/teachers/${teacherId}`)
+}
+
+export function googleClassroomCreateCourse(name, description, ownerId) {
+  const course = { name : name, description: description, ownerId: ownerId }
+
+  const courseBlob    = new Blob([JSON.stringify(course)], {type: 'application/json'})
+
+  let data = new FormData()
+
+  data.append('course', courseBlob)
+
+  const url = _gconsts.GOOGLE_CLASSROOM_API + "courses"
+
+  return axios.patch(url,
+    data, { headers: {
+      Authorization: `Bearer ${sessionStorage.getItem(
+        _constants.ACCESS_TOKEN
+      )}`
+    } },
+  )
 }
 
 // -- Google Drive
@@ -184,7 +212,7 @@ export function googleDriveUpdateFile(name, content, mime, fileId) {
 function axiosCall(url) {
   let api_url =
     sessionStorage.getItem("loginProvider") === _constants.GOOGLE
-      ? _gconsts.REACT_APP_GOOGLE_CLASSROOM_API
+      ? _gconsts.GOOGLE_CLASSROOM_API
       : _msconsts.REACT_APP_GRAPH_API_URL;
 
   console.log(api_url);
