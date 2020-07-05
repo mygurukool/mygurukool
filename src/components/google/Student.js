@@ -107,6 +107,7 @@ export default class Student extends Component {
         _apiUtils
           .loadGoogleSubjects()
           .then((subjectRes) => {
+            console.log(subjectRes);
             isLoading = false;
             this.setState({
               courses: subjectRes.data.courses,
@@ -281,6 +282,8 @@ export default class Student extends Component {
                               <div className="col-12">
                                 <Interaction
                                   userName={this.state.studentName}
+                                  courseId={assignment.courseId}
+                                  subjectName={assignment.title}
                                 />
                               </div>
                               {/* </div> */}
