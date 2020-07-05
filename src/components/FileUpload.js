@@ -199,13 +199,16 @@ export default class FileUpload extends Component {
     if (sessionStorage.getItem("loginProvider") === _constants.MICROSOFT) {
       this.msUploadStudentExercises();
     } else {
-      _apiUtils
-        .googleDriveGetFiles({ fields: "*", q: "name contains 'test'" })
-        .then((response) => {
-          console.log(response);
-        });
-      //googleDriveUploadFile(name, content, mime, folderId)
-      alert("Submit Clicked");
+      // _apiUtils
+      //   .googleDriveGetFiles({
+      //     fields: "*",
+      //     q: `name = 'Mathematics Class/ Class teacher name'`,
+      //   })
+      //   .then((response) => {
+      //     console.log(response);
+      //   });
+      // //googleDriveUploadFile(name, content, mime, folderId)
+      // alert("Submit Clicked: " + this.state.courseId);
       // let folderId =
       //   "0BzJfQgFkF_jafjRtSDUxazlqaVFtVVZLQ2ZPX1dMaFNzektPZ293WW5IOWlHU0VfODdWcjg";
       // _apiUtils

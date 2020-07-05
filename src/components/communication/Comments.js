@@ -2,6 +2,7 @@ import React, { Component, Fragment } from "react";
 import { MessageBox, MessageList, Input, Button } from "react-chat-elements";
 import "react-chat-elements/dist/main.css";
 import * as _constant from "../util/constants";
+import * as _apiUtils from "../util/AxiosUtil";
 
 let studentMsg = {
   position: "right",
@@ -42,19 +43,28 @@ export default class Comments extends Component {
     super(props);
     this.state = {
       showMessageBlock: false,
+      show: true,
       messageList: [studentMsg, teacherMsg], //TODO: Dev hack, msglist tobe del for prod
+      gDriveCommentsFileId: null,
     };
-    // this.cancelClick = this.cancelClick.bind(this);
     this.showInputElement = this.showInputElement.bind(this);
     this.startTimeOut = this.startTimeOut.bind(this);
+    this.syncComments = this.syncComments.bind(this);
+    this.mergeComments = this.mergeComments.bind(this);
   }
 
-  cancelClick = (event) => {
+  closeClick = (event) => {
     this.setState({
       showMessageBlock: false,
       showReplyBlock: false,
     });
     console.log(this.state.messageList);
+    this.syncComments();
+  };
+
+  openComments = (e) => {
+    this.setState({ showMessageBlock: true });
+    this.syncComments();
   };
 
   startTimeOut() {
@@ -65,8 +75,154 @@ export default class Comments extends Component {
     return false;
   }
 
-  componentDidMount() {
-    // this.startTimeOut();
+  componentWillMount() {
+    // setInterval(this.addMessage.bind(this), 3000);
+  }
+
+  mergeComments(localList, serverList) {
+    var tempList = [...localList, ...serverList];
+    var mergedList = tempList.sort(function (a, b) {
+      return a.date - b.date;
+    });
+    console.log("mergedList " + mergedList);
+    return mergedList;
+  }
+
+  syncComments(type) {
+    let fileName =
+      this.props.subjectName + "temp13" + "_CommentTranscript.json";
+
+    //update the file else get file by Name
+    if (this.state.gDriveCommentsFileId) {
+      /*
+        This section will be executed(actions: fetch, merge and update)
+          - For both read and write as soon as 
+              1: Comments file is created 
+              2: After first fetch for the current session
+      */
+
+      //fetch downloadable file
+      let downloadedComments = [];
+      _apiUtils
+        .googleDriveDownloadFile(this.state.gDriveCommentsFileId)
+        .then((resJsonFile) => {
+          console.log(
+            "get byCommentsFileId JSON Data, update messageList with: " +
+              JSON.stringify(resJsonFile.data)
+          );
+          downloadedComments.push(resJsonFile.data);
+        });
+
+      //merge
+      this.state.messageList = this.mergeComments(
+        this.state.messageList,
+        downloadedComments
+      );
+
+      console.log("merged messageList " + this.state.messageList);
+      //update
+      _apiUtils
+        .googleDriveUpdateFile(
+          fileName,
+          JSON.stringify(this.state.messageList),
+          "application/json",
+          this.state.gDriveCommentsFileId
+        )
+        .then((response) => {
+          console.log("CommentsFileId update: " + JSON.stringify(response));
+        });
+    } else {
+      /*
+      This clause will be executed(actions: fetch by file name, merge and update)
+        1: Comments file doesnt exist 
+        2: First fetch for the current session
+      */
+
+      //Step2: get file by Name  ..if it doesnt exist Create else update
+      _apiUtils
+        .googleDriveGetFiles({
+          fields: "*",
+          q: `name = '${fileName}' and trashed = false`,
+        })
+        .then((respByName) => {
+          console.log("GetByFileName: " + JSON.stringify(respByName.data));
+
+          if (respByName.data.files.length === 0) {
+            console.log("Trying to create File: ");
+
+            //Step1: get StudentCourseDetails, tobe able to get studentWorkFolder.id
+            _apiUtils
+              .googleClassroomStudentCourseDetails(this.props.courseId)
+              .then((respCourseDetails) => {
+                console.log(
+                  "StudentCourseDetails: " + JSON.stringify(respCourseDetails)
+                );
+
+                //Step2 create
+                _apiUtils
+                  .googleDriveUploadFile(
+                    fileName,
+                    JSON.stringify(this.state.messageList),
+                    "application/json",
+                    respCourseDetails.data.studentWorkFolder.id
+                  )
+                  .then((resCreate) => {
+                    console.log("upload: " + JSON.stringify(resCreate));
+                    this.setState({
+                      //set gdrive file id
+                      gDriveCommentsFileId: resCreate.data.id,
+                    });
+                  })
+                  .catch((error) => {
+                    console.log("Create File " + error);
+                  });
+              });
+          } else {
+            //***update section***
+            let fileId;
+            let downloadedComments = [];
+            if (respByName.data.hasOwnProperty("id"))
+              fileId = respByName.data.id;
+            else fileId = respByName.data.files[0].id;
+
+            this.setState({
+              //set gdrive file id
+              gDriveCommentsFileId: fileId,
+            });
+            //fetch downloadable file
+            _apiUtils.googleDriveDownloadFile(fileId).then((resJsonFile) => {
+              console.log(
+                "JSON Data, update local messageList with: " +
+                  JSON.stringify(resJsonFile)
+              );
+              downloadedComments.push(resJsonFile.data);
+            });
+
+            //merge locallist with serverlist
+            this.state.messageList = this.mergeComments(
+              this.state.messageList,
+              downloadedComments
+            );
+            console.log("else merged messageList " + this.state.messageList);
+            //update server with mergedList
+            _apiUtils
+              .googleDriveUpdateFile(
+                fileName,
+                JSON.stringify(this.state.messageList),
+                "application/json",
+                respByName.data.files[0].id
+              )
+              .then((response) => {
+                console.log(
+                  "getByfilename upload : " + JSON.stringify(response)
+                );
+              });
+          }
+        })
+        .catch((error) => {
+          console.log("GetByFileName " + error);
+        });
+    }
   }
 
   getRandomColor() {
@@ -152,7 +308,7 @@ export default class Comments extends Component {
                   return true;
                 }
                 if (e.charCode === 13) {
-                  this.refs.input.clear();
+                  this.refs.input && this.refs.input.clear();
                   this.addMessage(message, type);
                   e.preventDefault();
                   return false;
@@ -208,7 +364,7 @@ export default class Comments extends Component {
         <button
           type="button"
           className="btn btn-primary turnin"
-          onClick={() => this.setState({ showMessageBlock: true })}
+          onClick={this.openComments}
         >
           <i className="fas fa-question-circle"></i> Feel free to ask!!
         </button>
@@ -233,10 +389,10 @@ export default class Comments extends Component {
             <div className="form-group">
               <button
                 type="reset"
-                onClick={this.cancelClick}
+                onClick={this.closeClick}
                 className="btn btn-danger float-right"
               >
-                <i className="far fa-times-circle"></i> Close
+                <i className="fas fa-comment-slash"></i> Close Interaction
               </button>
             </div>
           </div>

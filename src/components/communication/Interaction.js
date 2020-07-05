@@ -51,6 +51,8 @@ export default class Interaction extends Component {
     return (
       <Comments
         userName={this.props.userName}
+        courseId={this.props.courseId}
+        subjectName={this.props.subjectName}
         resetTimeout={this.resetTimeOut}
       />
       // <Wrapper>
