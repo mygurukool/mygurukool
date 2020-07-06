@@ -45,9 +45,27 @@ export default class Student extends Component {
       studentName: "",
       currentView: "",
       material: { formUrls: [] },
+      turnInState: "Unknown",
+      submissionId: ""
     };
     // this.loadAssignment = this.loadAssignment.bind(this);
     this.extractMaterials = this.extractMaterials.bind(this);
+  }
+
+  getSubmissionTurnInState(courseId, assignmentId) {
+    _apiUtils.googleClassroomGetCourseworkSubmissions(courseId, assignmentId).then((response) => {
+      let state      = response.data.studentSubmissions[0].state
+      let submission = response.data.studentSubmissions[0].id
+
+      if (this.state.turnInState  !== state)      { this.setState({ turnInState:  state}) }
+      if (this.state.submissionId !== submission) { this.setState({ submissionId: submission}) }
+    })
+  }
+
+  handleSubmissionTurnIn(courseId, assignmentId, submissionId) {
+    _apiUtils.googleClassroomSubmissionTurnIn(courseId, assignmentId, submissionId).then((response) => {
+      this.getSubmissionTurnInState(courseId, assignmentId)
+    })
   }
 
   extractMaterials(assginmentMaterials) {
@@ -230,11 +248,13 @@ export default class Student extends Component {
                         <AccordionItemPanel>
                           <div className="card-body">
                             <div className="row float-right">
+                              { this.getSubmissionTurnInState(assignment.courseId, assignment.id) }
                               <button
                                 type="button"
                                 className="btn btn-primary turnin"
+                                onClick={() => this.handleSubmissionTurnIn(assignment.courseId, assignment.id, this.state.submissionId)}
                               >
-                                <i className="fas fa-check"></i> Turn In
+                                <i className="fas fa-check"></i> { this.state.turnInState }
                               </button>
                             </div>
                             <div className="row">
