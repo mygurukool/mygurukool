@@ -6,7 +6,7 @@ import * as _msconsts from "./msConsts";
 export function userProfile() {
   let api_url =
     sessionStorage.getItem("loginProvider") === _constants.GOOGLE
-      ? _gconsts.REACT_APP_GOOGLE_USERINFO_API
+      ? _gconsts.GOOGLE_USERINFO_API
       : _msconsts.REACT_APP_GRAPH_API_URL_BETA;
 
   return axios.get(api_url + "me", {
@@ -114,8 +114,65 @@ export function getBLOB(targetId, exerciseFileType) {
 }
 
 // -- Google Classroom
+export function googleClassroomGetCourses() {
+  return axiosGet(_gconsts.GOOGLE_CLASSROOM_API + "courses")
+}
+
 export function googleClassroomStudentCourseDetails(courseId, studentId ="me") {
-  return axiosGet(_gconsts.REACT_APP_GOOGLE_CLASSROOM_API + `courses/${courseId}/students/${studentId}`)
+  return axiosGet(_gconsts.GOOGLE_CLASSROOM_API + `courses/${courseId}/students/${studentId}`)
+}
+
+export function googleClassroomTeacherCourseDetails(courseId, teacherId ="me") {
+  return axiosGet(_gconsts.GOOGLE_CLASSROOM_API + `courses/${courseId}/teachers/${teacherId}`)
+}
+
+export function googleClassroomCreateCourse(name, description, ownerId) {
+  const course = { name : name, description: description, ownerId: ownerId }
+
+  const courseBlob    = new Blob([JSON.stringify(course)], {type: 'application/json'})
+
+  let data = new FormData()
+
+  data.append('course', courseBlob)
+
+  const url = _gconsts.GOOGLE_CLASSROOM_API + "courses"
+
+  return axios.patch(url,
+    data, { headers: {
+      Authorization: `Bearer ${sessionStorage.getItem(
+        _constants.ACCESS_TOKEN
+      )}`
+    } },
+  )
+}
+
+export function googleClassroomGetCourseworkSubmissions(courseId, courseworkId = "-") {
+  // -- if no coursework Id is specified, returns submissions for all courseworks.
+  return axiosCall(`courses/${courseId}/courseWork/${courseworkId}/studentSubmissions`);
+}
+
+export function googleClassroomSubmissionAddFile(courseId, courseworkId, submissionId, fileId) {
+  const attach = {
+    addAttachments: [ {
+      driveFile: {
+        id: fileId
+      }
+    } ]
+  }
+
+  const crw = `courses/${courseId}/courseWork/${courseworkId}/`
+  const sub = `studentSubmissions/${submissionId}:modifyAttachments`
+
+  const url = _gconsts.GOOGLE_CLASSROOM_API + crw + sub
+
+  return axios.post(url,
+    JSON.stringify(attach), { headers: {
+      Authorization: `Bearer ${sessionStorage.getItem(
+        _constants.ACCESS_TOKEN
+      )}`,
+      "Content-Type": "application/json"
+    } },
+  )
 }
 
 // -- Google Drive
@@ -184,7 +241,7 @@ export function googleDriveUpdateFile(name, content, mime, fileId) {
 function axiosCall(url) {
   let api_url =
     sessionStorage.getItem("loginProvider") === _constants.GOOGLE
-      ? _gconsts.REACT_APP_GOOGLE_CLASSROOM_API
+      ? _gconsts.GOOGLE_CLASSROOM_API
       : _msconsts.REACT_APP_GRAPH_API_URL;
 
   console.log(api_url);
