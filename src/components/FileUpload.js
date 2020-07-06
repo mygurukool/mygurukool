@@ -275,7 +275,7 @@ export default class FileUpload extends Component {
   }
 
   googleUploadStudentExercises() {
-    _apiUtils.googleClassroomStudentCourseDetails(this.state.courseId).then((response) => {
+    _apiUtils.googleClassroomCourseStudentsList(this.state.courseId).then((response) => {
       let folderId = response.data.studentWorkFolder.id
 
       _apiUtils.googleDriveUploadFile(this.file.name, this.file, this.file.type, folderId).then((response) => {

@@ -155,7 +155,7 @@ export default class Comments extends Component {
           if (respByName.data.files.length === 0) {
             //Step1: get StudentCourseDetails, tobe able to get studentWorkFolder.id
             _apiUtils
-              .googleClassroomStudentCourseDetails(this.props.courseId)
+              .googleClassroomCourseStudentsList(this.props.courseId)
               .then((respCourseDetails) => {
                 //Step2 create
                 _apiUtils
