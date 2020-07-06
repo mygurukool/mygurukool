@@ -33,7 +33,8 @@ export default class FileUpload extends Component {
     this.googleLoadStudentUploadedFiles = this.googleLoadStudentUploadedFiles.bind(
       this
     );
-    this.msUploadStudentExercises = this.msUploadStudentExercises.bind(this);
+    this.msUploadStudentExercises     = this.msUploadStudentExercises.bind(this);
+    this.googleUploadStudentExercises = this.googleUploadStudentExercises.bind(this);
     this.buildUploadBlock = this.buildUploadBlock.bind(this);
   }
 
@@ -199,6 +200,7 @@ export default class FileUpload extends Component {
     if (sessionStorage.getItem("loginProvider") === _constants.MICROSOFT) {
       this.msUploadStudentExercises();
     } else {
+      this.googleUploadStudentExercises();
       // _apiUtils
       //   .googleDriveGetFiles({
       //     fields: "*",
@@ -271,6 +273,25 @@ export default class FileUpload extends Component {
         console.log(error);
       });
   }
+
+  googleUploadStudentExercises() {
+    _apiUtils.googleClassroomStudentCourseDetails(this.state.courseId).then((response) => {
+      let folderId = response.data.studentWorkFolder.id
+
+      _apiUtils.googleDriveUploadFile(this.file.name, this.file, this.file.type, folderId).then((response) => {
+        let fileId = response.data.id
+
+        _apiUtils.googleClassroomGetCourseworkSubmissions(this.state.courseId, this.state.assignmentId).then((response) => {
+          let submissionId = response.data.studentSubmissions[0].id
+
+          _apiUtils.googleClassroomSubmissionAddFile(
+            this.state.courseId, this.state.assignmentId, submissionId, fileId
+          ).then((response) => { console.log(response) })
+        })
+      })
+    })
+  }
+
   displayFile() {
     //truncate file extention  **START**
     let fileNameToDisplay = this.props.exerciseDetails.objectFilename
@@ -309,6 +330,7 @@ export default class FileUpload extends Component {
       </Fragment>
     );
   }
+
   render() {
     return (
       <Fragment>

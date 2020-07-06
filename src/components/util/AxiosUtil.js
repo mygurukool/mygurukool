@@ -146,6 +146,35 @@ export function googleClassroomCreateCourse(name, description, ownerId) {
   )
 }
 
+export function googleClassroomGetCourseworkSubmissions(courseId, courseworkId = "-") {
+  // -- if no coursework Id is specified, returns submissions for all courseworks.
+  return axiosCall(`courses/${courseId}/courseWork/${courseworkId}/studentSubmissions`);
+}
+
+export function googleClassroomSubmissionAddFile(courseId, courseworkId, submissionId, fileId) {
+  const attach = {
+    addAttachments: [ {
+      driveFile: {
+        id: fileId
+      }
+    } ]
+  }
+
+  const crw = `courses/${courseId}/courseWork/${courseworkId}/`
+  const sub = `studentSubmissions/${submissionId}:modifyAttachments`
+
+  const url = _gconsts.GOOGLE_CLASSROOM_API + crw + sub
+
+  return axios.post(url,
+    JSON.stringify(attach), { headers: {
+      Authorization: `Bearer ${sessionStorage.getItem(
+        _constants.ACCESS_TOKEN
+      )}`,
+      "Content-Type": "application/json"
+    } },
+  )
+}
+
 // -- Google Drive
 export function googleDriveGetFiles(params = {}) {
   // -- get/list all files or folders in the users Google Drive.
