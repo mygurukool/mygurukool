@@ -175,6 +175,21 @@ export function googleClassroomSubmissionAddFile(courseId, courseworkId, submiss
   )
 }
 
+export function googleClassroomSubmissionTurnIn(courseId, courseworkId, submissionId) {
+  const crw = `courses/${courseId}/courseWork/${courseworkId}/`
+  const sub = `studentSubmissions/${submissionId}:turnIn`
+
+  const url = _gconsts.GOOGLE_CLASSROOM_API + crw + sub
+
+  return axios.post(url,
+    {}, { headers: {
+      Authorization: `Bearer ${sessionStorage.getItem(
+        _constants.ACCESS_TOKEN
+      )}`
+    } },
+  )
+}
+
 // -- Google Drive
 export function googleDriveGetFiles(params = {}) {
   // -- get/list all files or folders in the users Google Drive.
