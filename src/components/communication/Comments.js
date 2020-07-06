@@ -44,27 +44,29 @@ export default class Comments extends Component {
     this.state = {
       showMessageBlock: false,
       show: true,
-      messageList: [studentMsg, teacherMsg], //TODO: Dev hack, msglist tobe del for prod
+      messageList: [], //  [studentMsg, teacherMsg], //TODO: Dev hack, msglist tobe del for prod
       gDriveCommentsFileId: null,
     };
     this.showInputElement = this.showInputElement.bind(this);
     this.startTimeOut = this.startTimeOut.bind(this);
     this.syncComments = this.syncComments.bind(this);
     this.mergeComments = this.mergeComments.bind(this);
+    this.syncWithServer = this.syncWithServer.bind(this);
   }
 
-  closeClick = (event) => {
+  closeComment = () => {
     this.setState({
       showMessageBlock: false,
       showReplyBlock: false,
     });
-    console.log(this.state.messageList);
     this.syncComments();
   };
 
-  openComments = (e) => {
-    this.setState({ showMessageBlock: true });
+  openComments = () => {
     this.syncComments();
+    this.setState({
+      showMessageBlock: true,
+    });
   };
 
   startTimeOut() {
@@ -80,17 +82,47 @@ export default class Comments extends Component {
   }
 
   mergeComments(localList, serverList) {
-    var tempList = [...localList, ...serverList];
-    var mergedList = tempList.sort(function (a, b) {
+    const mergedArray = [...localList, ...serverList];
+    // mergedArray have duplicates, remove the duplicates using Set
+    let set = new Set();
+    let unionArray = mergedArray.filter((item) => {
+      if (!set.has(item.date)) {
+        set.add(item.date);
+        return true;
+      }
+      return false;
+    }, set);
+
+    let sortedList = unionArray.sort(function (a, b) {
       return a.date - b.date;
     });
-    console.log("mergedList " + mergedList);
-    return mergedList;
+    this.setState({ messageList: sortedList });
   }
 
-  syncComments(type) {
-    let fileName =
-      this.props.subjectName + "temp13" + "_CommentTranscript.json";
+  syncWithServer(localMsgs, fileName, fileId) {
+    let downloadedComments = [];
+    //fetch downloadable file
+    _apiUtils.googleDriveDownloadFile(fileId).then((resJsonFile) => {
+      downloadedComments.push(resJsonFile.data);
+
+      //merge locallist with serverlist update this.state.messageList
+      this.mergeComments(localMsgs, downloadedComments);
+
+      //update server with mergedList
+      _apiUtils
+        .googleDriveUpdateFile(
+          fileName,
+          // JSON.stringify(messageList),
+          this.state.messageList,
+          "application/json",
+          fileId
+        )
+        .then((response) => {});
+    });
+  }
+
+  syncComments() {
+    let fileName = this.props.subjectName + "_CommentTranscript.json";
 
     //update the file else get file by Name
     if (this.state.gDriveCommentsFileId) {
@@ -101,36 +133,11 @@ export default class Comments extends Component {
               2: After first fetch for the current session
       */
 
-      //fetch downloadable file
-      let downloadedComments = [];
-      _apiUtils
-        .googleDriveDownloadFile(this.state.gDriveCommentsFileId)
-        .then((resJsonFile) => {
-          console.log(
-            "get byCommentsFileId JSON Data, update messageList with: " +
-              JSON.stringify(resJsonFile.data)
-          );
-          downloadedComments.push(resJsonFile.data);
-        });
-
-      //merge
-      this.state.messageList = this.mergeComments(
+      this.syncWithServer(
         this.state.messageList,
-        downloadedComments
+        fileName,
+        this.state.gDriveCommentsFileId
       );
-
-      console.log("merged messageList " + this.state.messageList);
-      //update
-      _apiUtils
-        .googleDriveUpdateFile(
-          fileName,
-          JSON.stringify(this.state.messageList),
-          "application/json",
-          this.state.gDriveCommentsFileId
-        )
-        .then((response) => {
-          console.log("CommentsFileId update: " + JSON.stringify(response));
-        });
     } else {
       /*
       This clause will be executed(actions: fetch by file name, merge and update)
@@ -145,29 +152,21 @@ export default class Comments extends Component {
           q: `name = '${fileName}' and trashed = false`,
         })
         .then((respByName) => {
-          console.log("GetByFileName: " + JSON.stringify(respByName.data));
-
           if (respByName.data.files.length === 0) {
-            console.log("Trying to create File: ");
-
             //Step1: get StudentCourseDetails, tobe able to get studentWorkFolder.id
             _apiUtils
               .googleClassroomStudentCourseDetails(this.props.courseId)
               .then((respCourseDetails) => {
-                console.log(
-                  "StudentCourseDetails: " + JSON.stringify(respCourseDetails)
-                );
-
                 //Step2 create
                 _apiUtils
                   .googleDriveUploadFile(
                     fileName,
-                    JSON.stringify(this.state.messageList),
+                    // JSON.stringify(this.state.messageList),
+                    this.state.messageList,
                     "application/json",
                     respCourseDetails.data.studentWorkFolder.id
                   )
                   .then((resCreate) => {
-                    console.log("upload: " + JSON.stringify(resCreate));
                     this.setState({
                       //set gdrive file id
                       gDriveCommentsFileId: resCreate.data.id,
@@ -180,7 +179,6 @@ export default class Comments extends Component {
           } else {
             //***update section***
             let fileId;
-            let downloadedComments = [];
             if (respByName.data.hasOwnProperty("id"))
               fileId = respByName.data.id;
             else fileId = respByName.data.files[0].id;
@@ -189,34 +187,8 @@ export default class Comments extends Component {
               //set gdrive file id
               gDriveCommentsFileId: fileId,
             });
-            //fetch downloadable file
-            _apiUtils.googleDriveDownloadFile(fileId).then((resJsonFile) => {
-              console.log(
-                "JSON Data, update local messageList with: " +
-                  JSON.stringify(resJsonFile)
-              );
-              downloadedComments.push(resJsonFile.data);
-            });
-
-            //merge locallist with serverlist
-            this.state.messageList = this.mergeComments(
-              this.state.messageList,
-              downloadedComments
-            );
-            console.log("else merged messageList " + this.state.messageList);
-            //update server with mergedList
-            _apiUtils
-              .googleDriveUpdateFile(
-                fileName,
-                JSON.stringify(this.state.messageList),
-                "application/json",
-                respByName.data.files[0].id
-              )
-              .then((response) => {
-                console.log(
-                  "getByfilename upload : " + JSON.stringify(response)
-                );
-              });
+            //sync comment with server
+            this.syncWithServer(this.state.messageList, fileName, fileId);
           }
         })
         .catch((error) => {
@@ -297,20 +269,21 @@ export default class Comments extends Component {
               placeholder={defaultPlaceHolder}
               defaultValue=""
               ref="input"
-              multiline={true}
+              multiline={false}
               autofocus={true}
               // buttonsFloat="left"
               onKeyPress={(e) => {
                 this.startTimeOut();
                 message = e.target.value;
-                if (e.shiftKey && e.charCode === 13) {
+                if (e.keyUp && e.shiftKey && e.charCode === 13) {
                   this.refs.input.clear();
                   return true;
                 }
                 if (e.charCode === 13) {
-                  this.refs.input && this.refs.input.clear();
+                  // this.refs.input &&
+                  message = e.target.value;
+                  this.refs.input.clear();
                   this.addMessage(message, type);
-                  e.preventDefault();
                   return false;
                 }
               }}
@@ -318,17 +291,17 @@ export default class Comments extends Component {
                 type === ASK ? (
                   <Button
                     text={type}
-                    onClick={(e) => this.addMessage(message, type)}
+                    onClick={() => this.addMessage(message, type)}
                   />
                 ) : (
                   <div className="col-2">
                     <Button
                       text={type}
-                      onClick={(e) => this.addMessage(message, type)}
+                      onClick={() => this.addMessage(message, type)}
                     />{" "}
                     <Button
                       text="Cancel"
-                      onClick={(e) =>
+                      onClick={() =>
                         this.setState({
                           showReplyBlock: false,
                         })
@@ -389,7 +362,7 @@ export default class Comments extends Component {
             <div className="form-group">
               <button
                 type="reset"
-                onClick={this.closeClick}
+                onClick={this.closeComment}
                 className="btn btn-danger float-right"
               >
                 <i className="fas fa-comment-slash"></i> Close Interaction
