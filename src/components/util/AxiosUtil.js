@@ -118,11 +118,11 @@ export function googleClassroomGetCourses() {
   return axiosGet(_gconsts.GOOGLE_CLASSROOM_API + "courses")
 }
 
-export function googleClassroomStudentCourseDetails(courseId, studentId ="me") {
+export function googleClassroomCourseStudentsList(courseId, studentId ="me") {
   return axiosGet(_gconsts.GOOGLE_CLASSROOM_API + `courses/${courseId}/students/${studentId}`)
 }
 
-export function googleClassroomTeacherCourseDetails(courseId, teacherId ="me") {
+export function googleClassroomCourseTeachersList(courseId, teacherId ="me") {
   return axiosGet(_gconsts.GOOGLE_CLASSROOM_API + `courses/${courseId}/teachers/${teacherId}`)
 }
 
