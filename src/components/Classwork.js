@@ -1,29 +1,29 @@
 import React, { Component, Fragment } from "react";
-import Student from "./microsoft/Student";
-import GoogleStudent from "./google/Student";
+import MSCourse from "./microsoft/Student";
+import GoogleCourse from "./google/Course";
 import * as _constants from "./util/constants";
 
 export default class Classwork extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      studentData: null,
+      userData: null,
     };
-    this.handleStudentDataFromProvider = this.handleStudentDataFromProvider.bind(
+    this.handleUserDataFromProvider = this.handleUserDataFromProvider.bind(
       this
     );
   }
 
-  handleStudentDataFromProvider = (studentData) => {
-    this.props.studentData(studentData);
+  handleUserDataFromProvider = (userData) => {
+    this.props.userData(userData);
   };
 
   render() {
     return sessionStorage.getItem(_constants.LOGIN_PROVIDER) ===
       _constants.MICROSOFT ? (
-      <Student studentData={this.handleStudentDataFromProvider} />
+      <MSCourse userData={this.handleUserDataFromProvider} />
     ) : (
-      <GoogleStudent studentData={this.handleStudentDataFromProvider} />
+      <GoogleCourse userData={this.handleUserDataFromProvider} />
     );
   }
 }

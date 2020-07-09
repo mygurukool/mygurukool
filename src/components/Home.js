@@ -1,7 +1,6 @@
 import React from "react";
 import { Component } from "react";
 import SplitPane from "react-split-pane";
-// import Student from "./microsoft/Student";
 import Classwork from "./Classwork";
 import Conference from "./communication/Conference";
 import Header from "./Header";
@@ -16,10 +15,10 @@ class Home extends Component {
     super();
     this.toggleBtmHeight = this.toggleBtmHeight.bind(this);
     this.state = {
-      studentData: null,
+      userData: null,
       cssContainer: "container",
     };
-    this.handleStudentData = this.handleStudentData.bind(this);
+    this.handleUserData = this.handleUserData.bind(this);
     this.handleConferencePanelSize = this.handleConferencePanelSize.bind(this);
   }
   componentWillMount() {
@@ -35,13 +34,13 @@ class Home extends Component {
         displayName: this.props.location,
         department: sessionStorage.getItem("google_profile"),
       };
-      this.setState({ studentData: tempProfile });
+      this.setState({ userData: tempProfile });
     }
   }
 
-  handleStudentData = (studentData) => {
+  handleUserData = (userData) => {
     this.setState({
-      studentData: studentData,
+      userData: userData,
     });
   };
 
@@ -74,7 +73,7 @@ class Home extends Component {
         <Header
           isSignedIn={true}
           studentName={
-            this.state.studentData ? this.state.studentData.displayName : "User"
+            this.state.userData ? this.state.userData.displayName : "User"
           }
         />
         <div className={this.state.cssContainer}>
@@ -84,8 +83,8 @@ class Home extends Component {
                 <span>
                   {/* Group Name*/}
                   <b>
-                    {this.state.studentData
-                      ? `Group: ${this.state.studentData.department}`
+                    {this.state.userData
+                      ? `Group: ${this.state.userData.department}`
                       : "Group Name"}
                   </b>
                 </span>
@@ -121,11 +120,11 @@ class Home extends Component {
           onChange={(size) => this.toggleBtmHeight(size)}
         >
           <Scrollbars>
-            <Classwork studentData={this.handleStudentData} />
-            {/* <Student studentData={this.handleStudentData} /> */}
+            <Classwork userData={this.handleUserData} />
+            {/* <Student userData={this.handleUserData} /> */}
           </Scrollbars>
           {/* <CustomScroll allowOuterScroll={true} flex="1">
-            <Student studentData={this.handleStudentData} />
+            <Student userData={this.handleUserData} />
           </CustomScroll> */}
           {this.state.showConfPane ? (
             <Conference
