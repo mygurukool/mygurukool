@@ -1,8 +1,13 @@
-import mathematics from "./../../assets/mathematics.gif";
-import english from "./../../assets/english.png";
-import german from "./../../assets/german.png";
-import hindi from "./../../assets/hindi.png";
-import history from "./../../assets/history.png";
+const _loadingGifs = importLoaderGifs(require.context('./../../assets/loading/', false, /\.(gif)$/)); //require.context('./', false, /\.(png|jpe?g|svg)$/));
+function importLoaderGifs(r) {
+  return r.keys().map(r);
+}
+
+const _subjectIcons = importSubjectIcons(require.context('./../../assets/', false, /\.(png|jpe?g|gif|svg)$/));
+function importSubjectIcons(r) {
+  return r.keys().map(r);
+}
+
 
 // parse OneNote Page
 export function parseOneNotePage(page) {
@@ -69,12 +74,8 @@ export function parseOneNotePage(page) {
 }
 
 export function loadIconBySubject(subjectName) {
-  let imgArray = [mathematics, german, english, history, hindi];
   let subjectIcon = "";
-  //TODO:
-  //1: find a better solution to load all icons from a given path, instead of the array
-  //2: replace the string functions *substring, lastIndexOf, etc* with a clean solution like *Object Name*
-  imgArray.map(function (icon) {
+  _subjectIcons.map(function (icon) {
     let lastIndexOfbackSlash = icon.lastIndexOf("/");
     if (
       subjectName
@@ -91,4 +92,10 @@ export function loadIconBySubject(subjectName) {
     return subjectIcon;
   });
   return subjectIcon;
+}
+
+export function loaderRandomGifs() {
+  let min=0;
+  let max = _loadingGifs.length;
+  return (_loadingGifs[Math.floor(Math.random() * (max - min + 1)) + min]);
 }
