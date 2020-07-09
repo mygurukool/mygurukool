@@ -3,8 +3,6 @@ import "../../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import FileUpload from "../FileUpload";
 import Interaction from "../communication/Interaction";
-import { css } from "@emotion/core";
-import PacmanLoader from "react-spinners/PacmanLoader";
 import {
   Accordion,
   AccordionItem,
@@ -24,12 +22,7 @@ import "@fortawesome/fontawesome-free/css/all.css";
 //   group: { name, id },
 //   subjects: { exercises: { exerciseTitle, exercisedata, submissionDate } },
 // };
-const override = css`
-  display: block;
-  margin: 0 auto;
-  border-color: red;
-  // background-image: url("../../assets/giraffe-icon.png");
-`;
+
 let isLoading = false;
 let studentData = {
   displayName: "Name",
@@ -109,14 +102,16 @@ export default class Student extends Component {
           materialObj.exerciseDetails[i] = tempExerciseDetails;
         }
       });
-    this.state.material = materialObj;
+    this.setState({material : materialObj})
   }
 
   componentDidMount() {
     isLoading = true;
+    let userId;
     _apiUtils
       .userProfile()
       .then((response) => {
+        userId = response.data.id;
         studentData.displayName = response.data.name;
         studentData.department = response.data.family_name;
         this.props.studentData(studentData);
@@ -130,7 +125,13 @@ export default class Student extends Component {
             this.setState({
               courses: subjectRes.data.courses,
             });
-          })
+            if (subjectRes.data.courses.length > 0 && subjectRes.data.courses[0].hasOwnProperty("teacherFolder")) 
+              _apiUtils.googleClassroomCourseTeachersList(subjectRes.data.courses[0].id).then((resTeacher) =>{
+                if(userId === resTeacher.data.userId)
+                  console.log("You are identified as Teacher! ");
+                  //_apiUtils.teacherAdditionalScopes().then((response) =>{console.log(response)})
+              });
+           })
           .catch((error) => {
             console.error("Error during loadGoogleSubjects:", error);
           });
@@ -202,13 +203,13 @@ export default class Student extends Component {
             </div>
           </div>
           <div className="tabcontent col-12">
-            <PacmanLoader
-              css={override}
-              size={20}
-              // color={"#D77F36"}
-              color={"rgb(54, 215, 183)"}
-              loading={isLoading}
-            />
+            {isLoading?(<img
+                              src={_util.loaderRandomGifs()}
+                              className="loaderIcon"
+                            />
+                          ) : (
+                            ""
+                          )}
             <Accordion
               allowZeroExpanded={true}
               onChange={(e) => this.setState({ openedItems: e })}
