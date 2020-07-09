@@ -27,7 +27,7 @@ let userData = {
   department: "Group Name",
 };
 
-export default class Student extends Component {
+export default class Course extends Component {
   constructor(props) {
     super(props);
     this.state = {
