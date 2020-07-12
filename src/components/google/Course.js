@@ -1,3 +1,4 @@
+/* global gapi */
 import React, { Component, Fragment } from "react";
 import "../../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -14,6 +15,9 @@ import Video from "../Video";
 import * as _util from "../util/utils";
 import * as _apiUtils from "../util/AxiosUtil";
 import "@fortawesome/fontawesome-free/css/all.css";
+import {REACT_APP_GOOGLE_OAUTH_TUTOR_SCOPES} from "../util/gConsts"
+import { ACCESS_TOKEN } from "../util/constants";
+import {Modal, Button} from "react-bootstrap";
 
 // let user = {
 //   name,
@@ -26,7 +30,7 @@ let userData = {
   displayName: "Name",
   department: "Group Name",
 };
-
+ 
 export default class Course extends Component {
   constructor(props) {
     super(props);
@@ -37,26 +41,48 @@ export default class Course extends Component {
       currentView: "",
       material: { formUrls: [] },
       turnInState: "Unknown",
-      submissionId: ""
+      submissionId: "",
+      showTeacherModal: true,
+      isTeacherLogin: false,
+      hasTeacherAccepted: true,
     };
-    // this.loadAssignment = this.loadAssignment.bind(this);
     this.extractMaterials = this.extractMaterials.bind(this);
   }
 
   getSubmissionTurnInState(courseId, assignmentId) {
-    _apiUtils.googleClassroomGetCourseworkSubmissions(courseId, assignmentId).then((response) => {
-      let state      = response.data.studentSubmissions[0].state
-      let submission = response.data.studentSubmissions[0].id
+    // _apiUtils.googleClassroomGetCourseworkSubmissions(courseId, assignmentId).then((response) => {
+    //   let state      = response.data.studentSubmissions[0].state
+    //   let submission = response.data.studentSubmissions[0].id
 
-      if (this.state.turnInState  !== state)      { this.setState({ turnInState:  state}) }
-      if (this.state.submissionId !== submission) { this.setState({ submissionId: submission}) }
-    })
+    //   if (this.state.turnInState  !== state)      { this.setState({ turnInState:  state}) }
+    //   if (this.state.submissionId !== submission) { this.setState({ submissionId: submission}) }
+    // })
   }
 
   handleSubmissionTurnIn(courseId, assignmentId, submissionId) {
     _apiUtils.googleClassroomSubmissionTurnIn(courseId, assignmentId, submissionId).then((response) => {
       this.getSubmissionTurnInState(courseId, assignmentId)
     })
+  }
+
+
+  handleTeacherDialogClose = () => {this.setState({showTeacherModal: false, hasTeacherAccepted: false})};
+
+  handleTeacherConfirmation = () => {
+    this.setState({isTeacherLogin: false, showTeacherModal: false, hasTeacherAccepted: true});
+    const options = new gapi.auth2.SigninOptionsBuilder();
+    options.setScope(REACT_APP_GOOGLE_OAUTH_TUTOR_SCOPES);
+
+    let googleUser = gapi.auth2.getAuthInstance().currentUser.get();
+    googleUser.grant(options).then(
+      function (success) {
+        // console.log(JSON.stringify({ message: "success", value: success }))
+        // console.log("success.access_token " + success.wc.access_token)
+        sessionStorage.setItem(ACCESS_TOKEN, success.wc.access_token);
+      },
+      function (fail) {
+        alert(JSON.stringify({ message: "fail", value: fail }));
+      })
   }
 
   extractMaterials(assginmentMaterials) {
@@ -127,7 +153,7 @@ export default class Course extends Component {
               _apiUtils.googleClassroomCourseTeachersList(subjectRes.data.courses[0].id).then((resTeacher) =>{
                 if(userId === resTeacher.data.userId)
                   console.log("You are identified as Teacher! ");
-                  //_apiUtils.teacherAdditionalScopes().then((response) =>{console.log(response)})
+                  this.setState({isTeacherLogin: true});
               });
            })
           .catch((error) => {
@@ -201,13 +227,57 @@ export default class Course extends Component {
             </div>
           </div>
           <div className="tabcontent col-12">
-            {isLoading?(<img
-                              src={_util.loaderRandomGifs()}
-                              className="loaderIcon"
-                            />
-                          ) : (
-                            ""
-                          )}
+            {isLoading ? (
+              <img src={_util.loaderRandomGifs()} className="loaderIcon" />
+            ) : (
+              ""
+            )}
+            {this.state.isTeacherLogin ? (
+              <Modal
+                show={this.state.showTeacherModal}
+                backdrop="static"
+                keyboard={false}
+                centered={true}
+              >
+                <Modal.Header>
+                  <Modal.Title>Additional Permissions</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                  Welcome! You are identified as Teacher. Please approve, to
+                  present you additional Permissions!
+                </Modal.Body>
+                <Modal.Footer>
+                  {/* <Button
+                    variant="secondary"
+                    onClick={this.handleTeacherDialogClose}
+                  >
+                    I Reject!
+                  </Button> */}
+                  <Button
+                    variant="primary"
+                    onClick={this.handleTeacherConfirmation}
+                  >
+                    Yes, I Approve!
+                  </Button>
+                </Modal.Footer>
+              </Modal>
+            ) : (
+              ""
+            )}
+
+            {/* {this.state.isTeacherLogin && !this.state.hasTeacherAccepted ? (
+              <div className="col-12">
+              <button
+                type="button"
+                className="btn btn-primary turnin"
+                onClick={this.handleTeacherConfirmation}
+              >
+                <i className="fas fa-check"></i> Please present me additional Permissions.
+              </button>
+              </div>
+            ) : (
+              ""
+            )} */}
             <Accordion
               allowZeroExpanded={true}
               onChange={(e) => this.setState({ openedItems: e })}
@@ -247,13 +317,23 @@ export default class Course extends Component {
                         <AccordionItemPanel>
                           <div className="card-body">
                             <div className="row float-right">
-                             { this.getSubmissionTurnInState(assignment.courseId, assignment.id) } 
+                              {this.getSubmissionTurnInState(
+                                assignment.courseId,
+                                assignment.id
+                              )}
                               <button
                                 type="button"
                                 className="btn btn-primary turnin"
-                                onClick={() => this.handleSubmissionTurnIn(assignment.courseId, assignment.id, this.state.submissionId)}
+                                onClick={() =>
+                                  this.handleSubmissionTurnIn(
+                                    assignment.courseId,
+                                    assignment.id,
+                                    this.state.submissionId
+                                  )
+                                }
                               >
-                                <i className="fas fa-check"></i> { this.state.turnInState }
+                                <i className="fas fa-check"></i>{" "}
+                                {this.state.turnInState}
                               </button>
                             </div>
                             <div className="row">
@@ -317,9 +397,7 @@ export default class Course extends Component {
                                           (
                                             <FileUpload
                                               exerciseDetails={exerciseDetail}
-                                              userName={
-                                                this.state.userName
-                                              }
+                                              userName={this.state.userName}
                                               courseId={assignment.courseId}
                                               assignmentId={assignment.id}
                                             />

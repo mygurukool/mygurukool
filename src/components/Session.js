@@ -1,3 +1,5 @@
+/* global gapi */
+
 import React, { Component, Fragment } from "react";
 import "..//App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
@@ -20,16 +22,7 @@ export default class Session extends Component {
     sessionStorage.setItem(_constants.ACCESS_TOKEN, "");
   }
 
-  handleSubmit = (event) => {
-    event.preventDefault();
-    this.setState({ isSignedIn: true });
-  };
-
-  render() {
-    if (this.state.isSignedIn) {
-      // redirect to home if signed up
-      return <Redirect to={{ pathname: "/home" }} />;
-    }
+   render() {
     return (
       <Fragment>
         <Header isSignedIn={this.state.isSignedIn} />
@@ -39,9 +32,6 @@ export default class Session extends Component {
               <div className="alert alert-success">
                 Please sign in using your School account.
               </div>
-              {/* <div className="alert alert-success">
-                Please sign in using your Microsoft Work or School account.
-              </div> */}
               <button
                 className="btn btn-lg btn-submit btn-block"
                 type="button"
@@ -80,30 +70,11 @@ export default class Session extends Component {
                 className="btn btn-lg btn-submit btn-block"
                 type="button"
                 onClick={(e) => {
-                  e.preventDefault();
-                  let stateNow = new Date()
-                    .toISOString()
-                    .replace(/[^0-9]/g, "")
-                    .slice(0, -3);
-                  let random = Math.random().toString(36).substring(7);
-
                   sessionStorage.setItem(
                     _constants.LOGIN_PROVIDER,
                     _constants.GOOGLE
                   );
-
-                  window.location.href =
-                    "https://accounts.google.com/o/oauth2/v2/auth?client_id=" +
-                    process.env.REACT_APP_GOOGLE_CLIENT_ID +
-                    "&response_type=id_token%20token&redirect_uri=" +
-                    process.env.REACT_APP_OAUTH_REDIRECT_URI +
-                    "&response_mode=fragment&scope=openid%20" +
-                    _gconsts.REACT_APP_GOOGLE_OAUTH_SCOPES +
-                    //    "&prompt=consent" +
-                    "&state=" +
-                    stateNow +
-                    "&nonce=" +
-                    random;
+                  window.gapi.auth2.getAuthInstance().signIn();
                 }}
               >
                 <img src={google} className="googleIcon" />

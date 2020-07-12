@@ -1,3 +1,4 @@
+/* global gapi */
 import React, { Component, Fragment } from "react";
 import * as _apiUtils from "./util/AxiosUtil";
 import * as _constants from "./util/constants";
@@ -26,31 +27,19 @@ export default class Header extends Component {
                     href="#"
                     onClick={(e) => {
                       e.preventDefault();
-
                       let provider = sessionStorage.getItem(
                         _constants.LOGIN_PROVIDER
                       );
-                      let token = sessionStorage.getItem(
-                        _constants.ACCESS_TOKEN
-                      );
-
-                      sessionStorage.clear();
 
                       if (provider === _constants.GOOGLE) {
-                        _apiUtils
-                          .googleLogout(token)
-                          .then(function (response) {
-                            console.log(response);
-                          })
-                          .then(function () {
-                            window.location.href =
-                              process.env.REACT_APP_OAUTH_LOGOUT_URI;
-                          });
+                        gapi.auth2.getAuthInstance().signOut();
+                        gapi.auth2.getAuthInstance().disconnect();
                       } else {
                         window.location.href =
                           "https://login.microsoftonline.com/common/oauth2/v2.0/logout?post_logout_redirect_uri=" +
                           process.env.REACT_APP_OAUTH_LOGOUT_URI;
                       }
+                      sessionStorage.clear();                    
                     }}
                   >
                     <i className="fas fa-sign-out-alt">&nbsp;Logout</i>

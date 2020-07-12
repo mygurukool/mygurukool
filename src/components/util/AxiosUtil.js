@@ -59,7 +59,7 @@ export function loadAssignmentPage(pageUrl) {
 
 export function getGoogleStudentUploadedExerciseFiles(courseId, assignmentId = "-") {
   // -- if no assigment Id is specified, returns submissions for all assignments.
-  return axiosCall(`courses/${courseId}/courseWork/${assignmentId}/studentSubmissions`);
+  //return axiosCall(`courses/${courseId}/courseWork/${assignmentId}/studentSubmissions`);
 }
 
 export function getStudentUploadedExerciseFiles(driveId, titleId) {
@@ -148,7 +148,7 @@ export function googleClassroomCreateCourse(name, description, ownerId) {
 
 export function googleClassroomGetCourseworkSubmissions(courseId, courseworkId = "-") {
   // -- if no coursework Id is specified, returns submissions for all courseworks.
-  return axiosCall(`courses/${courseId}/courseWork/${courseworkId}/studentSubmissions`);
+  // return axiosCall(`courses/${courseId}/courseWork/${courseworkId}/studentSubmissions`);
 }
 
 export function googleClassroomSubmissionAddFile(courseId, courseworkId, submissionId, fileId) {
@@ -259,7 +259,7 @@ function axiosCall(url) {
       ? _gconsts.GOOGLE_CLASSROOM_API
       : _msconsts.REACT_APP_GRAPH_API_URL;
 
-  console.log(api_url);
+  console.log(api_url + url + "  .... TOKEN " + sessionStorage.getItem(_constants.ACCESS_TOKEN));
 
   return axios.get(api_url + url, {
     params: {},
