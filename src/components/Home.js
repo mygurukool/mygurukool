@@ -15,7 +15,7 @@ class Home extends Component {
     super();
     this.toggleBtmHeight = this.toggleBtmHeight.bind(this);
     this.state = {
-      userData: null,
+      userData: { displayName:"displayName", displayName:"displayName" },
       cssContainer: "container",
     };
     this.handleUserData = this.handleUserData.bind(this);
@@ -27,15 +27,26 @@ class Home extends Component {
       showConfPane: false,
       splitPercentage: "100%",
     });
-    if (
-      sessionStorage.getItem(_constants.LOGIN_PROVIDER) === _constants.GOOGLE
-    ) {
-      let tempProfile = {
-        displayName: this.props.location,
-        department: sessionStorage.getItem("google_profile"),
-      };
-      this.setState({ userData: tempProfile });
-    }
+//     if (
+//       sessionStorage.getItem(_constants.LOGIN_PROVIDER) === _constants.GOOGLE
+//     ) {
+//       let googleUser = sessionStorage
+//         .getItem(_constants.SESSION_OBJECT);
+        
+//         console.log(googleUser);
+
+// if(googleUser){
+//   let profile = googleUser.getBasicProfile();
+//   if(profile)
+//       this.setState((prevState) => ({
+//         userData: {
+//           ...prevState.userData,
+//           displayName: profile.getName(),
+//           department: profile.getFamilyName(),
+//         },
+//       }));
+//     }
+//     }
   }
 
   handleUserData = (userData) => {
