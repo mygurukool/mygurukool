@@ -50,13 +50,13 @@ export default class Course extends Component {
   }
 
   getSubmissionTurnInState(courseId, assignmentId) {
-    // _apiUtils.googleClassroomGetCourseworkSubmissions(courseId, assignmentId).then((response) => {
-    //   let state      = response.data.studentSubmissions[0].state
-    //   let submission = response.data.studentSubmissions[0].id
+    _apiUtils.googleClassroomGetCourseworkSubmissions(courseId, assignmentId).then((response) => {
+      let state      = response.data.studentSubmissions[0].state
+      let submission = response.data.studentSubmissions[0].id
 
-    //   if (this.state.turnInState  !== state)      { this.setState({ turnInState:  state}) }
-    //   if (this.state.submissionId !== submission) { this.setState({ submissionId: submission}) }
-    // })
+      if (this.state.turnInState  !== state)      { this.setState({ turnInState:  state}) }
+      if (this.state.submissionId !== submission) { this.setState({ submissionId: submission}) }
+    })
   }
 
   handleSubmissionTurnIn(courseId, assignmentId, submissionId) {

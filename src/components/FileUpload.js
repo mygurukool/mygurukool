@@ -42,7 +42,7 @@ export default class FileUpload extends Component {
     if (sessionStorage.getItem("loginProvider") === _constants.MICROSOFT) {
       this.msLoadStudentUploadedFiles();
     } else {
-      //this.googleLoadStudentUploadedFiles();
+      this.googleLoadStudentUploadedFiles();
     }
   }
 
@@ -202,29 +202,12 @@ export default class FileUpload extends Component {
       this.msUploadStudentExercises();
     } else {
       this.googleUploadStudentExercises();
-      // _apiUtils
-      //   .googleDriveGetFiles({
-      //     fields: "*",
-      //     q: `name = 'Mathematics Class/ Class teacher name'`,
-      //   })
-      //   .then((response) => {
-      //     console.log(response);
-      //   });
-      // //googleDriveUploadFile(name, content, mime, folderId)
-      // alert("Submit Clicked: " + this.state.courseId);
-      // let folderId =
-      //   "0BzJfQgFkF_jafjRtSDUxazlqaVFtVVZLQ2ZPX1dMaFNzektPZ293WW5IOWlHU0VfODdWcjg";
-      // _apiUtils
-      //   .googleDriveUploadFile(
-      //     this.file.name,
-      //     this.file,
-      //     "application/octet-stream",
-      //     folderId
-      //   )
-      //   .then((response) => {
-      //     console.log(response);
-      //   });
     }
+    this.setState({ fileName: this.file.name, showFlash: true, hideFileUpload: true, fileUploaded: true,});
+    setTimeout(() => {
+      this.setState({ showFlash: false });
+    }, 3000);
+   
   };
 
   msUploadStudentExercises() {
@@ -251,19 +234,10 @@ export default class FileUpload extends Component {
                 .then((response) => {
                   console.log(response.data);
                   this.setState({ fileUploadedName: response.data });
-                  this.setState({ fileName: this.file.name });
-                  this.fileUploaded = true;
-                  this.setState({ showFlash: true });
-                  setTimeout(() => {
-                    this.setState({ showFlash: false });
-                  }, 3000);
                 })
                 .catch((error) => {
                   console.log(error);
                 });
-              this.setState({
-                hideFileUpload: true,
-              });
             }
           })
           .catch((error) => {
@@ -280,8 +254,9 @@ export default class FileUpload extends Component {
       let folderId = response.data.studentWorkFolder.id
 
       _apiUtils.googleDriveUploadFile(this.file.name, this.file, this.file.type, folderId).then((response) => {
+        this.setState({ fileUploadedName: response.data });
+        console.log(response.data)
         let fileId = response.data.id
-
         _apiUtils.googleClassroomGetCourseworkSubmissions(this.state.courseId, this.state.assignmentId).then((response) => {
           let submissionId = response.data.studentSubmissions[0].id
 
