@@ -89,6 +89,7 @@ export default class FileUpload extends Component {
         <button
           className="btn btn-primary float-right"
           onClick={this.handleUploadClick}
+          disabled={!this.props.isActive}
         >
           <i className="fas fa-upload"></i> Upload Exercise
         </button>

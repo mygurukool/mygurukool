@@ -15,3 +15,4 @@ export const GOOGLE_DRIVE_UPLOAD_API = "https://www.googleapis.com/upload/drive/
 
 //features/ functionality related constants
 export const COURSE_STATUS = "ACTIVE";
+export const COURSE_ARCHIVED = "ARCHIVED";

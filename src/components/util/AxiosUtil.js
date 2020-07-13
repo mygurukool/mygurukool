@@ -29,8 +29,9 @@ export function loadSite(groupName) {
   return axiosCall("sites/root:/sites/" + groupName);
 }
 
-export function loadGoogleSubjects() {
-  return axiosCall("courses?courseStates=" + _gconsts.COURSE_STATUS);
+export function loadGoogleSubjects(statusActive) {
+  let status = statusActive ? _gconsts.COURSE_STATUS : _gconsts.COURSE_ARCHIVED;
+  return axiosCall("courses?courseStates=" + status);
 }
 
 export function loadSubjects(groupId, studentName) {

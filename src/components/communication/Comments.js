@@ -338,6 +338,7 @@ export default class Comments extends Component {
           type="button"
           className="btn btn-primary turnin"
           onClick={this.openComments}
+          disabled={!this.props.isActive}
         >
           <i className="fas fa-question-circle"></i> Feel free to ask!!
         </button>

@@ -9,13 +9,16 @@ import Header from "./Header";
 import { Scrollbars } from "react-custom-scrollbars";
 import * as _constants from "./util/constants";
 import { Wrapper } from "./util/Wrapper";
+import { Fab, Action } from 'react-tiny-fab';
+import '../scss/tinyFabstyles.css';
+//@import "~react-tiny-fab/dist/styles.css";
 
 class Home extends Component {
   constructor() {
     super();
     this.toggleBtmHeight = this.toggleBtmHeight.bind(this);
     this.state = {
-      userData: { displayName:"displayName", displayName:"displayName" },
+      userData: { displayName: "displayName", displayName: "displayName" },
       cssContainer: "container",
     };
     this.handleUserData = this.handleUserData.bind(this);
@@ -27,26 +30,26 @@ class Home extends Component {
       showConfPane: false,
       splitPercentage: "100%",
     });
-//     if (
-//       sessionStorage.getItem(_constants.LOGIN_PROVIDER) === _constants.GOOGLE
-//     ) {
-//       let googleUser = sessionStorage
-//         .getItem(_constants.SESSION_OBJECT);
-        
-//         console.log(googleUser);
+    //     if (
+    //       sessionStorage.getItem(_constants.LOGIN_PROVIDER) === _constants.GOOGLE
+    //     ) {
+    //       let googleUser = sessionStorage
+    //         .getItem(_constants.SESSION_OBJECT);
 
-// if(googleUser){
-//   let profile = googleUser.getBasicProfile();
-//   if(profile)
-//       this.setState((prevState) => ({
-//         userData: {
-//           ...prevState.userData,
-//           displayName: profile.getName(),
-//           department: profile.getFamilyName(),
-//         },
-//       }));
-//     }
-//     }
+    //         console.log(googleUser);
+
+    // if(googleUser){
+    //   let profile = googleUser.getBasicProfile();
+    //   if(profile)
+    //       this.setState((prevState) => ({
+    //         userData: {
+    //           ...prevState.userData,
+    //           displayName: profile.getName(),
+    //           department: profile.getFamilyName(),
+    //         },
+    //       }));
+    //     }
+    //     }
   }
 
   handleUserData = (userData) => {
@@ -78,6 +81,44 @@ class Home extends Component {
   toggleBtmHeight(newSize) {
     this.setState({ btmHeight: newSize + "px" });
   }
+  loadFab() {
+    return (
+      <>
+      <Fab
+        mainButtonStyles={{
+          backgroundColor: "#00b5ad",
+        }}
+        actionButtonStyles={{
+          backgroundColor: "#ffffff",
+          color: "#34495e",
+        }}
+        position={{
+          bottom: 100,
+          left: 50,
+        }}
+        icon="+"
+        event="hover"
+      >
+        <Action
+          text="Conference"
+          onClick={() =>
+            this.handleConferencePanelSize(!this.state.showConfPane ? 0 : -1
+            )
+          }
+        >
+          <i className="far fa-comments fa-1g" />
+        </Action>
+        <Action
+          text="Archive"
+          onClick={() => alert("archive")}
+        >
+          <i className="far fa-file-archive fa-1g" />
+        </Action>
+      </Fab>
+      </>
+    );
+  }
+
   render() {
     return (
       <Wrapper>
@@ -87,10 +128,12 @@ class Home extends Component {
             this.state.userData ? this.state.userData.displayName : "User"
           }
         />
+        {this.loadFab()}
         <div className={this.state.cssContainer}>
           <div className="row section-nav">
             <div className="col-12">
-              <div className="alert alert-primary" role="alert">
+              <div className="alert alert-primary">
+                {/* role="alert"> */}
                 <span>
                   {/* Group Name*/}
                   <b>
@@ -100,8 +143,6 @@ class Home extends Component {
                   </b>
                 </span>
                 <ul className="float-right">
-                  {/* <ul className="navbar-nav float-right"> */}
-                  {/* <li className="nav-item"> */}
                   <li>
                     <a
                       href="#"
@@ -116,7 +157,17 @@ class Home extends Component {
                         )
                       }
                     >
-                      <i className="far fa-comments fa-1g"></i>
+                      <i className="far fa-file-archive fa-1g">Archive</i>
+                    </a>{" "}
+                    <a
+                      href="#"
+                      onClick={() =>
+                        this.handleConferencePanelSize(
+                          !this.state.showConfPane ? 0 : -1
+                        )
+                      }
+                    >
+                      <i className="far fa-comments fa-1g">Conference</i>
                     </a>
                   </li>
                 </ul>
@@ -131,7 +182,7 @@ class Home extends Component {
           onChange={(size) => this.toggleBtmHeight(size)}
         >
           <Scrollbars>
-            <Classwork userData={this.handleUserData} />
+            <Classwork userData={this.handleUserData} expandArchive={true}/>
             {/* <Student userData={this.handleUserData} /> */}
           </Scrollbars>
           {/* <CustomScroll allowOuterScroll={true} flex="1">

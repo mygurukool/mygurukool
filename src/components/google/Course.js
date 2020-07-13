@@ -142,7 +142,7 @@ export default class Course extends Component {
         this.setState({ userName: response.data.name });
         // load courses
         _apiUtils
-          .loadGoogleSubjects()
+          .loadGoogleSubjects(this.props.isActive)
           .then((subjectRes) => {
             console.log(subjectRes);
             isLoading = false;
@@ -324,6 +324,7 @@ export default class Course extends Component {
                               <button
                                 type="button"
                                 className="btn btn-primary turnin"
+                                disabled={!this.props.isActive}
                                 onClick={() =>
                                   this.handleSubmissionTurnIn(
                                     assignment.courseId,
@@ -383,6 +384,7 @@ export default class Course extends Component {
                                   userName={this.state.userName}
                                   courseId={assignment.courseId}
                                   subjectName={assignment.title}
+                                  isActive={this.props.isActive}
                                 />
                               </div>
                               {/* </div> */}
@@ -400,6 +402,7 @@ export default class Course extends Component {
                                               userName={this.state.userName}
                                               courseId={assignment.courseId}
                                               assignmentId={assignment.id}
+                                              isActive={this.props.isActive}
                                             />
                                           ))
                                         : ""
@@ -410,6 +413,7 @@ export default class Course extends Component {
                                     userName={this.state.userName}
                                     courseId={assignment.courseId}
                                     assignmentId={assignment.id}
+                                    isActive={this.props.isActive}
                                   />
                                 ) : (
                                   ""

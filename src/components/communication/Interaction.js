@@ -54,6 +54,7 @@ export default class Interaction extends Component {
         courseId={this.props.courseId}
         subjectName={this.props.subjectName}
         resetTimeout={this.resetTimeOut}
+        isActive={this.props.isActive}
       />
       // <Wrapper>
       //   <div>
