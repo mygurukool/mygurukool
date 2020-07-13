@@ -4,37 +4,6 @@ import "react-chat-elements/dist/main.css";
 import * as _constant from "../util/constants";
 import * as _apiUtils from "../util/AxiosUtil";
 
-let studentMsg = {
-  position: "right",
-  replyButton: true,
-  type: "text",
-  theme: "white",
-  view: "list",
-  title: "From: MyGuruKool Student",
-  text: "How do I solve this issue",
-  status: "read",
-  date: +new Date(),
-  onReplyMessageClick: () => {
-    console.log("onReplyMessageClick");
-    alert("onReplyMessageClick");
-  },
-};
-
-let teacherMsg = {
-  position: "left",
-  replyButton: true,
-  type: "text",
-  theme: "white",
-  view: "list",
-  title: "From: Teacher",
-  text: "Read through Chapter 1",
-  status: "sent",
-  date: +new Date(),
-  onReplyMessageClick: () => {
-    console.log("onReplyMessageClick");
-    alert("onReplyMessageClick");
-  },
-};
 
 const REPLY = "Reply";
 const ASK = "Ask";
@@ -82,7 +51,7 @@ export default class Comments extends Component {
   }
 
   mergeComments(localList, serverList) {
-    const mergedArray = [...localList, ...serverList];
+    const mergedArray = [...serverList, ...localList];
     // mergedArray have duplicates, remove the duplicates using Set
     let set = new Set();
     let unionArray = mergedArray.filter((item) => {
@@ -96,24 +65,24 @@ export default class Comments extends Component {
     let sortedList = unionArray.sort(function (a, b) {
       return a.date - b.date;
     });
-    this.setState({ messageList: sortedList });
+    return sortedList;
   }
 
   syncWithServer(localMsgs, fileName, fileId) {
-    let downloadedComments = [];
+    let downloadedComments;
     //fetch downloadable file
     _apiUtils.googleDriveDownloadFile(fileId).then((resJsonFile) => {
-      downloadedComments.push(resJsonFile.data);
+      downloadedComments = resJsonFile.data;
 
       //merge locallist with serverlist update this.state.messageList
-      this.mergeComments(localMsgs, downloadedComments);
+      this.setState({ messageList: this.mergeComments(localMsgs, downloadedComments) });
 
       //update server with mergedList
       _apiUtils
         .googleDriveUpdateFile(
           fileName,
-          // JSON.stringify(messageList),
-          this.state.messageList,
+          JSON.stringify(this.state.messageList),
+          //this.state.messageList,
           "application/json",
           fileId
         )
@@ -161,8 +130,8 @@ export default class Comments extends Component {
                 _apiUtils
                   .googleDriveUploadFile(
                     fileName,
-                    // JSON.stringify(this.state.messageList),
-                    this.state.messageList,
+                    JSON.stringify(this.state.messageList),
+                   // this.state.messageList,
                     "application/json",
                     respCourseDetails.data.studentWorkFolder.id
                   )
