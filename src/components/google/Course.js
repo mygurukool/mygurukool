@@ -151,8 +151,7 @@ export default class Course extends Component {
             });
             if (subjectRes.data.courses.length > 0 && subjectRes.data.courses[0].hasOwnProperty("teacherFolder")) 
               _apiUtils.googleClassroomCourseTeachersList(subjectRes.data.courses[0].id).then((resTeacher) =>{
-                if(userId === resTeacher.data.userId)
-                  console.log("You are identified as Teacher! ");
+                if(userId === resTeacher.data.userId && this.props.isActive)
                   this.setState({isTeacherLogin: true});
               });
            })
