@@ -60,7 +60,7 @@ export function loadAssignmentPage(pageUrl) {
 
 export function getGoogleStudentUploadedExerciseFiles(courseId, assignmentId = "-") {
   // -- if no assigment Id is specified, returns submissions for all assignments.
-  return axiosCall(`courses/${courseId}/courseWork/${assignmentId}/studentSubmissions`);
+  //return axiosCall(`courses/${courseId}/courseWork/${assignmentId}/studentSubmissions`);
 }
 
 export function getStudentUploadedExerciseFiles(driveId, titleId) {
@@ -184,6 +184,70 @@ export function googleClassroomSubmissionTurnIn(courseId, courseworkId, submissi
 
   return axios.post(url,
     {}, { headers: {
+      Authorization: `Bearer ${sessionStorage.getItem(
+        _constants.ACCESS_TOKEN
+      )}`
+    } },
+  )
+}
+
+export function googleClassroomCreateCourseWork(coursework) {
+  let courseId = coursework["courseId"];
+  delete coursework["courseId"];
+  delete coursework["id"];
+  delete coursework["creationTime"];
+  delete coursework["updateTime"];
+  delete coursework["creatorUserId"];
+  
+  /** 
+  {
+  ==> to del "courseId":"128023581544",
+ ==> to del "id":"128032756602",
+  "title":"CourseWork 101 - API Test Again Baby",
+  "description":"CW 101 - Figure out this API again",
+  "materials":[
+      {"driveFile":
+        {"driveFile":
+          {"id":"1TBdLNWckTjsW-Izh0EzThq36qeceS47f",
+          "title":"cs101-assignment-material.txt",
+          "alternateLink":"https://drive.google.com/open?id=1TBdLNWckTjsW-Izh0EzThq36qeceS47f",
+          "thumbnailUrl":"https://drive.google.com/thumbnail?id=1TBdLNWckTjsW-Izh0EzThq36qeceS47f&sz=s200"
+          },
+          "shareMode":"VIEW"
+        }
+      }
+    ],
+    "state":"PUBLISHED",
+    "alternateLink":"https://classroom.google.com/c/MTI4MDIzNTgxNTQ0/a/MTI4MDMyNzU2NjAy/details",
+?? ==> to del   "creationTime":"2020-07-05T18:45:43.347Z",
+?? ==> to del   "updateTime":"2020-07-05T18:45:42.661Z",
+    "workType":"ASSIGNMENT",
+    "submissionModificationMode": "MODIFIABLE_UNTIL_TURNED_IN",
+    "assignment":
+      {
+        "studentWorkFolder":
+          {
+            "id":"0B2DpClxEXO3sflNOR2NMUDdXMkp0bmpHWEM4bE5MeEhEMndQYWpCN1Q3UDNPaktJNU8zYXM",
+            "title":"CourseWork 101 - API Test Again Baby",
+            "alternateLink":"https://drive.google.com/drive/folders/0B2DpClxEXO3sflNOR2NMUDdXMkp0bmpHWEM4bE5MeEhEMndQYWpCN1Q3UDNPaktJNU8zYXM"
+          }
+        },
+   ==> to del     "associatedWithDeveloper":true,
+        "assigneeMode":"ALL_STUDENTS",
+    ==> to del         "creatorUserId":"106139693665068244927"}
+  
+  */
+ alert("Axiosutils.googleClassroomCreateCourseWork: " + JSON.stringify(coursework))
+  const courseWorkBlob = new Blob([coursework], {type: 'text/json;charset=utf-8'})  // 'application/json'}) //
+
+  let data = new FormData()
+
+  data.append('courseWork', courseWorkBlob)
+
+  const url = _gconsts.GOOGLE_CLASSROOM_API + `courses/${courseId}/courseWork/`
+
+  return axios.post(url,
+    data, { headers: {
       Authorization: `Bearer ${sessionStorage.getItem(
         _constants.ACCESS_TOKEN
       )}`

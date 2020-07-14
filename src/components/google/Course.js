@@ -18,14 +18,9 @@ import "@fortawesome/fontawesome-free/css/all.css";
 import {REACT_APP_GOOGLE_OAUTH_TUTOR_SCOPES} from "../util/gConsts"
 import { ACCESS_TOKEN } from "../util/constants";
 import {Modal, Button} from "react-bootstrap";
+import * as _classworkUtil from "./ClassworkUtil";
 
-// let user = {
-//   name,
-//   group: { name, id },
-//   subjects: { exercises: { exerciseTitle, exercisedata, submissionDate } },
-// };
 
-let isLoading = false;
 let userData = {
   displayName: "Name",
   department: "Group Name",
@@ -45,17 +40,18 @@ export default class Course extends Component {
       showTeacherModal: true,
       isTeacherLogin: false,
       hasTeacherAccepted: true,
+      isLoading: false,
     };
     this.extractMaterials = this.extractMaterials.bind(this);
   }
 
   getSubmissionTurnInState(courseId, assignmentId) {
     _apiUtils.googleClassroomGetCourseworkSubmissions(courseId, assignmentId).then((response) => {
-      let state      = response.data.studentSubmissions[0].state
-      let submission = response.data.studentSubmissions[0].id
+        let state      = response.data.studentSubmissions[0].state
+        let submission = response.data.studentSubmissions[0].id
 
-      if (this.state.turnInState  !== state)      { this.setState({ turnInState:  state}) }
-      if (this.state.submissionId !== submission) { this.setState({ submissionId: submission}) }
+        if (this.state.turnInState  !== state)      { this.setState({ turnInState:  state}) }
+        if (this.state.submissionId !== submission) { this.setState({ submissionId: submission}) }
     })
   }
 
@@ -64,7 +60,6 @@ export default class Course extends Component {
       this.getSubmissionTurnInState(courseId, assignmentId)
     })
   }
-
 
   handleTeacherDialogClose = () => {this.setState({showTeacherModal: false, hasTeacherAccepted: false})};
 
@@ -130,7 +125,7 @@ export default class Course extends Component {
   }
 
   componentDidMount() {
-    isLoading = true;
+    this.setState({isLoading: true});
     let userId;
     _apiUtils
       .userProfile()
@@ -144,11 +139,8 @@ export default class Course extends Component {
         _apiUtils
           .loadGoogleSubjects(this.props.isActive)
           .then((subjectRes) => {
-            console.log(subjectRes);
-            isLoading = false;
-            this.setState({
-              courses: subjectRes.data.courses,
-            });
+            console.log("Course.componentDidMount.userProfile: ", subjectRes);
+            this.setState({isLoading: false, courses: subjectRes.data.courses});
             if (subjectRes.data.courses.length > 0 && subjectRes.data.courses[0].hasOwnProperty("teacherFolder")) 
               _apiUtils.googleClassroomCourseTeachersList(subjectRes.data.courses[0].id).then((resTeacher) =>{
                 if(userId === resTeacher.data.userId && this.props.isActive)
@@ -165,19 +157,14 @@ export default class Course extends Component {
   }
 
   loadAssignment = (event) => {
-    isLoading = true;
-    this.setState({ currentView: this.state.courses[event.target.id].name });
-    _apiUtils
-      .loadGoogleAssignments(this.state.courses[event.target.id].id)
-      .then((response) => {
-        this.setState({
-          assignments: response.data.courseWork,
-        });
-      })
-      .catch((error) => {
-        console.error("Error during google userProfile:", error);
-      });
-    isLoading = false;
+    this.setState({
+      isLoading: true,  
+      currentView: this.state.courses[event.target.id].name,
+     });
+    _classworkUtil.loadAssignments(this.state.courses[event.target.id].id, this.state.isTeacherLogin).then((response) =>{
+      this.setState({assignments: response});
+    })
+    this.setState({isLoading: false});
   };
 
   render() {
@@ -226,7 +213,7 @@ export default class Course extends Component {
             </div>
           </div>
           <div className="tabcontent col-12">
-            {isLoading ? (
+            {this.state.isLoading ? (
               <img src={_util.loaderRandomGifs()} className="loaderIcon" />
             ) : (
               ""
@@ -243,7 +230,7 @@ export default class Course extends Component {
                 </Modal.Header>
                 <Modal.Body>
                   Welcome! You are identified as Teacher. Please approve, to
-                  present you additional Permissions!
+                  present you additional Permissions and Authorize MyGuruKool App to facilitate you with access control to all your Google Classroom Courses!
                 </Modal.Body>
                 <Modal.Footer>
                   {/* <Button
@@ -324,8 +311,7 @@ export default class Course extends Component {
                                 type="button"
                                 className="btn btn-primary turnin"
                                 disabled={!this.props.isActive}
-                                onClick={() =>
-                                  this.handleSubmissionTurnIn(
+                                onClick={() =>this.handleSubmissionTurnIn(
                                     assignment.courseId,
                                     assignment.id,
                                     this.state.submissionId
