@@ -130,19 +130,14 @@ export function googleClassroomCourseTeachersList(courseId, teacherId ="me") {
 export function googleClassroomCreateCourse(name, description, ownerId) {
   const course = { name : name, description: description, ownerId: ownerId }
 
-  const courseBlob    = new Blob([JSON.stringify(course)], {type: 'application/json'})
-
-  let data = new FormData()
-
-  data.append('course', courseBlob)
-
   const url = _gconsts.GOOGLE_CLASSROOM_API + "courses"
 
-  return axios.patch(url,
-    data, { headers: {
+  return axios.post(url,
+    JSON.stringify(course), { headers: {
       Authorization: `Bearer ${sessionStorage.getItem(
         _constants.ACCESS_TOKEN
-      )}`
+      )}`,
+      "Content-Type": "application/json"
     } },
   )
 }
