@@ -1,8 +1,22 @@
-import React, { Component } from "react";
+/*global JitsiMeetExternalAPI*/
+import React, { Component } from 'react';
+import * as _util from "../util/utils";
+
+const containerStyle = {
+    width: '100%',
+    height: '700px',
+};
+
 export default class Conference extends Component {
   constructor(props) {
     super(props);
-    this.state = { resize: false };
+    this.state = { resize: false, loading: true, };
+
+    let jitsiContainerStyle = {
+      display: (this.state.loading ? 'none' : 'block'),
+      width: '100%',
+      height: '100%',
+    }
   }
 
   handleClick = (e) => {
@@ -10,6 +24,40 @@ export default class Conference extends Component {
     //Conference Pane=> size/e.target.id: -1:close window; 0:minimize(50%); 1:maximize
     this.props.paneMaximize(parseInt(e.target.id));
   };
+
+  componentDidMount(){
+   if (window.JitsiMeetExternalAPI) this.startConference();
+   else alert('Jitsi Meet API script not loaded');
+  }
+
+  startConference() {
+    alert(JSON.stringify(this.props.userData))
+    try {
+     const domain = 'meet.jit.si';
+     const options = {
+      roomName: 'GuruKoolSchoolVideoConference',
+      height: 700,
+      parentNode: document.getElementById('conference'),
+      interfaceConfigOverwrite: {
+       filmStripOnly: false,
+       SHOW_JITSI_WATERMARK: false,
+      },
+      configOverwrite: {
+       disableSimulcast: false,
+      },
+     };
+  
+     const api = new JitsiMeetExternalAPI(domain, options);
+     api.addEventListener('videoConferenceJoined', () => {
+      console.log('Local User Joined');
+      this.setState({loading: false })
+      api.executeCommand('displayName', this.props.userData.displayName+ "( " + this.props.userData.department+" )");
+      //api.executeCommand('toggleVideo');
+     });
+    } catch (error) {
+     console.error('Failed to load Jitsi API', error);
+    }
+   }
 
   render() {
     return (
@@ -40,17 +88,14 @@ export default class Conference extends Component {
           </a>
           &emsp;
           <span>Video Conference</span>
-          {/* {localStorage.getItem("currentView")
-           ? +localStorage.getItem("currentView") + "Conference room"
-           : "Video Conference"} */}
-          <iframe
-            sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-            src="https://meet.jit.si/GuruKoolSchoolVideoConference"
-            width="100%"
-            height="700"
-            allowtransparency="true"
-            frameborder="0"
-          ></iframe>
+          <div id='conference' style={containerStyle}>
+            {this.state.loading ? (
+              <img src={_util.loaderRandomGifs()} className="loaderIcon" />
+            ) : (
+              ""
+            )}
+            <div style={this.jitsiContainerStyle} />
+          </div>
         </div>
       </div>
     );

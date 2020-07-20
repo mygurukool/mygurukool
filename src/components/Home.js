@@ -192,6 +192,7 @@ class Home extends Component {
             <Conference
               paneMaximize={this.handleConferencePanelSize}
               bottomHeight={this.state.btmHeight}
+              userData={this.state.userData}
             />
           ) : (
             ""
