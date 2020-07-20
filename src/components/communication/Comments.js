@@ -82,11 +82,15 @@ export default class Comments extends Component {
         .googleDriveUpdateFile(
           fileName,
           JSON.stringify(this.state.messageList),
-          //this.state.messageList,
           "application/json",
           fileId
         )
-        .then((response) => {});
+        .then((response) => {})
+        .catch((error) => {
+          console.log("syncWithServer.googleDriveUpdateFile " + error);
+        });
+    }).catch((error) => {
+      console.trace("syncWithServer.googleDriveDownloadFile " + JSON.stringify(error));
     });
   }
 
@@ -122,29 +126,31 @@ export default class Comments extends Component {
         })
         .then((respByName) => {
           if (respByName.data.files.length === 0) {
+            console.log("File doesnt exists: " + fileName)
             //Step1: get StudentCourseDetails, tobe able to get studentWorkFolder.id
-            _apiUtils
-              .googleClassroomCourseStudentsList(this.props.courseId)
-              .then((respCourseDetails) => {
-                //Step2 create
-                _apiUtils
-                  .googleDriveUploadFile(
-                    fileName,
-                    JSON.stringify(this.state.messageList),
-                   // this.state.messageList,
-                    "application/json",
-                    respCourseDetails.data.studentWorkFolder.id
-                  )
-                  .then((resCreate) => {
-                    this.setState({
-                      //set gdrive file id
-                      gDriveCommentsFileId: resCreate.data.id,
-                    });
-                  })
-                  .catch((error) => {
-                    console.log("Create File " + error);
-                  });
-              });
+            // _apiUtils
+            //   .googleClassroomCourseStudentsList(this.props.courseId)
+            //   .then((respCourseDetails) => {
+            //     //Step2 create
+            //     _apiUtils
+            //       .googleDriveUploadFile(
+            //         fileName,
+            //         JSON.stringify(this.state.messageList),
+            //        // this.state.messageList,
+            //         //"application/json",
+            //         "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            //         respCourseDetails.data.studentWorkFolder.id
+            //       )
+            //       .then((resCreate) => {
+            //         this.setState({
+            //           //set gdrive file id
+            //           gDriveCommentsFileId: resCreate.data.id,
+            //         });
+            //       })
+            //       .catch((error) => {
+            //         console.log("Create File " + error);
+            //       });
+            //   });
           } else {
             //***update section***
             let fileId;
