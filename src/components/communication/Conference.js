@@ -4,7 +4,7 @@ import * as _util from "../util/utils";
 
 const containerStyle = {
     width: '100%',
-    height: '700px',
+    height: '100%',
 };
 
 export default class Conference extends Component {
@@ -31,7 +31,6 @@ export default class Conference extends Component {
   }
 
   startConference() {
-    alert(JSON.stringify(this.props.userData))
     try {
      const domain = 'meet.jit.si';
      const options = {
