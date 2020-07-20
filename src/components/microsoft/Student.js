@@ -57,7 +57,7 @@ export default class Student extends Component {
   }
 
   handleStudentDataFetch() {
-    this.props.studentData(this.state.studentData);
+    this.props.userData(this.state.studentData);
   }
 
   componentDidMount() {
@@ -209,13 +209,11 @@ export default class Student extends Component {
             </div>
           </div>
           <div className="tabcontent col-12">
-            <PacmanLoader
-              css={override}
-              size={20}
-              // color={"#D77F36"}
-              color={"rgb(54, 215, 183)"}
-              loading={this.state.isLoading}
-            />
+            {this.state.isLoading ? (
+              <img src={_util.loaderRandomGifs()} className="loaderIcon" />
+            ) : (
+              ""
+            )}
             {/* <Accordion allowZeroExpanded={true} className="testing-color-green"> */}
             <Accordion
               allowZeroExpanded={true}
@@ -288,9 +286,12 @@ export default class Student extends Component {
                                       groupData={this.state.groupDetails.id}
                                       subjectName={this.state.currentView}
                                       title={exe.title}
-                                      studentName={
+                                      userName={
                                         this.state.studentData.displayName
                                       }
+                                      // the value true is current default, shall be adopted as the logic demands
+                                      // while representing archive material
+                                      isActive={true}
                                     />
                                   ) : (
                                     ""
