@@ -30,7 +30,7 @@ export function loadSite(groupName) {
 }
 
 export function loadGoogleSubjects(statusActive) {
-  let status = statusActive ? _gconsts.COURSE_STATUS : _gconsts.COURSE_ARCHIVED;
+  let status = statusActive ? _gconsts.COURSE_ACTIVE : _gconsts.COURSE_ARCHIVED;
   return axiosCall("courses?courseStates=" + status);
 }
 
@@ -127,8 +127,8 @@ export function googleClassroomCourseTeachersList(courseId, teacherId ="me") {
   return axiosGet(_gconsts.GOOGLE_CLASSROOM_API + `courses/${courseId}/teachers/${teacherId}`)
 }
 
-export function googleClassroomCreateCourse(name, description, ownerId) {
-  const course = { name : name, description: description, ownerId: ownerId }
+export function googleClassroomCreateCourse(course) {
+ // const course = { name : name, description: description, ownerId: ownerId }
 
   const url = _gconsts.GOOGLE_CLASSROOM_API + "courses"
 
@@ -144,7 +144,7 @@ export function googleClassroomCreateCourse(name, description, ownerId) {
 
 export function googleClassroomGetCourseworkSubmissions(courseId, courseworkId = "-") {
   // -- if no coursework Id is specified, returns submissions for all courseworks.
-   return axiosCall(`courses/${courseId}/courseWork/${courseworkId}/studentSubmissions`);
+ //  return axiosCall(`courses/${courseId}/courseWork/${courseworkId}/studentSubmissions`);
 }
 
 export function googleClassroomSubmissionAddFile(courseId, courseworkId, submissionId, fileId) {
