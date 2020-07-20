@@ -46,25 +46,26 @@ export default class Course extends Component {
   }
 
   getSubmissionTurnInState(courseId, assignmentId) {
-    _apiUtils.googleClassroomGetCourseworkSubmissions(courseId, assignmentId).then((response) => {
-        let state      = response.data.studentSubmissions[0].state
-        let submission = response.data.studentSubmissions[0].id
+    // _apiUtils.googleClassroomGetCourseworkSubmissions(courseId, assignmentId).then((response) => {
+    //     let state      = response.data.studentSubmissions[0].state
+    //     let submission = response.data.studentSubmissions[0].id
 
-        if (this.state.turnInState  !== state)      { this.setState({ turnInState:  state}) }
-        if (this.state.submissionId !== submission) { this.setState({ submissionId: submission}) }
-    })
+    //     if (this.state.turnInState  !== state)      { this.setState({ turnInState:  state}) }
+    //     if (this.state.submissionId !== submission) { this.setState({ submissionId: submission}) }
+    // })
   }
 
   handleSubmissionTurnIn(courseId, assignmentId, submissionId) {
-    _apiUtils.googleClassroomSubmissionTurnIn(courseId, assignmentId, submissionId).then((response) => {
-      this.getSubmissionTurnInState(courseId, assignmentId)
-    })
+    //_apiUtils.googleClassroomSubmissionTurnIn(courseId, assignmentId, submissionId).then((response) => {
+    //  this.getSubmissionTurnInState(courseId, assignmentId)
+    //})
   }
 
   handleTeacherDialogClose = () => {this.setState({showTeacherModal: false, hasTeacherAccepted: false})};
 
   handleTeacherConfirmation = () => {
-    this.setState({isTeacherLogin: false, showTeacherModal: false, hasTeacherAccepted: true});
+    this.setState({
+      showTeacherModal: false, hasTeacherAccepted: true});
     const options = new gapi.auth2.SigninOptionsBuilder();
     options.setScope(REACT_APP_GOOGLE_OAUTH_TUTOR_SCOPES);
 
@@ -161,7 +162,7 @@ export default class Course extends Component {
       isLoading: true,  
       currentView: this.state.courses[event.target.id].name,
      });
-    _classworkUtil.loadAssignments(this.state.courses[event.target.id].id, this.state.isTeacherLogin).then((response) =>{
+    _classworkUtil.loadAssignments(this.state.courses[event.target.id], this.state.isTeacherLogin).then((response) =>{
       this.setState({assignments: response});
     })
     this.setState({isLoading: false});
