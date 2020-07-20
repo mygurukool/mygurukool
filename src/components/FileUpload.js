@@ -42,7 +42,7 @@ export default class FileUpload extends Component {
     if (sessionStorage.getItem("loginProvider") === _constants.MICROSOFT) {
       this.msLoadStudentUploadedFiles();
     } else {
-      this.googleLoadStudentUploadedFiles();
+     // this.googleLoadStudentUploadedFiles();
     }
   }
 
