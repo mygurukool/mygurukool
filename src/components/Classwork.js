@@ -32,8 +32,9 @@ export default class Classwork extends Component {
       _constants.MICROSOFT ? (
       <MSCourse userData={this.handleUserDataFromProvider} />
     ) : (
+      sessionStorage.getItem(_constants.LOGIN_PROVIDER) ===
+      _constants.GOOGLE ? (
       <Fragment>
-        {/* <button onClick={() => alert("button")} /> */}
         <GoogleCourse
           userData={this.handleUserDataFromProvider}
           isActive={true}
@@ -66,6 +67,7 @@ export default class Classwork extends Component {
           </div>
         </div>
       </Fragment>
+      ):""
     );
     {
       /* CALL Courses for ARCHIVED */
