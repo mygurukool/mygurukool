@@ -13,7 +13,6 @@ import {
 } from "react-accessible-accordion";
 import Video from "../Video";
 import * as _util from "../util/utils";
-import * as _apiUtils from "../util/AxiosUtil";
 import "@fortawesome/fontawesome-free/css/all.css";
 import {REACT_APP_GOOGLE_OAUTH_TUTOR_SCOPES} from "../util/gConsts"
 import { ACCESS_TOKEN } from "../util/constants";
@@ -21,10 +20,7 @@ import {Modal, Button} from "react-bootstrap";
 import * as _classworkUtil from "./ClassworkUtil";
 
 
-let userData = {
-  displayName: "Name",
-  department: "Group Name",
-};
+let user;
  
 export default class Course extends Component {
   constructor(props) {
@@ -127,34 +123,23 @@ export default class Course extends Component {
 
   componentDidMount() {
     this.setState({isLoading: true});
-    let userId;
-    _apiUtils
-      .userProfile()
-      .then((response) => {
-        userId = response.data.id;
-        userData.displayName = response.data.name;
-        userData.department = response.data.family_name;
-        this.props.userData(userData);
-        this.setState({ userName: response.data.name });
-        // load courses
-        _apiUtils
-          .loadGoogleSubjects(this.props.isActive)
-          .then((subjectRes) => {
-            console.log("Course.componentDidMount.userProfile: ", subjectRes);
-            this.setState({isLoading: false, courses: subjectRes.data.courses});
-            if (subjectRes.data.courses.length > 0 && subjectRes.data.courses[0].hasOwnProperty("teacherFolder")) 
-              _apiUtils.googleClassroomCourseTeachersList(subjectRes.data.courses[0].id).then((resTeacher) =>{
-                if(userId === resTeacher.data.userId && this.props.isActive)
+
+    //loading user profile
+    _classworkUtil.userProfile().then((response) => {
+      user = response;
+      this.props.userData(user);
+    });
+
+    //loading subjects
+    _classworkUtil.loadSubjects(this.props.isActive).then((subjectRes) => {
+      console.log("Course.componentDidMount.userProfile: ", subjectRes);
+      this.setState({isLoading: false, courses: subjectRes});
+      if (this.state.courses.length > 0 && this.state.courses[0].hasOwnProperty("teacherFolder")) 
+        _classworkUtil.isTeacher(user.id, this.state.courses[0].id).then((resTeacher) =>{
+                if(resTeacher && this.props.isActive)
                   this.setState({isTeacherLogin: true});
               });
-           })
-          .catch((error) => {
-            console.error("Error during loadGoogleSubjects:", error);
-          });
-      })
-      .catch((error) => {
-        console.error("Error during google userProfile:", error);
-      });
+    });
   }
 
   loadAssignment = (event) => {
@@ -367,7 +352,7 @@ export default class Course extends Component {
                               </div>
                               <div className="col-12">
                                 <Interaction
-                                  userName={this.state.userName}
+                                  userName={user.name}
                                   courseId={assignment.courseId}
                                   subjectName={assignment.title}
                                   isActive={this.props.isActive}
@@ -385,7 +370,7 @@ export default class Course extends Component {
                                           (
                                             <FileUpload
                                               exerciseDetails={exerciseDetail}
-                                              userName={this.state.userName}
+                                              userName={user.name}
                                               courseId={assignment.courseId}
                                               assignmentId={assignment.id}
                                               isActive={this.props.isActive}
@@ -396,7 +381,7 @@ export default class Course extends Component {
                                 {!hasDriveFiles ? (
                                   <FileUpload
                                     exerciseDetails={""}
-                                    userName={this.state.userName}
+                                    userName={user.name}
                                     courseId={assignment.courseId}
                                     assignmentId={assignment.id}
                                     isActive={this.props.isActive}

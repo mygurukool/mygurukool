@@ -34,6 +34,7 @@ export default class Student extends Component {
 
     this.state = {
       studentData: null,
+      user: {name:"", group:""},
       displayName: "",
       sections: "", //Subjects
       tabIndex: 0,
@@ -57,7 +58,8 @@ export default class Student extends Component {
   }
 
   handleStudentDataFetch() {
-    this.props.userData(this.state.studentData);
+    //this.props.userData(this.state.studentData);
+    this.props.userData(this.state.user);
   }
 
   componentDidMount() {
@@ -68,19 +70,25 @@ export default class Student extends Component {
       this.setState({
         studentData: response.data,
       });
+      this.setState(prevState => {
+        let user = Object.assign({}, prevState.user);  // creating copy of state variable
+        user.name = response.data.displayName;         // update the name property, assign a new value 
+        user.group = response.data.department;                         
+        return { user };                               // return new object
+      })
 
       //Pushing StudentData to Home
       this.handleStudentDataFetch();
 
       //Profile department is translated to GroupName
-      _apiUtils.loadSite(this.state.studentData.department).then((response) => {
+      _apiUtils.loadSite(this.state.user.group).then((response) => {
         this.setState({ groupDetails: response.data });
 
         //load subjects
         _apiUtils
           .loadSubjects(
             this.state.groupDetails.id,
-            this.state.studentData.displayName //studentData.displayName => StudentName
+            this.state.user.name
           )
           .then((response) => {
             this.setState({ isLoading: false });
@@ -107,7 +115,7 @@ export default class Student extends Component {
             //       exercisedata: this.state.exercise,
             //     });
             //   });
-          });
+          }).catch((error) => {console.log(" _apiUtils.loadSubjects: " + error)});
       });
     });
   }
@@ -287,7 +295,7 @@ export default class Student extends Component {
                                       subjectName={this.state.currentView}
                                       title={exe.title}
                                       userName={
-                                        this.state.studentData.displayName
+                                        this.state.user.name
                                       }
                                       // the value true is current default, shall be adopted as the logic demands
                                       // while representing archive material
