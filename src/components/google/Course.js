@@ -127,13 +127,18 @@ export default class Course extends Component {
     //loading user profile
     _classworkUtil.userProfile().then((response) => {
       user = response;
-      this.props.userData(user);
     });
 
     //loading subjects
     _classworkUtil.loadSubjects(this.props.isActive).then((subjectRes) => {
       console.log("Course.componentDidMount.userProfile: ", subjectRes);
       this.setState({isLoading: false, courses: subjectRes});
+      
+      if (this.state.courses.length > 0 && this.state.courses[0].section !== null) 
+        user.group = this.state.courses[0].section;
+     
+      //now set the user data to callback object(userData)
+      this.props.userData(user);
       if (this.state.courses.length > 0 && this.state.courses[0].hasOwnProperty("teacherFolder")) 
         _classworkUtil.isTeacher(user.id, this.state.courses[0].id).then((resTeacher) =>{
                 if(resTeacher && this.props.isActive)
