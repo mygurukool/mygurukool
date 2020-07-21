@@ -39,7 +39,7 @@ export default class Classwork extends Component {
           userData={this.handleUserDataFromProvider}
           isActive={true}
         />
-        <div className="container">
+        {/* <div className="container"> 
           <div className="row">
             <div className="col-12">
               <div className="alert-primary">
@@ -65,7 +65,7 @@ export default class Classwork extends Component {
               </div>
             </div>
           </div>
-        </div>
+        </div>*/}
       </Fragment>
       ):""
     );
