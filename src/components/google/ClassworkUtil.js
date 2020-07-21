@@ -2,6 +2,16 @@
 import * as _apiUtils from "../util/AxiosUtil";
 import * as _gconsts from "../util/gConsts";
 
+export let user = {
+  name: "Name",
+  group: "Group Name",
+  id: "",
+};
+
+export let course = {
+  name: "",
+  id: "",
+};
 
 /**
  * Check for AssociatedWithDeveloper flag on Assignments.
@@ -9,7 +19,20 @@ import * as _gconsts from "../util/gConsts";
  * else copy and re-create the course with School App.
  */
 function associatedWithDeveloperAction(course, assignments) {
-    assignments && assignments.map((assignment) => {
+  //TODO: filer out assignments that are already copied
+  // let set = new Set();
+  // let unionArray = assignments.filter((assignment) => {
+  //   if (!set.has(assignment.title)) {
+  //     console.log("true " + assignment.title + "...associatedWithDeveloper: " + assignment.hasOwnProperty("associatedWithDeveloper"));
+  //     set.add(assignment.title);
+  //     return true;
+  //   }
+  //   console.log("false: "+assignment.title + "...associatedWithDeveloper: " + assignment.hasOwnProperty("associatedWithDeveloper"));
+  //   return false;
+  // }, set);
+//  console.log("unionArray: " + JSON.stringify(unionArray));
+
+  assignments && assignments.map((assignment) => {
       if (assignment && !assignment.hasOwnProperty("associatedWithDeveloper")) {
           /**TODO: 
            * Fetch the course from gc
@@ -18,10 +41,69 @@ function associatedWithDeveloperAction(course, assignments) {
            * Set the old course status to Archived
            */
 
-        //creating the course
-        createCourse(course);
+        //creating the courseWork
+        //createCourseWork(assignment);
       }
     });
+}
+
+function createCourseWork(coursework){
+
+  alert("title: " + coursework["title"])
+  let courseId = coursework["courseId"];
+  delete coursework["courseId"]; 
+  delete coursework["id"];
+  delete coursework["creationTime"];
+  delete coursework["updateTime"];
+  delete coursework["creatorUserId"];
+  delete coursework["associatedWithDeveloper"];  
+  
+  /** 
+  {
+ ==> to del "id":"128032756602",
+ ?? ==> to del   "creationTime":"2020-07-05T18:45:43.347Z",
+?? ==> to del   "updateTime":"2020-07-05T18:45:42.661Z",
+   ==> to del     "associatedWithDeveloper":true,
+    ==> to del         "creatorUserId":"106139693665068244927"}
+
+  "title":"CourseWork 101 - API Test Again Baby",
+  "description":"CW 101 - Figure out this API again",
+  "materials":[
+      {"driveFile":
+        {"driveFile":
+          {"id":"1TBdLNWckTjsW-Izh0EzThq36qeceS47f",
+          "title":"cs101-assignment-material.txt",
+          "alternateLink":"https://drive.google.com/open?id=1TBdLNWckTjsW-Izh0EzThq36qeceS47f",
+          "thumbnailUrl":"https://drive.google.com/thumbnail?id=1TBdLNWckTjsW-Izh0EzThq36qeceS47f&sz=s200"
+          },
+          "shareMode":"VIEW"
+        }
+      }
+    ],
+    "state":"PUBLISHED",
+    "alternateLink":"https://classroom.google.com/c/MTI4MDIzNTgxNTQ0/a/MTI4MDMyNzU2NjAy/details",
+
+    "workType":"ASSIGNMENT",
+    "submissionModificationMode": "MODIFIABLE_UNTIL_TURNED_IN",
+    "assignment":
+      {
+        "studentWorkFolder":
+          {
+            "id":"0B2DpClxEXO3sflNOR2NMUDdXMkp0bmpHWEM4bE5MeEhEMndQYWpCN1Q3UDNPaktJNU8zYXM",
+            "title":"CourseWork 101 - API Test Again Baby",
+            "alternateLink":"https://drive.google.com/drive/folders/0B2DpClxEXO3sflNOR2NMUDdXMkp0bmpHWEM4bE5MeEhEMndQYWpCN1Q3UDNPaktJNU8zYXM"
+          }
+        },
+        "assigneeMode":"ALL_STUDENTS",
+  */
+
+
+  //creating coursework
+    _apiUtils
+        .googleClassroomCreateCourseWork(courseId, coursework)
+        .then((response) => {
+            console.log(response);
+        });
 }
 
 function createCourse(courseParam){
@@ -103,3 +185,41 @@ export function loadAssignments(course, associatedWithDeveloperCheck){
       })
 }
 
+export function loadSubjects(subjectsStatus){
+// load courses
+  return new Promise((resolve, reject) => {
+    _apiUtils
+    .loadGoogleSubjects(subjectsStatus)
+    .then((subjectRes) => {
+      console.log("Course.componentDidMount.userProfile: ", subjectRes);
+      resolve(subjectRes.data.courses)
+    })
+    .catch((error) => {reject(error); console.error("Error during loadGoogleSubjects:", error);
+    });
+  })
+}
+
+export function userProfile(){
+  return new Promise((resolve, reject) => {
+    _apiUtils
+    .userProfile()
+    .then((response) => {
+      user.id = response.data.id;
+      user.name = response.data.name;
+      user.group = response.data.family_name;
+      resolve(user)
+    })
+    .catch((error) => {reject(error); console.error("Error during google userProfile:", error);
+    });
+  })
+}
+
+export function isTeacher(userId, courseId){
+  return new Promise((resolve, reject) => {
+    _apiUtils.googleClassroomCourseTeachersList(courseId).then((resTeacher) =>{
+      let isTeacherLogin;
+      (userId === resTeacher.data.userId) ? isTeacherLogin = true : isTeacherLogin = false;
+      resolve(isTeacherLogin)
+    }).catch((error) => {reject(error); console.error("Error during google userProfile:", error)});
+  })
+}
