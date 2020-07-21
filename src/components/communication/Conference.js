@@ -50,7 +50,7 @@ export default class Conference extends Component {
      api.addEventListener('videoConferenceJoined', () => {
       console.log('Local User Joined');
       this.setState({loading: false })
-      api.executeCommand('displayName', this.props.userData.displayName+ "( " + this.props.userData.department+" )");
+      api.executeCommand('displayName', this.props.userData.name+ "( " + this.props.userData.group+" )");
       //api.executeCommand('toggleVideo');
      });
     } catch (error) {

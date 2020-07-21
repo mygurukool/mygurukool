@@ -18,7 +18,7 @@ class Home extends Component {
     super();
     this.toggleBtmHeight = this.toggleBtmHeight.bind(this);
     this.state = {
-      userData: { displayName: "displayName", displayName: "displayName" },
+      userData: { name: "name", group: "groupName" },
       cssContainer: "container",
     };
     this.handleUserData = this.handleUserData.bind(this);
@@ -30,26 +30,6 @@ class Home extends Component {
       showConfPane: false,
       splitPercentage: "100%",
     });
-    //     if (
-    //       sessionStorage.getItem(_constants.LOGIN_PROVIDER) === _constants.GOOGLE
-    //     ) {
-    //       let googleUser = sessionStorage
-    //         .getItem(_constants.SESSION_OBJECT);
-
-    //         console.log(googleUser);
-
-    // if(googleUser){
-    //   let profile = googleUser.getBasicProfile();
-    //   if(profile)
-    //       this.setState((prevState) => ({
-    //         userData: {
-    //           ...prevState.userData,
-    //           displayName: profile.getName(),
-    //           department: profile.getFamilyName(),
-    //         },
-    //       }));
-    //     }
-    //     }
   }
 
   handleUserData = (userData) => {
@@ -125,7 +105,7 @@ class Home extends Component {
         <Header
           isSignedIn={true}
           studentName={
-            this.state.userData ? this.state.userData.displayName : "User"
+            this.state.userData ? this.state.userData.name : "User"
           }
         />
         {this.loadFab()}
@@ -138,7 +118,7 @@ class Home extends Component {
                   {/* Group Name*/}
                   <b>
                     {this.state.userData
-                      ? `Group: ${this.state.userData.department}`
+                      ? `Group: ${this.state.userData.group}`
                       : "Group Name"}
                   </b>
                 </span>
