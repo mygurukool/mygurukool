@@ -9,9 +9,7 @@ import Header from "./Header";
 import { Scrollbars } from "react-custom-scrollbars";
 import * as _constants from "./util/constants";
 import { Wrapper } from "./util/Wrapper";
-import { Fab, Action } from 'react-tiny-fab';
-import '../scss/tinyFabstyles.css';
-//@import "~react-tiny-fab/dist/styles.css";
+import FloatingButton from "./util/FloatingButton";
 
 class Home extends Component {
   constructor() {
@@ -23,6 +21,7 @@ class Home extends Component {
     };
     this.handleUserData = this.handleUserData.bind(this);
     this.handleConferencePanelSize = this.handleConferencePanelSize.bind(this);
+    this.floatingButtonAction = this.floatingButtonAction.bind(this);
   }
   componentWillMount() {
     this.setState({
@@ -37,6 +36,10 @@ class Home extends Component {
       userData: userData,
     });
   };
+
+  floatingButtonAction = (performAction) => {
+    if(performAction) this.handleConferencePanelSize(!this.state.showConfPane ? 0 : -1);
+  }
 
   handleConferencePanelSize = (resize) => {
     //Conference Pane
@@ -61,43 +64,6 @@ class Home extends Component {
   toggleBtmHeight(newSize) {
     this.setState({ btmHeight: newSize + "px" });
   }
-  loadFab() {
-    return (
-      <>
-      <Fab
-        mainButtonStyles={{
-          backgroundColor: "#00b5ad",
-        }}
-        actionButtonStyles={{
-          backgroundColor: "#ffffff",
-          color: "#34495e",
-        }}
-        position={{
-          bottom: 100,
-          left: 50,
-        }}
-        icon="+"
-        event="hover"
-      >
-        <Action
-          text="Conference"
-          onClick={() =>
-            this.handleConferencePanelSize(!this.state.showConfPane ? 0 : -1
-            )
-          }
-        >
-          <i className="far fa-comments fa-1g" />
-        </Action>
-        <Action
-          text="Archive"
-          onClick={() => alert("archive")}
-        >
-          <i className="far fa-file-archive fa-1g" />
-        </Action>
-      </Fab>
-      </>
-    );
-  }
 
   render() {
     return (
@@ -107,8 +73,8 @@ class Home extends Component {
           studentName={
             this.state.userData ? this.state.userData.name : "User"
           }
-        />
-        {this.loadFab()}
+        />     
+        {<FloatingButton performAction={this.floatingButtonAction}/>}
         <div className={this.state.cssContainer}>
           <div className="row section-nav">
             <div className="col-12">
@@ -137,7 +103,7 @@ class Home extends Component {
                         )
                       }
                     >
-                      <i className="far fa-file-archive fa-1g">Archive</i>
+                      {/* <i className="far fa-file-archive fa-1g">Archive</i>
                     </a>{" "}
                     <a
                       href="#"
@@ -146,8 +112,8 @@ class Home extends Component {
                           !this.state.showConfPane ? 0 : -1
                         )
                       }
-                    >
-                      <i className="far fa-comments fa-1g">Conference</i>
+                    > */}
+                      <i className="far fa-comments fa-1g">{'\n'}Conference</i>
                     </a>
                   </li>
                 </ul>
