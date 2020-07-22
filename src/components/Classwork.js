@@ -28,7 +28,7 @@ export default class Classwork extends Component {
   };
 
   loadCourses(groupName){
-    this.child.loadCourses(groupName);
+    this.child.fetchCoursesToDisplay(groupName);
   }
   render() {
     return sessionStorage.getItem(_constants.LOGIN_PROVIDER) ===
