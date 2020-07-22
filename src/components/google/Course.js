@@ -17,10 +17,10 @@ export default class Course extends Component {
     super(props);
     this.state = {
       courses: "",
+      coursesCompleteList: "",
       assignments: "",
       userName: "",
       currentView: "",
-      material: { formUrls: [] },
       turnInState: "Unknown",
       submissionId: "",
       showTeacherModal: true,
@@ -51,9 +51,7 @@ export default class Course extends Component {
       })
   }
 
-  componentDidMount() {
-    alert("this.state.selectedGroup: " + this.props.selectedGroup)
- 
+  componentDidMount() { 
     this.setState({isLoading: true});
 
     //loading user profile
@@ -64,24 +62,28 @@ export default class Course extends Component {
     //loading subjects
     _classworkUtil.loadSubjects(this.props.isActive).then((subjectRes) => {
       console.log("Course.componentDidMount.userProfile: ", subjectRes);
-      this.setState({isLoading: false, courses: subjectRes});
-      
+      this.setState({isLoading: false, coursesCompleteList: subjectRes});     
       user.group = _classworkUtil.fetchGroupList(subjectRes);
      
       //now set the user data to callback object(userData)
       this.props.userData(user);
 
+      this.fetchCoursesToDisplay(user.group[0]);
       if (this.state.courses.length > 0 && this.state.courses[0].hasOwnProperty("teacherFolder")) 
         _classworkUtil.isTeacher(user.id, this.state.courses[0].id).then((resTeacher) =>{
                 if(resTeacher && this.props.isActive)
                   this.setState({isTeacherLogin: true});
-              });
+        });
     });
+  }
+
+  fetchCoursesToDisplay(groupName){
+    this.setState({courses: _classworkUtil.coursesByGroupName(this.state.coursesCompleteList, groupName)});
   }
 
   loadAssignment = (event) => {
     this.setState({
-      currentView: this.state.courses[event.target.id].name,
+      currentView: this.state.courses[event.target.id].name
      });
      this.child.loadAssignment(this.state.courses[event.target.id].id, this.state.isTeacherLogin);
   };

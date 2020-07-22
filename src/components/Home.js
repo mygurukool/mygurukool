@@ -10,20 +10,23 @@ import { Scrollbars } from "react-custom-scrollbars";
 import * as _constants from "./util/constants";
 import { Wrapper } from "./util/Wrapper";
 import FloatingButton from "./util/FloatingButton";
+import GroupName from "./GroupName";
+import { Dropdown, DropdownButton } from "react-bootstrap";
 
 class Home extends Component {
   constructor() {
     super();
     this.toggleBtmHeight = this.toggleBtmHeight.bind(this);
     this.state = {
-      userData: { name: "name", group: "groupName" },
+      userData: { name: "name", group: ["groupName"] },
       cssContainer: "container",
     };
     this.handleUserData = this.handleUserData.bind(this);
     this.handleConferencePanelSize = this.handleConferencePanelSize.bind(this);
     this.floatingButtonAction = this.floatingButtonAction.bind(this);
+    this.child = React.createRef();
   }
-  componentWillMount() {
+  componentDidMount() {
     this.setState({
       btmHeight: "",
       showConfPane: false,
@@ -39,6 +42,10 @@ class Home extends Component {
 
   floatingButtonAction = (performAction) => {
     if(performAction) this.handleConferencePanelSize(!this.state.showConfPane ? 0 : -1);
+  }
+
+  groupSelection = (groupName) => {
+    this.child.loadCourses(groupName);
   }
 
   handleConferencePanelSize = (resize) => {
@@ -83,9 +90,16 @@ class Home extends Component {
                 <span>
                   {/* Group Name*/}
                   <b>
-                    {this.state.userData
+                    {<GroupName group={this.state.userData.group} groupSelection={this.groupSelection}/>}
+                     {/* {<DropdownButton id="dropdown-custom-components" title="Dropdown button" onSelect={(e)=> console.log(JSON.stringify(e.target.value))}>
+  <Dropdown.Item >Action</Dropdown.Item>
+  <Dropdown.Item >Another action</Dropdown.Item>
+  <Dropdown.Item >Something else</Dropdown.Item>
+</DropdownButton>}  */}
+
+                    {/* {this.state.userData
                       ? `Group: ${this.state.userData.group}`
-                      : "Group Name"}
+                      : "Group Name"} */}
                   </b>
                 </span>
                 <ul className="float-right">
@@ -128,7 +142,7 @@ class Home extends Component {
           onChange={(size) => this.toggleBtmHeight(size)}
         >
           <Scrollbars>
-            <Classwork userData={this.handleUserData} expandArchive={true}/>
+            <Classwork ref={instance => { this.child = instance; }} userData={this.handleUserData} expandArchive={true}/>
             {/* <Student userData={this.handleUserData} /> */}
           </Scrollbars>
           {/* <CustomScroll allowOuterScroll={true} flex="1">

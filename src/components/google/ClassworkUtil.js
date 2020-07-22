@@ -4,7 +4,7 @@ import * as _gconsts from "../util/gConsts";
 
 export let user = {
   name: "Name",
-  group: "Group Name",
+  group: ["Group Name",],
   id: "",
 };
 
@@ -170,9 +170,9 @@ function createCourse(courseParam){
 //             function(err) { console.error("Execute error", err); });
 // }
 
-export function loadAssignments(course, associatedWithDeveloperCheck){
+export function loadAssignments(courseId, associatedWithDeveloperCheck){
       return new Promise((resolve, reject) => {
-        _apiUtils.loadGoogleAssignments(course.id)
+        _apiUtils.loadGoogleAssignments(courseId)
         .then((response) => {
             //console.log("ClassworkUtil.loadAssignment: " + JSON.stringify(response.data))
             let assignments = response.data.courseWork;
@@ -206,7 +206,6 @@ export function userProfile(){
     .then((response) => {
       user.id = response.data.id;
       user.name = response.data.name;
-      user.group = response.data.family_name;
       resolve(user)
     })
     .catch((error) => {reject(error); console.error("Error during google userProfile:", error);
@@ -222,4 +221,32 @@ export function isTeacher(userId, courseId){
       resolve(isTeacherLogin)
     }).catch((error) => {reject(error); console.error("Error during google userProfile:", error)});
   })
+}
+
+export function destructClassname_Courses(courses){
+  let destructObj = {courses:[], group: null};
+  alert("destructClassname_Courses: " + courses.length)
+  courses && courses.map((course) => {
+    if(destructObj.group === null) destructObj.group = course.name.substring(0, course.name.indexOf("-"));
+     course.name = course.name.split(/[\-]+/).pop().trim();
+     destructObj.courses.push(course);
+  });
+  console.log("group/ coursename: " + JSON.stringify(destructObj));
+}
+
+export function fetchGroupList(courses){
+  let groupList = [];
+  courses && courses.map((course) => {
+    let name = course.section;
+    if(name!==null && typeof(name) !== 'undefined' && !groupList.includes(name)) groupList.push(name)
+  });
+  return groupList;
+}
+
+export function coursesByGroupName(courses, groupName){
+  let coursesByGroup = [];
+  courses && courses.map((course) => {
+    if(course.section === groupName) coursesByGroup.push(course);
+  });
+  return coursesByGroup;
 }

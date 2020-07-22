@@ -102,7 +102,6 @@ export default class Course extends Component {
       this.setState({assignments: response, isLoading: false});
       console.log(response)
     })
-    
   }
 
   render() {

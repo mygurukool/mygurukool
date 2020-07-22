@@ -27,6 +27,9 @@ export default class Classwork extends Component {
     this.props.userData(userData);
   };
 
+  loadCourses(groupName){
+    this.child.loadCourses(groupName);
+  }
   render() {
     return sessionStorage.getItem(_constants.LOGIN_PROVIDER) ===
       _constants.MICROSOFT ? (
@@ -35,7 +38,7 @@ export default class Classwork extends Component {
       sessionStorage.getItem(_constants.LOGIN_PROVIDER) ===
       _constants.GOOGLE ? (
       <Fragment>
-        <GoogleCourse
+        <GoogleCourse ref={instance => { this.child = instance; }} 
           userData={this.handleUserDataFromProvider}
           isActive={true}
         />
