@@ -27,6 +27,8 @@ export default class Course extends Component {
       isTeacherLogin: false,
       hasTeacherAccepted: true,
       isLoading: false,
+      isAssignmentsViewStale: true,
+      selectedCourseId:"",
     };
      this.child = React.createRef();
   }
@@ -78,15 +80,22 @@ export default class Course extends Component {
   }
 
   fetchCoursesToDisplay(groupName){
-    this.setState({courses: _classworkUtil.coursesByGroupName(this.state.coursesCompleteList, groupName)});
+    this.setState({courses: _classworkUtil.coursesByGroupName(this.state.coursesCompleteList, groupName), isAssignmentsViewStale: true});
   }
 
   loadAssignment = (event) => {
     this.setState({
-      currentView: this.state.courses[event.target.id].name
-     });
-     this.child.loadAssignment(this.state.courses[event.target.id].id, this.state.isTeacherLogin);
-  };
+      currentView: this.state.courses[event.target.id].name, selectedCourseId:this.state.courses[event.target.id].id});
+    this.setState({isAssignmentsViewStale: false}, 
+      this.awaitAndLoadAssignments
+     );
+  }
+
+  awaitAndLoadAssignments = () => {
+    const { isAssignmentsViewStale } = this.state;
+    if(!isAssignmentsViewStale)
+    this.child.loadAssignment(this.state.selectedCourseId, this.state.isTeacherLogin);
+  }
 
   render() {
     let hasDriveFiles = false;
@@ -185,7 +194,8 @@ export default class Course extends Component {
             ) : (
               ""
             )} */}
-            <Assignment ref={instance => { this.child = instance; }}/>
+            {!this.state.isAssignmentsViewStale ?
+            <Assignment ref={instance => { this.child = instance; }}/> : ""}
            </div>
         </div>
       </Fragment>
