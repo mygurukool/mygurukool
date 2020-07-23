@@ -11,6 +11,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 
 import * as _constants from "./components/util/constants"
 import * as _gconsts from "./components/util/gConsts"
+import CreateCourse from "./components/CreateCourse";
 
 function googleUpdateSigninStatus(isSignedIn) {
   console.log("googleUpdateSigninStatus")
@@ -71,6 +72,16 @@ function App() {
           )}
         />
       </div>
+      <Route
+          exact={true}
+          //path="/createcourse"
+          path="/home/createcourse"
+          render={() => (
+            <div className="App">
+              <CreateCourse />
+            </div>
+          )}
+        />
     </BrowserRouter>
   );
 }
