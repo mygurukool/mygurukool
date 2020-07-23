@@ -204,6 +204,37 @@ export function googleClassroomCreateCourseWork(courseId, coursework) {
   )
 }
 
+export function googleClassroomGetInvitations(userId ="me") {
+  return axiosGet(_gconsts.GOOGLE_CLASSROOM_API + `invitations?userId=${userId}`)
+}
+
+export function googleClassroomCreateInvitation(toCourseId, forUserId, withRole = "STUDENT") {
+  const invitation = { courseId: toCourseId, role: withRole, userId: forUserId }
+
+  const url = _gconsts.GOOGLE_CLASSROOM_API + `invitations`
+
+  return axios.post(url,
+    JSON.stringify(invitation), { headers: {
+      Authorization: `Bearer ${sessionStorage.getItem(
+        _constants.ACCESS_TOKEN
+      )}`,
+      "Content-Type": "application/json"
+    } },
+  )
+}
+
+export function googleClassroomAcceptInvitation(invitationId) {
+  const url = _gconsts.GOOGLE_CLASSROOM_API + `invitations/${invitationId}:accept`
+
+  return axios.post(url,
+    {}, { headers: {
+      Authorization: `Bearer ${sessionStorage.getItem(
+        _constants.ACCESS_TOKEN
+      )}`
+    } },
+  )
+}
+
 // -- Google Drive
 export function googleDriveGetFiles(params = {}) {
   // -- get/list all files or folders in the users Google Drive.
