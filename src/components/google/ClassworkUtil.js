@@ -251,17 +251,28 @@ export function coursesByGroupName(courses, groupName){
   return coursesByGroup;
 }
 
-export function getFormLink(name, driveId){
+export function getDriveFileLink(name, contentType, driveId){
   let formUrl;
+  let mime;
+  let fileType
+  switch (contentType) {
+    case 1: mime = 'application/vnd.google-apps.form'; fileType = 'forms'; break;
+    case 2: mime = 'application/vnd.google-apps.document'; fileType = 'document'; break;
+    case 3: mime = 'application/vnd.google-apps.presentation'; fileType = 'presentation'; break;
+    case 4: mime = 'application/vnd.google-apps.spreadsheet'; fileType = 'spreadsheets'; break;
+    case 5: mime = 'application/vnd.google-apps.drawing'; fileType = 'drawings'; break;
+  }
   return new Promise((resolve, reject) => {
     _apiUtils
-    .googleClassroomCreateForm(name, driveId)
+    .googleClassroomCreateDriveFile(name, mime, driveId)
     .then((response) => {
       console.log(response)
-      formUrl= `https://docs.google.com/forms/d/${response.data.id}/edit`
+      formUrl= `https://docs.google.com/${fileType}/d/${response.data.id}/edit`
       resolve(formUrl)
     })
     .catch((error) => {reject(error); console.error("Error during getFormLink:", error);
     });
   })
 }
+
+//function getDriveFileLink(name, contentType, driveId){

@@ -297,10 +297,9 @@ export function googleDriveUpdateFile(name, content, mime, fileId) {
   )
 }
 
-export function googleClassroomCreateForm(name, driveId=""){
+export function googleClassroomCreateDriveFile(name, mime, driveId=""){
   const url = _gconsts.GOOGLE_DRIVE_API + "files"
-  let mime = 'application/vnd.google-apps.form'
-
+  
   const meta = { name : name, mimeType: mime }
 
   return axios.post(url,
