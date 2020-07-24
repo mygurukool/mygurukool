@@ -16,3 +16,11 @@ export const GOOGLE_DRIVE_UPLOAD_API = "https://www.googleapis.com/upload/drive/
 //features/ functionality related constants
 export const COURSE_ACTIVE = "ACTIVE";
 export const COURSE_ARCHIVED = "ARCHIVED";
+
+//Drive file types
+export const DRIVE_FORMS = 1;
+export const DRIVE_DOCS = 2;
+export const DRIVE_SLIDES = 3;
+export const DRIVE_SHEETS = 4;
+export const DRIVE_DRAWINGS = 5;
+
