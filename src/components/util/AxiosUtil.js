@@ -297,6 +297,22 @@ export function googleDriveUpdateFile(name, content, mime, fileId) {
   )
 }
 
+export function googleClassroomCreateForm(name, driveId=""){
+  const url = _gconsts.GOOGLE_DRIVE_API + "files"
+  let mime = 'application/vnd.google-apps.form'
+
+  const meta = { name : name, mimeType: mime }
+
+  return axios.post(url,
+    meta, { headers: {
+      Authorization: `Bearer ${sessionStorage.getItem(
+        _constants.ACCESS_TOKEN
+      )}`,
+      "Content-Type": "application/json"
+    } },
+  )
+}
+
 // -- helpers
 function axiosCall(url) {
   let api_url =

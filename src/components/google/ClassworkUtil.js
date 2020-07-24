@@ -250,3 +250,18 @@ export function coursesByGroupName(courses, groupName){
   });
   return coursesByGroup;
 }
+
+export function getFormLink(name, driveId){
+  let formUrl;
+  return new Promise((resolve, reject) => {
+    _apiUtils
+    .googleClassroomCreateForm(name, driveId)
+    .then((response) => {
+      console.log(response)
+      formUrl= `https://docs.google.com/forms/d/${response.data.id}/edit`
+      resolve(formUrl)
+    })
+    .catch((error) => {reject(error); console.error("Error during getFormLink:", error);
+    });
+  })
+}
