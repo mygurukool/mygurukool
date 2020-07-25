@@ -1,6 +1,7 @@
 import { Fab, Action } from "react-tiny-fab";
 import "react-tiny-fab/dist/styles.css";
 import React, { Component } from "react";
+import * as _classworkUtil from "../google/ClassworkUtil";
 
 // let actionList = [`<Action text="Conference" onClick={this.onConferenceClick}>
 // <i className="far fa-comments fa-1g" />
@@ -17,7 +18,11 @@ export default class FloatingButton extends Component {
   };
 
   onClickCreateCourse  = () => {
-    window.location.href = '/home/createcourse';
+    this.props.showCreateCourse(true);
+    //window.location.href = '/home/createcourse';
+   // _classworkUtil.getDriveFileLink("name5",5,"").then((response)  => {
+     // console.log("onClickCreateCourse: " + JSON.stringify(response))});
+    //window.location.assign('https://docs.google.com/forms/d/157J7UAAYKAfP04QcdR8d40fV8Ad7N3Mi-6lAVtzEs9U/edit');
   }
 //   var mydict = new Array();
 // mydict['onClickMethod']   = 'this.onConferenceClick';

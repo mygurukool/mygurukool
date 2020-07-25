@@ -106,7 +106,7 @@ function createCourseWork(coursework){
         });
 }
 
-function createCourse(courseParam){
+function reCreateCourse(courseParam){
  /**
    * { X description, "room", "section"
       "id": "128158816977",
@@ -157,6 +157,14 @@ function createCourse(courseParam){
 });
 }
 
+export function createCourse(courseName, className){
+  const courseContent = { name : courseName, ownerId: "me", section: className};
+  alert("className: " + className);
+  _apiUtils.googleClassroomCreateCourse(courseContent).then((response) => {
+    alert(response)
+    console.log("createCourse " + response);  
+  });
+}
 // function execute() {
 //   gapi.client.load('classroom', 'v1', callback);
 //   return gapi.client.classroom.courses.create({
@@ -223,6 +231,7 @@ export function isTeacher(userId, courseId){
   })
 }
 
+//TODO: currently not used.. to be deleted in near future should this function is not needed anymore
 export function destructClassname_Courses(courses){
   let destructObj = {courses:[], group: null};
   alert("destructClassname_Courses: " + courses.length)
@@ -238,7 +247,9 @@ export function fetchGroupList(courses){
   let groupList = [];
   courses && courses.map((course) => {
     let name = course.section;
-    if(name!==null && typeof(name) !== 'undefined' && !groupList.includes(name)) groupList.push(name)
+    if(name===null || typeof(name) === 'undefined') {name = 'undefined'} //TODO: temp for Sudha's testing, to be deleted
+    //if(name!==null && typeof(name) !== 'undefined' && !groupList.includes(name)) groupList.push(name) //TODO enable this when the testing code is deleted
+    if(!groupList.includes(name)) groupList.push(name);
   });
   return groupList;
 }
@@ -247,6 +258,7 @@ export function coursesByGroupName(courses, groupName){
   let coursesByGroup = [];
   courses && courses.map((course) => {
     if(course.section === groupName) coursesByGroup.push(course);
+    else if(groupName === 'undefined') coursesByGroup.push(course); //TODO: temp for Sudha's testing, to be deleted
   });
   return coursesByGroup;
 }

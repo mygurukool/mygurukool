@@ -12,6 +12,7 @@ import { Wrapper } from "./util/Wrapper";
 import FloatingButton from "./util/FloatingButton";
 import GroupName from "./GroupName";
 import { Dropdown, DropdownButton } from "react-bootstrap";
+import CreateCourse from "./CreateCourse";
 
 class Home extends Component {
   constructor() {
@@ -20,6 +21,7 @@ class Home extends Component {
     this.state = {
       userData: { name: "name", group: ["groupName"] },
       cssContainer: "container",
+      showCreateCourse:false,
     };
     this.handleUserData = this.handleUserData.bind(this);
     this.handleConferencePanelSize = this.handleConferencePanelSize.bind(this);
@@ -42,6 +44,10 @@ class Home extends Component {
 
   floatingButtonAction = (performAction) => {
     if(performAction) this.handleConferencePanelSize(!this.state.showConfPane ? 0 : -1);
+  }
+
+  createCourseClick = (showCreateCourse) => {
+    this.setState({showCreateCourse: showCreateCourse});
   }
 
   groupSelection = (groupName) => {
@@ -81,7 +87,7 @@ class Home extends Component {
             this.state.userData ? this.state.userData.name : "User"
           }
         />     
-        {<FloatingButton performAction={this.floatingButtonAction}/>}
+        {<FloatingButton performAction={this.floatingButtonAction} showCreateCourse={this.createCourseClick}/>}
         <div className={this.state.cssContainer}>
           <div className="row section-nav">
             <div className="col-12">
@@ -135,6 +141,7 @@ class Home extends Component {
             </div>
           </div>
         </div>
+        {!this.state.showCreateCourse ? 
         <SplitPane
           className="crazy-scroll"
           split="vertical"
@@ -158,6 +165,8 @@ class Home extends Component {
             ""
           )}
         </SplitPane>
+        : <CreateCourse hideCreateCourse={this.createCourseClick}/>
+        }
       </Wrapper>
     );
   }
