@@ -36,6 +36,7 @@ export default class Course extends Component {
   handleTeacherDialogClose = () => {this.setState({showTeacherModal: false, hasTeacherAccepted: false})};
 
   handleTeacherConfirmation = () => {
+    sessionStorage.setItem("hasTeacherAccepted", true);
     this.setState({
       showTeacherModal: false, hasTeacherAccepted: true});
     const options = new gapi.auth2.SigninOptionsBuilder();
@@ -148,7 +149,7 @@ export default class Course extends Component {
             ) : (
               ""
             )}
-            {this.state.isTeacherLogin ? (
+            {this.state.isTeacherLogin && !sessionStorage.getItem("hasTeacherAccepted") ? (
               <Modal
                 show={this.state.showTeacherModal}
                 backdrop="static"
