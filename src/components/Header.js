@@ -33,7 +33,7 @@ export default class Header extends Component {
 
                       if (provider === _constants.GOOGLE) {
                         gapi.auth2.getAuthInstance().signOut();
-                        gapi.auth2.getAuthInstance().disconnect();
+                        //gapi.auth2.getAuthInstance().disconnect();
                       } else {
                         window.location.href =
                           "https://login.microsoftonline.com/common/oauth2/v2.0/logout?post_logout_redirect_uri=" +
