@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import { Form, Button } from "react-bootstrap";
 import * as _classworkUtil from "./google/ClassworkUtil";
 

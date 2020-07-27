@@ -18,9 +18,21 @@ export const COURSE_ACTIVE = "ACTIVE";
 export const COURSE_ARCHIVED = "ARCHIVED";
 
 //Drive file types
-export const DRIVE_FORMS = 1;
-export const DRIVE_DOCS = 2;
-export const DRIVE_SLIDES = 3;
-export const DRIVE_SHEETS = 4;
-export const DRIVE_DRAWINGS = 5;
+export const driveFileTypes = {
+  DRIVE_FORMS : 'Forms',
+  DRIVE_DOCS : 'Docs',
+  DRIVE_SLIDES : 'Presentation',
+  DRIVE_SHEETS : 'Spreadsheets',
+  DRIVE_DRAWINGS : 'Drawings',
+}
+
+//CourseWork Type Enums
+export const courseWorkType = {
+  //COURSE_WORK_TYPE_UNSPECIFIED: 
+  ASSIGNMENT : 'Assignment',
+  SHORT_ANSWER_QUESTION : 'Question',
+  MULTIPLE_CHOICE_QUESTION : 'Quiz Assignment',
+//   "Material",
+//   "Reuse post",
+}
 

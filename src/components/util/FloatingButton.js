@@ -19,11 +19,15 @@ export default class FloatingButton extends Component {
 
   onClickCreateCourse  = () => {
     this.props.showCreateCourse(true);
-    //window.location.href = '/home/createcourse';
-   // _classworkUtil.getDriveFileLink("name5",5,"").then((response)  => {
-     // console.log("onClickCreateCourse: " + JSON.stringify(response))});
-    //window.location.assign('https://docs.google.com/forms/d/157J7UAAYKAfP04QcdR8d40fV8Ad7N3Mi-6lAVtzEs9U/edit');
   }
+
+  onClickCreateCourseWork  = () => {
+    this.props.showCreateCourseWork(true);
+    //window.location.href = '/home/createcourseWork';
+  }
+
+
+
 //   var mydict = new Array();
 // mydict['onClickMethod']   = 'this.onConferenceClick';
 /* Somewhere: */
@@ -69,6 +73,9 @@ export default class FloatingButton extends Component {
            <i className="fas fa-file-archive fa-1g" />
          </Action>
          <Action text="Create Course" onClick={this.onClickCreateCourse}>
+           <i className="fas fa-plus-circle fa-1g" />
+         </Action>
+         <Action text="Create Course Work" onClick={this.onClickCreateCourseWork}>
            <i className="fas fa-plus-circle fa-1g" />
          </Action>
         </Fab>

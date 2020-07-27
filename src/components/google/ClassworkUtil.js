@@ -47,7 +47,7 @@ function associatedWithDeveloperAction(course, assignments) {
     });
 }
 
-function createCourseWork(coursework){
+function reCreateCourseWork(coursework){
 
   alert("title: " + coursework["title"])
   let courseId = coursework["courseId"];
@@ -263,16 +263,16 @@ export function coursesByGroupName(courses, groupName){
   return coursesByGroup;
 }
 
-export function getDriveFileLink(name, contentType, driveId){
+export function getDriveFileLink(name, contentType, driveId=""){
   let formUrl;
   let mime;
   let fileType
   switch (contentType) {
-    case 1: mime = 'application/vnd.google-apps.form'; fileType = 'forms'; break;
-    case 2: mime = 'application/vnd.google-apps.document'; fileType = 'document'; break;
-    case 3: mime = 'application/vnd.google-apps.presentation'; fileType = 'presentation'; break;
-    case 4: mime = 'application/vnd.google-apps.spreadsheet'; fileType = 'spreadsheets'; break;
-    case 5: mime = 'application/vnd.google-apps.drawing'; fileType = 'drawings'; break;
+    case _gconsts.driveFileTypes.DRIVE_FORMS: mime = 'application/vnd.google-apps.form'; fileType = 'forms'; break;
+    case _gconsts.driveFileTypes.DRIVE_DOCS: mime = 'application/vnd.google-apps.document'; fileType = 'document'; break;
+    case _gconsts.driveFileTypes.DRIVE_SLIDES: mime = 'application/vnd.google-apps.presentation'; fileType = 'presentation'; break;
+    case _gconsts.driveFileTypes.DRIVE_SHEETS: mime = 'application/vnd.google-apps.spreadsheet'; fileType = 'spreadsheets'; break;
+    case _gconsts.driveFileTypes.DRIVE_DRAWINGS: mime = 'application/vnd.google-apps.drawing'; fileType = 'drawings'; break;
   }
   return new Promise((resolve, reject) => {
     _apiUtils
@@ -287,4 +287,82 @@ export function getDriveFileLink(name, contentType, driveId){
   })
 }
 
-//function getDriveFileLink(name, contentType, driveId){
+export function autoAcceptCourseInvitation(){
+  _apiUtils.googleClassroomGetInvitations().then((response) => {
+    console.log("googleClassroomGetInvitations " + JSON.stringify(response))
+    _apiUtils.googleClassroomAcceptInvitation(response.data.nextPageToken).then((response) => {
+      console.log("googleClassroomAcceptInvitation: " + response)
+    })
+  })
+}
+
+export function createCourseWork(coursework){
+  let courseId = coursework.courseId;
+  let courseWork = {title: coursework.title, description: coursework.instructions, workType:coursework.workType,
+                    associatedWithDeveloper: true, state:'PUBLISHED', //maxPoints: 1
+                    materials: [],   
+                  };
+
+  let materials= []
+  coursework.driveFiles.map((file) => { 
+    if(file.type === _gconsts.driveFileTypes.DRIVE_FORMS){
+      materials=
+      {
+        "form": {
+          "formUrl": file.url,
+          "title": file.name,
+        }
+      }
+    } 
+    // else if(file.type === _gconsts.driveFileTypes.DRIVE_DOCS){
+    //   materials=
+    //   {
+    //     "form": {
+    //       "formUrl": file.url,
+    //       "title": file.name,
+    //     }
+    //   }
+    // } 
+  })
+  courseWork.materials.push(materials);
+  console.log("createCourseWork: " + JSON.stringify(courseWork));
+
+  // let materials:[
+  //     {driveFile:
+  //       {"driveFile":
+  //         {"id":"1TBdLNWckTjsW-Izh0EzThq36qeceS47f",
+  //         "title":"cs101-assignment-material.txt",
+  //         "alternateLink":"https://drive.google.com/open?id=1TBdLNWckTjsW-Izh0EzThq36qeceS47f",
+  //         "thumbnailUrl":"https://drive.google.com/thumbnail?id=1TBdLNWckTjsW-Izh0EzThq36qeceS47f&sz=s200"
+  //         },
+  //         "shareMode":"VIEW"
+  //       }
+  //     }
+  //   ],
+    // "state":"PUBLISHED",
+    // "alternateLink":"https://classroom.google.com/c/MTI4MDIzNTgxNTQ0/a/MTI4MDMyNzU2NjAy/details",
+
+    // "workType":"ASSIGNMENT",
+    // "submissionModificationMode": "MODIFIABLE_UNTIL_TURNED_IN",
+    // "assignment":
+    //   {
+    //     "studentWorkFolder":
+    //       {
+    //         "id":"0B2DpClxEXO3sflNOR2NMUDdXMkp0bmpHWEM4bE5MeEhEMndQYWpCN1Q3UDNPaktJNU8zYXM",
+    //         "title":"CourseWork 101 - API Test Again Baby",
+    //         "alternateLink":"https://drive.google.com/drive/folders/0B2DpClxEXO3sflNOR2NMUDdXMkp0bmpHWEM4bE5MeEhEMndQYWpCN1Q3UDNPaktJNU8zYXM"
+    //       }
+    //     },
+    //     "assigneeMode":"ALL_STUDENTS",
+
+
+  //creating coursework
+  return new Promise((resolve, reject) => {
+    _apiUtils
+        .googleClassroomCreateCourseWork(courseId, courseWork)
+        .then((response) => {
+            console.log("googleClassroomCreateCourseWork: "+ JSON.stringify(response));
+            resolve(response);
+        }).catch((error) => {reject(error); console.error("Error during google CreateCourseWork:", error)});
+      })
+  }

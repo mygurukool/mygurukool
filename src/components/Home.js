@@ -1,5 +1,4 @@
-import React from "react";
-import { Component } from "react";
+import React, { Component } from "react";
 import SplitPane from "react-split-pane";
 import Classwork from "./Classwork";
 import Conference from "./communication/Conference";
@@ -11,8 +10,10 @@ import * as _constants from "./util/constants";
 import { Wrapper } from "./util/Wrapper";
 import FloatingButton from "./util/FloatingButton";
 import GroupName from "./GroupName";
-import { Dropdown, DropdownButton } from "react-bootstrap";
+// import GroupNameDropdown from "./util/DropdownUtil";
 import CreateCourse from "./CreateCourse";
+import CreateCourseWork from "./CreateCourseWork";
+
 
 class Home extends Component {
   constructor() {
@@ -22,6 +23,7 @@ class Home extends Component {
       userData: { name: "name", group: ["groupName"] },
       cssContainer: "container",
       showCreateCourse:false,
+      showCreateCourseWork:false,
     };
     this.handleUserData = this.handleUserData.bind(this);
     this.handleConferencePanelSize = this.handleConferencePanelSize.bind(this);
@@ -48,6 +50,10 @@ class Home extends Component {
 
   createCourseClick = (showCreateCourse) => {
     this.setState({showCreateCourse: showCreateCourse});
+  }
+
+  createCourseWorkClick = (showCreateCourseWork) => {
+    this.setState({showCreateCourseWork: showCreateCourseWork});
   }
 
   groupSelection = (groupName) => {
@@ -87,7 +93,9 @@ class Home extends Component {
             this.state.userData ? this.state.userData.name : "User"
           }
         />     
-        {<FloatingButton performAction={this.floatingButtonAction} showCreateCourse={this.createCourseClick}/>}
+        {<FloatingButton performAction={this.floatingButtonAction} 
+                         showCreateCourse={this.createCourseClick} 
+                         showCreateCourseWork={this.createCourseWorkClick}/>}
         <div className={this.state.cssContainer}>
           <div className="row section-nav">
             <div className="col-12">
@@ -97,15 +105,7 @@ class Home extends Component {
                   {/* Group Name*/}
                   <b>
                     {<GroupName group={this.state.userData.group} groupSelection={this.groupSelection}/>}
-                     {/* {<DropdownButton id="dropdown-custom-components" title="Dropdown button" onSelect={(e)=> console.log(JSON.stringify(e.target.value))}>
-  <Dropdown.Item >Action</Dropdown.Item>
-  <Dropdown.Item >Another action</Dropdown.Item>
-  <Dropdown.Item >Something else</Dropdown.Item>
-</DropdownButton>}  */}
-
-                    {/* {this.state.userData
-                      ? `Group: ${this.state.userData.group}`
-                      : "Group Name"} */}
+                    {/* {<GroupNameDropdown dropdownTitleText="Class" itemList={this.state.userData.group} itemSelection={this.groupSelection}/>} */}
                   </b>
                 </span>
                 <ul className="float-right">
@@ -141,31 +141,35 @@ class Home extends Component {
             </div>
           </div>
         </div>
-        {!this.state.showCreateCourse ? 
-        <SplitPane
-          className="crazy-scroll"
-          split="vertical"
-          defaultSize={this.state.splitPercentage}
-          onChange={(size) => this.toggleBtmHeight(size)}
-        >
-          <Scrollbars>
-            <Classwork ref={instance => { this.child = instance; }} userData={this.handleUserData} expandArchive={true}/>
-            {/* <Student userData={this.handleUserData} /> */}
-          </Scrollbars>
-          {/* <CustomScroll allowOuterScroll={true} flex="1">
-            <Student userData={this.handleUserData} />
-          </CustomScroll> */}
-          {this.state.showConfPane ? (
-            <Conference
-              paneMaximize={this.handleConferencePanelSize}
-              bottomHeight={this.state.btmHeight}
-              userData={this.state.userData}
-            />
-          ) : (
-            ""
-          )}
-        </SplitPane>
-        : <CreateCourse hideCreateCourse={this.createCourseClick}/>
+    
+        {!this.state.showCreateCourseWork ? 
+        // {!this.state.showCreateCourse ? 
+          <SplitPane
+            className="crazy-scroll"
+            split="vertical"
+            defaultSize={this.state.splitPercentage}
+            onChange={(size) => this.toggleBtmHeight(size)}
+          >
+            <Scrollbars>
+              <Classwork ref={instance => { this.child = instance; }} userData={this.handleUserData} expandArchive={true}/>
+              {/* <Student userData={this.handleUserData} /> */}
+            </Scrollbars>
+            {/* <CustomScroll allowOuterScroll={true} flex="1">
+              <Student userData={this.handleUserData} />
+            </CustomScroll> */}
+            {this.state.showConfPane ? (
+              <Conference
+                paneMaximize={this.handleConferencePanelSize}
+                bottomHeight={this.state.btmHeight}
+                userData={this.state.userData}
+              />
+            ) : (
+              ""
+            )}
+          </SplitPane>
+        : 
+          <CreateCourseWork showCreateCourseWork={this.createCourseWorkClick}/>
+        // <CreateCourse hideCreateCourse={this.createCourseClick}/>
         }
       </Wrapper>
     );
