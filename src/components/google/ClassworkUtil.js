@@ -308,9 +308,8 @@ export function createCourseWork(coursework){
     if(file.type === _gconsts.driveFileTypes.DRIVE_FORMS){
       materials=
       {
-        "form": {
-          "formUrl": file.url,
-          "title": file.name,
+        "link": {
+          "url": file.url,
         }
       }
     } 
