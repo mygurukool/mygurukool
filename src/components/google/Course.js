@@ -196,7 +196,7 @@ export default class Course extends Component {
               ""
             )} */}
             {!this.state.isAssignmentsViewStale ?
-            <Assignment ref={instance => { this.child = instance; }}/> : ""}
+            <Assignment ref={instance => { this.child = instance; }} isActive={this.props.isActive}/> : ""}
            </div>
         </div>
       </Fragment>
