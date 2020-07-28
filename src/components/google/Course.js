@@ -28,7 +28,7 @@ export default class Course extends Component {
       hasTeacherAccepted: true,
       isLoading: false,
       isAssignmentsViewStale: true,
-      selectedCourseId:"",
+      selectedCourseId:"null",
     };
      this.child = React.createRef();
   }
@@ -55,6 +55,9 @@ export default class Course extends Component {
   }
 
   componentDidMount() { 
+    // alert("course.comp did mount : " +  sessionStorage.getItem("COURSE_ID"))
+     sessionStorage.setItem("COURSE_ID", this.state.selectedCourseId);
+     //alert("***********course.comp did mount after setItem(COURSE_ID null): " +  this.state.selectedCourseId)
     this.setState({isLoading: true});
 
     //loading user profile
@@ -79,12 +82,23 @@ export default class Course extends Component {
         });
     });
   }
+  // shouldComponentUpdate(){
+  //   sessionStorage.setItem("COURSE_ID", null);
+  // }
 
-  fetchCoursesToDisplay(groupName){
-    this.setState({courses: _classworkUtil.coursesByGroupName(this.state.coursesCompleteList, groupName), isAssignmentsViewStale: true});
+  async fetchCoursesToDisplay(groupName){
+  //  sessionStorage.setItem("COURSE_ID", null);
+  //  alert("course. fetchCoursesToDisplay : " +  sessionStorage.getItem("COURSE_ID") + " ..CURRENT VIEW: " + this.state.currentView) ;
+    await this.setState({courses: _classworkUtil.coursesByGroupName(this.state.coursesCompleteList, groupName), isAssignmentsViewStale: true, 
+      selectedCourseId: "null"});
+  //  alert(this.state.selectedCourseId + " after ..CURRENT VIEW: " + this.state.currentView) ;
+    this.forceUpdate();
+    
+    //this.setState({this.state});
   }
 
   loadAssignment = (event) => {
+    sessionStorage.setItem("COURSE_ID", this.state.courses[event.target.id].id);
     this.setState({
       currentView: this.state.courses[event.target.id].name, selectedCourseId:this.state.courses[event.target.id].id});
     this.setState({isAssignmentsViewStale: false}, 
@@ -99,6 +113,7 @@ export default class Course extends Component {
   }
 
   render() {
+  //  alert("couser render")
     let hasDriveFiles = false;
     return (
       <Fragment>

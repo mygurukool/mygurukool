@@ -26,8 +26,6 @@ export default class FloatingButton extends Component {
     //window.location.href = '/home/createcourseWork';
   }
 
-
-
 //   var mydict = new Array();
 // mydict['onClickMethod']   = 'this.onConferenceClick';
 /* Somewhere: */
@@ -75,9 +73,12 @@ export default class FloatingButton extends Component {
          <Action text="Create Course" onClick={this.onClickCreateCourse}>
            <i className="fas fa-plus-circle fa-1g" />
          </Action>
-         <Action text="Create Course Work" onClick={this.onClickCreateCourseWork}>
-           <i className="fas fa-plus-circle fa-1g" />
-         </Action>
+         {sessionStorage.getItem("COURSE_ID") !== 'null' ? 
+          <Action text="Create Course Work" onClick={this.onClickCreateCourseWork} > 
+            <i className="fas fa-plus-circle fa-1g" />
+          </Action>
+          : ""
+         }
         </Fab>
       </>
     );
