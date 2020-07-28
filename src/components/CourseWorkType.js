@@ -5,6 +5,8 @@ import {driveFileTypes} from "./util/gConsts"
 import DriveFileTypeDropdown from "./util/DropdownUtil";
 
 const driveFileTypeList = Object.keys(driveFileTypes).map(key => driveFileTypes[key]);
+const TITLE_FIELD = "titleField";
+const DRIVE_FILE_NAME_FIELD = "driveFileNameField";
 
 export default class CourseWorkType extends React.Component {
   constructor(props) {
@@ -39,7 +41,7 @@ export default class CourseWorkType extends React.Component {
     const { target } = event;
     const value = target.value;
     const { name } = target;
-    if(name === "titleField" && value.length > 0)
+    if((name === TITLE_FIELD) && value.length > 0)
       this.setState({isAssignDisabled: false,});
     
     await this.setState({
@@ -47,12 +49,18 @@ export default class CourseWorkType extends React.Component {
     });
   };
 
+  keyDown = async (event) => {
+    if(event.keyCode === 13 && (event.target.name === DRIVE_FILE_NAME_FIELD)) {
+      this.createDriveFiles();
+    }
+  }
+
   handleClick = async (eventId) => {
     if(eventId !== 'cancel'){
       let courseWork = {title: this.state.titleField, 
                         description: this.state.instructionsField, 
                         workType: this.props.workTypeData.type,
-                        courseId: "136875407598", //this.props.courseId;
+                        courseId: sessionStorage.getItem("COURSE_ID"),
                         driveFiles: this.state.driveFiles,
                       };
       _classworkUtil.createCourseWork(courseWork).then((res) => console.log(res));
@@ -91,8 +99,9 @@ export default class CourseWorkType extends React.Component {
             <Form.Label>Title</Form.Label>
             <Form.Control
               type="input"
-              name="titleField"
+              name={TITLE_FIELD}
               //placeholder="eg: English, French"
+              onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
               onChange={(e) => this.handleChange(e)}
             />
             {/* <Form.Text className="text-muted">
@@ -126,8 +135,11 @@ export default class CourseWorkType extends React.Component {
               <Form.Label>{this.state.driveFileType} Title</Form.Label>
                 <Form.Control
                   type="input"
-                  name="driveFileNameField"
+                  name={DRIVE_FILE_NAME_FIELD}
+                  autofocus="true"
                   //placeholder="eg: English, French"
+                  onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
+                  onKeyDown={(e) => this.keyDown(e)}
                   onChange={(e) => this.handleChange(e)}
                 />
               </Form.Group>
