@@ -12,12 +12,22 @@ export default class CreateCourse extends React.Component {
     this.handleChange = this.handleChange.bind(this);
   }
 
-  handleClick = () => {
-    _classworkUtil
+  handleClick = async () => {
+    let resp = await _classworkUtil
       .createCourse(this.state.courseName, this.state.className)
-      .then((res) => {
-        console.log(res);
-      });
+      .then(res => res);
+      // .then((res) => {
+      //   console.log(res);
+      // });
+      alert(JSON.stringify(resp))
+      console.log(resp);
+
+      // _classworkUtil
+      // .createCourse(this.state.courseName, this.state.className)
+      // .then((res) => {
+      //   console.log("CreateCourse: " + res);
+      // });
+
     this.props.hideCreateCourse(false);
   };
 

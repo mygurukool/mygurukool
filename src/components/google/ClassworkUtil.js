@@ -159,12 +159,24 @@ function reCreateCourse(courseParam){
 
 export function createCourse(courseName, className){
   const courseContent = { name : courseName, ownerId: "me", section: className};
-  alert("className: " + className);
   _apiUtils.googleClassroomCreateCourse(courseContent).then((response) => {
     alert(response)
     console.log("createCourse " + response);  
   });
+
+  // return new Promise((resolve, reject) => {
+  //   _apiUtils.googleClassroomCreateCourse(courseContent).then((response) => {
+  //     resolve(response)
+  //     console.log("createCourse " + response);  
+  //   }).catch((error) => {
+  //       reject(error); console.error("Error during createCourse:", error);
+  //     });
+  //   })
+
 }
+
+
+
 // function execute() {
 //   gapi.client.load('classroom', 'v1', callback);
 //   return gapi.client.classroom.courses.create({

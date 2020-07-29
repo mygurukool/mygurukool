@@ -12,8 +12,6 @@ import FloatingButton from "./util/FloatingButton";
 import GroupName from "./GroupName";
 // import GroupNameDropdown from "./util/DropdownUtil";
 import CreateCourse from "./CreateCourse";
-import CreateCourseWork from "./CreateCourseWork";
-
 
 class Home extends Component {
   constructor() {
@@ -50,10 +48,6 @@ class Home extends Component {
 
   createCourseClick = (showCreateCourse) => {
     this.setState({showCreateCourse: showCreateCourse});
-  }
-
-  createCourseWorkClick = (showCreateCourseWork) => {
-    this.setState({showCreateCourseWork: showCreateCourseWork});
   }
 
   groupSelection = (groupName) => {
@@ -95,7 +89,7 @@ class Home extends Component {
         />     
         {<FloatingButton performAction={this.floatingButtonAction} 
                          showCreateCourse={this.createCourseClick} 
-                         showCreateCourseWork={this.createCourseWorkClick}/>}
+                         />}
         <div className={this.state.cssContainer}>
           <div className="row section-nav">
             <div className="col-12">
@@ -142,8 +136,7 @@ class Home extends Component {
           </div>
         </div>
     
-        {!this.state.showCreateCourseWork ? 
-        // {!this.state.showCreateCourse ? 
+        {!this.state.showCreateCourse ? 
           <SplitPane
             className="crazy-scroll"
             split="vertical"
@@ -168,8 +161,7 @@ class Home extends Component {
             )}
           </SplitPane>
         : 
-          <CreateCourseWork showCreateCourseWork={this.createCourseWorkClick}/>
-        // <CreateCourse hideCreateCourse={this.createCourseClick}/>
+         <CreateCourse hideCreateCourse={this.createCourseClick}/>
         }
       </Wrapper>
     );

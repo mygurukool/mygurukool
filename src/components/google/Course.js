@@ -9,6 +9,8 @@ import { ACCESS_TOKEN } from "../util/constants";
 import {Modal, Button} from "react-bootstrap";
 import * as _classworkUtil from "./ClassworkUtil";
 import Assignment from "./Assignment"
+import CreateCourseWork from "../CreateCourseWork";
+import FloatingButton from "../util/FloatingButton";
 
 let user;
  
@@ -52,6 +54,9 @@ export default class Course extends Component {
       function (fail) {
         alert(JSON.stringify({ message: "fail", value: fail }));
       })
+  }
+  createCourseWorkClick = (showCreateCourseWork) => {
+    this.setState({showCreateCourseWork: showCreateCourseWork});
   }
 
   componentDidMount() { 
@@ -117,6 +122,7 @@ export default class Course extends Component {
     let hasDriveFiles = false;
     return (
       <Fragment>
+         {<FloatingButton showCreateCourseWork={this.createCourseWorkClick}/>}
         <div className="container">
           <div className="row">
             <div className="row sub-excer-section">
@@ -210,7 +216,8 @@ export default class Course extends Component {
             ) : (
               ""
             )} */}
-            {!this.state.isAssignmentsViewStale ?
+            {this.state.showCreateCourseWork ? (<CreateCourseWork showCreateCourseWork={this.createCourseWorkClick}/>) : ""}
+            {!this.state.showCreateCourseWork && !this.state.isAssignmentsViewStale ?
             <Assignment ref={instance => { this.child = instance; }} isActive={this.props.isActive}/> : ""}
            </div>
         </div>
