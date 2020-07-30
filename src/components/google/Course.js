@@ -9,8 +9,8 @@ import { ACCESS_TOKEN } from "../util/constants";
 import {Modal, Button} from "react-bootstrap";
 import * as _classworkUtil from "./ClassworkUtil";
 import Assignment from "./Assignment"
-import CreateCourseWork from "../CreateCourseWork";
 import FloatingButton from "../util/FloatingButton";
+import CreateCourseWork from "../CreateCourseWork";
 
 let user;
  
@@ -29,8 +29,9 @@ export default class Course extends Component {
       isTeacherLogin: false,
       hasTeacherAccepted: true,
       isLoading: false,
-      isAssignmentsViewStale: true,
+    //  isAssignmentsViewStale: true,  //TODO: used along with *refs* 
       selectedCourseId:"null",
+      showAssignments: false,
     };
      this.child = React.createRef();
   }
@@ -47,22 +48,22 @@ export default class Course extends Component {
     let googleUser = gapi.auth2.getAuthInstance().currentUser.get();
     googleUser.grant(options).then(
       function (success) {
-        // console.log(JSON.stringify({ message: "success", value: success }))
-        // console.log("success.access_token " + success.wc.access_token)
         sessionStorage.setItem(ACCESS_TOKEN, success.wc.access_token);
       },
       function (fail) {
         alert(JSON.stringify({ message: "fail", value: fail }));
       })
   }
-  createCourseWorkClick = (showCreateCourseWork) => {
-    this.setState({showCreateCourseWork: showCreateCourseWork});
+  
+  createCourseWorkClick = async (showCreateCourseWork) => {
+    this.setState({showCreateCourseWork: showCreateCourseWork, 
+      selectedCourseId: this.state.selectedCourseId,
+      showAssignments: !this.state.showAssignments,
+    });
   }
 
   componentDidMount() { 
-    // alert("course.comp did mount : " +  sessionStorage.getItem("COURSE_ID"))
-     sessionStorage.setItem("COURSE_ID", this.state.selectedCourseId);
-     //alert("***********course.comp did mount after setItem(COURSE_ID null): " +  this.state.selectedCourseId)
+  //  sessionStorage.setItem("COURSE_ID", this.state.selectedCourseId);
     this.setState({isLoading: true});
 
     //loading user profile
@@ -73,56 +74,59 @@ export default class Course extends Component {
     //loading subjects
     _classworkUtil.loadSubjects(this.props.isActive).then((subjectRes) => {
       console.log("Course.componentDidMount.userProfile: ", subjectRes);
-      this.setState({isLoading: false, coursesCompleteList: subjectRes});     
+      this.setState({isLoading: false, coursesCompleteList: subjectRes, });     
       user.group = _classworkUtil.fetchGroupList(subjectRes);
      
-      //now set the user data to callback object(userData)
-      this.props.userData(user);
-
       this.fetchCoursesToDisplay(user.group[0]);
       if (this.state.courses.length > 0 && this.state.courses[0].hasOwnProperty("teacherFolder")) 
         _classworkUtil.isTeacher(user.id, this.state.courses[0].id).then((resTeacher) =>{
                 if(resTeacher && this.props.isActive)
                   this.setState({isTeacherLogin: true});
-        });
+          });
+      
+      //now set the user data to callback object(userData)
+      user.isTeacherLogin= this.setState.isTeacherLogin;
+      user.selectedCourseId = "null";
+      this.props.userData(user);
+      this.setState({selectedCourseId: "null"});
     });
   }
-  // shouldComponentUpdate(){
-  //   sessionStorage.setItem("COURSE_ID", null);
-  // }
 
   async fetchCoursesToDisplay(groupName){
   //  sessionStorage.setItem("COURSE_ID", null);
-  //  alert("course. fetchCoursesToDisplay : " +  sessionStorage.getItem("COURSE_ID") + " ..CURRENT VIEW: " + this.state.currentView) ;
-    await this.setState({courses: _classworkUtil.coursesByGroupName(this.state.coursesCompleteList, groupName), isAssignmentsViewStale: true, 
-      selectedCourseId: "null"});
-  //  alert(this.state.selectedCourseId + " after ..CURRENT VIEW: " + this.state.currentView) ;
-    this.forceUpdate();
-    
-    //this.setState({this.state});
+    await this.setState({courses: _classworkUtil.coursesByGroupName(this.state.coursesCompleteList, groupName), 
+      showAssignments: false,}); 
   }
 
   loadAssignment = (event) => {
-    sessionStorage.setItem("COURSE_ID", this.state.courses[event.target.id].id);
+  //  sessionStorage.setItem("COURSE_ID", this.state.courses[event.target.id].id);
     this.setState({
-      currentView: this.state.courses[event.target.id].name, selectedCourseId:this.state.courses[event.target.id].id});
-    this.setState({isAssignmentsViewStale: false}, 
-      this.awaitAndLoadAssignments
-     );
+      currentView: this.state.courses[event.target.id].name, 
+      showAssignments: true, showCreateCourseWork: false, selectedCourseId: this.state.courses[event.target.id].id,
+    });
+    user.selectedCourseId = this.state.courses[event.target.id].id;
+    this.props.userData(user);
+    // this.setState({isAssignmentsViewStale: false}, 
+    //   this.awaitAndLoadAssignments  }
+    //);
   }
 
-  awaitAndLoadAssignments = () => {
-    const { isAssignmentsViewStale } = this.state;
-    if(!isAssignmentsViewStale)
-    this.child.loadAssignment(this.state.selectedCourseId, this.state.isTeacherLogin);
-  }
+    awaitAndLoadAssignments = () => {
+      const { isAssignmentsViewStale } = this.state;
+      if(!isAssignmentsViewStale)
+      this.child.loadAssignment(this.state.selectedCourseId, this.state.isTeacherLogin);
+    }
 
   render() {
-  //  alert("couser render")
+    //alert("couser render isTeacherLogin=" + this.state.isTeacherLogin + ".. selectedCourseId={ " +this.state.selectedCourseId)
     let hasDriveFiles = false;
     return (
       <Fragment>
-         {<FloatingButton showCreateCourseWork={this.createCourseWorkClick}/>}
+         {<FloatingButton         
+         showCreateCourseWork={this.createCourseWorkClick} 
+         isTeacherLogin={this.state.isTeacherLogin}
+         selectedCourseId={this.state.selectedCourseId}
+         />}
         <div className="container">
           <div className="row">
             <div className="row sub-excer-section">
@@ -216,9 +220,21 @@ export default class Course extends Component {
             ) : (
               ""
             )} */}
-            {this.state.showCreateCourseWork ? (<CreateCourseWork showCreateCourseWork={this.createCourseWorkClick}/>) : ""}
-            {!this.state.showCreateCourseWork && !this.state.isAssignmentsViewStale ?
-            <Assignment ref={instance => { this.child = instance; }} isActive={this.props.isActive}/> : ""}
+            
+            {this.state.showCreateCourseWork ?
+            <CreateCourseWork showCreateCourseWork={this.createCourseWorkClick}/>
+            : ""
+            }
+            {this.state.showAssignments? (alert("courseId: " + this.state.selectedCourseId),
+            <Assignment
+              courseId={this.state.selectedCourseId} 
+              isTeacherLogin={this.state.isTeacherLogin} 
+              isActive={this.props.isActive}/>)
+            : ""}
+            {/* // This code to explicity call child function to fix the issue: Assignments view is state >>  
+                //not updating with the newly selected course has no assignments
+            {!this.state.isAssignmentsViewStale ?
+            <Assignment ref={instance => { this.child = instance; }} isActive={this.props.isActive}/> : ""} */}
            </div>
         </div>
       </Fragment>

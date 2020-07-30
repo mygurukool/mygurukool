@@ -36,6 +36,10 @@ export default class Course extends Component {
      this.extractMaterials = this.extractMaterials.bind(this);
   }
 
+  componentDidMount() { 
+    this.loadAssignment(this.props.courseId, this.props.isTeacherLogin);
+  }
+  
   getSubmissionTurnInState(courseId, assignmentId) {
     // _apiUtils.googleClassroomGetCourseworkSubmissions(courseId, assignmentId).then((response) => {
     //     let state      = response.data.studentSubmissions[0].state
@@ -98,11 +102,11 @@ export default class Course extends Component {
 
   loadAssignment(courseId, isTeacherLogin) {
     this.setState({isLoading: true});
-    _classworkUtil.loadAssignments(courseId, isTeacherLogin).then((response) =>{
-      this.setState({assignments: response, isLoading: false});
-      console.log(response)
-    })
-  }
+      _classworkUtil.loadAssignments(courseId, isTeacherLogin).then((response) =>{
+        this.setState({assignments: response, isLoading: false});
+        console.log(response)
+      })
+  };
 
   render() {
     let hasDriveFiles = false;

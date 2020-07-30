@@ -18,10 +18,9 @@ class Home extends Component {
     super();
     this.toggleBtmHeight = this.toggleBtmHeight.bind(this);
     this.state = {
-      userData: { name: "name", group: ["groupName"] },
+      userData: { name: "name", group: ["groupName"], isTeacherLogin: false, selectedCourseId: 'null' },
       cssContainer: "container",
       showCreateCourse:false,
-      showCreateCourseWork:false,
     };
     this.handleUserData = this.handleUserData.bind(this);
     this.handleConferencePanelSize = this.handleConferencePanelSize.bind(this);
@@ -88,7 +87,7 @@ class Home extends Component {
           }
         />     
         {<FloatingButton performAction={this.floatingButtonAction} 
-                         showCreateCourse={this.createCourseClick} 
+                         showCreateCourse={this.createCourseClick}
                          />}
         <div className={this.state.cssContainer}>
           <div className="row section-nav">
