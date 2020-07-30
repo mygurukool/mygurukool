@@ -70,15 +70,15 @@ export default class FloatingButton extends Component {
          <Action text="Archive" onClick={() => alert("archive")}>
            <i className="fas fa-file-archive fa-1g" />
          </Action>
+         {this.props.isTeacherLogin ? 
          <Action text="Create Course" onClick={this.onClickCreateCourse}>
            <i className="fas fa-plus-circle fa-1g" />
-         </Action>
-         {sessionStorage.getItem("COURSE_ID") !== 'null' ? 
+         </Action>:""}
+         {this.props.isTeacherLogin && (this.props.selectedCourseId !== 'null') ? 
           <Action text="Create Course Work" onClick={this.onClickCreateCourseWork} > 
             <i className="fas fa-plus-circle fa-1g" />
           </Action>
-          : ""
-         }
+          : ""}
         </Fab>
       </>
     );
