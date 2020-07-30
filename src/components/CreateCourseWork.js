@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Fragment } from "react";
 import { Form } from "react-bootstrap";
 import * as _classworkUtil from "./google/ClassworkUtil";
 import CourseWorkTypeDropdown from "./util/DropdownUtil";
@@ -39,11 +39,17 @@ export default class CreateCourseWork extends React.Component {
         </div>
         {
           this.state.selectedCourseWorkType === null ? 
-          <CourseWorkTypeDropdown
+          <Fragment>
+            <CourseWorkTypeDropdown
             dropdownTitleText="+ Create" 
             itemList={courseWorkList}
             itemSelection={this.courseWorkTypeSelection}
-          /> 
+          />
+          <div className="row-12">
+          Assign work to your class here!!
+          Create assignments and questions the way you want students to see it
+          </div>
+          </Fragment>
           :
           <CourseWorkType workTypeData={workTypeObject} showCreateCourseWork={this.showCreateCourseWork}/>
         }
