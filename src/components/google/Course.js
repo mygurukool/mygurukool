@@ -225,11 +225,11 @@ export default class Course extends Component {
             <CreateCourseWork showCreateCourseWork={this.createCourseWorkClick}/>
             : ""
             }
-            {this.state.showAssignments? (alert("courseId: " + this.state.selectedCourseId),
+            {this.state.showAssignments?
             <Assignment
               courseId={this.state.selectedCourseId} 
               isTeacherLogin={this.state.isTeacherLogin} 
-              isActive={this.props.isActive}/>)
+              isActive={this.props.isActive}/>
             : ""}
             {/* // This code to explicity call child function to fix the issue: Assignments view is state >>  
                 //not updating with the newly selected course has no assignments
