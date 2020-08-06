@@ -4,13 +4,15 @@ import "../../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import * as _util from "../util/utils";
 import "@fortawesome/fontawesome-free/css/all.css";
-import {REACT_APP_GOOGLE_OAUTH_TUTOR_SCOPES} from "../util/gConsts"
-import { ACCESS_TOKEN } from "../util/constants";
-import {Modal, Button} from "react-bootstrap";
+// import {REACT_APP_GOOGLE_OAUTH_TUTOR_SCOPES} from "../util/gConsts"
+// import { ACCESS_TOKEN } from "../util/constants";
+// import {Modal, Button} from "react-bootstrap";
 import * as _classworkUtil from "./ClassworkUtil";
 import Assignment from "./Assignment"
 import FloatingButton from "../util/FloatingButton";
 import CreateCourseWork from "../CreateCourseWork";
+import TeacherAuthorization from "./TeacherAuthorization";
+import {HAS_TEACHER_ACCEPTED} from "../util/constants";
 
 let user;
  
@@ -25,9 +27,7 @@ export default class Course extends Component {
       currentView: "",
       turnInState: "Unknown",
       submissionId: "",
-      showTeacherModal: true,
       isTeacherLogin: false,
-      hasTeacherAccepted: true,
       isLoading: false,
     //  isAssignmentsViewStale: true,  //TODO: used along with *refs* 
       selectedCourseId:"null",
@@ -36,24 +36,6 @@ export default class Course extends Component {
      this.child = React.createRef();
   }
 
-  handleTeacherDialogClose = () => {this.setState({showTeacherModal: false, hasTeacherAccepted: false})};
-
-  handleTeacherConfirmation = () => {
-    sessionStorage.setItem("hasTeacherAccepted", true);
-    this.setState({
-      showTeacherModal: false, hasTeacherAccepted: true});
-    const options = new gapi.auth2.SigninOptionsBuilder();
-    options.setScope(REACT_APP_GOOGLE_OAUTH_TUTOR_SCOPES);
-
-    let googleUser = gapi.auth2.getAuthInstance().currentUser.get();
-    googleUser.grant(options).then(
-      function (success) {
-        sessionStorage.setItem(ACCESS_TOKEN, success.wc.access_token);
-      },
-      function (fail) {
-        alert(JSON.stringify({ message: "fail", value: fail }));
-      })
-  }
   
   createCourseWorkClick = async (showCreateCourseWork) => {
     this.setState({showCreateCourseWork: showCreateCourseWork, 
@@ -118,7 +100,6 @@ export default class Course extends Component {
     }
 
   render() {
-    //alert("couser render isTeacherLogin=" + this.state.isTeacherLogin + ".. selectedCourseId={ " +this.state.selectedCourseId)
     let hasDriveFiles = false;
     return (
       <Fragment>
@@ -174,52 +155,11 @@ export default class Course extends Component {
             ) : (
               ""
             )}
-            {this.state.isTeacherLogin && !sessionStorage.getItem("hasTeacherAccepted") ? (
-              <Modal
-                show={this.state.showTeacherModal}
-                backdrop="static"
-                keyboard={false}
-                centered={true}
-              >
-                <Modal.Header>
-                  <Modal.Title>Additional Permissions</Modal.Title>
-                </Modal.Header>
-                <Modal.Body>
-                  Welcome! You are identified as Teacher. Please approve, to
-                  present you additional Permissions and Authorize MyGuruKool App to facilitate you with access control to all your Google Classroom Courses!
-                </Modal.Body>
-                <Modal.Footer>
-                  {/* <Button
-                    variant="secondary"
-                    onClick={this.handleTeacherDialogClose}
-                  >
-                    I Reject!
-                  </Button> */}
-                  <Button
-                    variant="primary"
-                    onClick={this.handleTeacherConfirmation}
-                  >
-                    Yes, I Approve!
-                  </Button>
-                </Modal.Footer>
-              </Modal>
+            {this.state.isTeacherLogin && !sessionStorage.getItem(HAS_TEACHER_ACCEPTED) ? (
+              <TeacherAuthorization />
             ) : (
               ""
             )}
-
-            {/* {this.state.isTeacherLogin && !this.state.hasTeacherAccepted ? (
-              <div className="col-12">
-              <button
-                type="button"
-                className="btn btn-primary turnin"
-                onClick={this.handleTeacherConfirmation}
-              >
-                <i className="fas fa-check"></i> Please present me additional Permissions.
-              </button>
-              </div>
-            ) : (
-              ""
-            )} */}
             
             {this.state.showCreateCourseWork ?
             <CreateCourseWork showCreateCourseWork={this.createCourseWorkClick}/>
