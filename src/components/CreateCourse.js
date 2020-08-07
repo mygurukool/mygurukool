@@ -19,7 +19,7 @@ export default class CreateCourse extends React.Component {
       // .then((res) => {
       //   console.log(res);
       // });
-      alert(JSON.stringify(resp))
+      //alert(JSON.stringify(resp))
       console.log(resp);
 
       // _classworkUtil
@@ -45,7 +45,7 @@ export default class CreateCourse extends React.Component {
     return (
       // {"create course"}
       <div className="container">
-        <div className="card card-body fileblock">
+        <div className="card card-body">
           <Form>
             <Form.Label><b>Create Course</b></Form.Label>
             <Form.Group controlId="formCreateCourse">
