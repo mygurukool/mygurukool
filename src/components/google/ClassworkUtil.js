@@ -212,7 +212,6 @@ export function loadSubjects(subjectsStatus){
     _apiUtils
     .loadGoogleSubjects(subjectsStatus)
     .then((subjectRes) => {
-      console.log("Course.componentDidMount.userProfile: ", subjectRes);
       resolve(subjectRes.data.courses)
     })
     .catch((error) => {reject(error); console.error("Error during loadGoogleSubjects:", error);
@@ -236,11 +235,28 @@ export function userProfile(){
 
 export function isTeacher(userId, courseId){
   return new Promise((resolve, reject) => {
-    _apiUtils.googleClassroomCourseTeachersList(courseId).then((resTeacher) =>{
+    _apiUtils.googleClassroomCourseTeachersList(courseId, "me").then((resTeacher) =>{
       let isTeacherLogin;
       (userId === resTeacher.data.userId) ? isTeacherLogin = true : isTeacherLogin = false;
       resolve(isTeacherLogin)
-    }).catch((error) => {reject(error); console.error("Error during google userProfile:", error)});
+    }).catch((error) => {reject(error); console.error("Error during google isTeacher:", error)});
+  })
+}
+
+export function getTeachersList(courseId){
+  return new Promise((resolve, reject) => {
+    _apiUtils.googleClassroomCourseTeachersList(courseId).then((resTeacher) =>{
+      resolve(resTeacher)
+    }).catch((error) => {reject(error); console.error("Error during google getTeachersList:", error)});
+  })
+}
+
+export function getStudentsList(courseId){
+  return new Promise((resolve, reject) => {
+    _apiUtils.googleClassroomCourseStudentsList(courseId).then((resStudent) =>{
+      console.log("getStudentsList: " + JSON.stringify(resStudent));
+      resolve(resStudent)
+    }).catch((error) => {reject(error); console.error("Error during google getTeachersList:", error)});
   })
 }
 
@@ -377,4 +393,8 @@ export function createCourseWork(coursework){
             resolve(response);
         }).catch((error) => {reject(error); console.error("Error during google CreateCourseWork:", error)});
       })
+
+      //upload comments transcript file
+
+      //Assign student to course
   }

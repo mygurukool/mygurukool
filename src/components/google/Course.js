@@ -10,6 +10,7 @@ import CreateCourseWork from "../CreateCourseWork";
 import TeacherAuthorization from "./TeacherAuthorization";
 import {HAS_TEACHER_ACCEPTED} from "../util/constants";
 import {COURSE_ID} from "../util/constants"
+import InvitePeople from "./InvitePeople";
 
 let user;
  
@@ -35,6 +36,13 @@ export default class Course extends Component {
 
   createCourseWorkClick = async (showCreateCourseWork) => {
     this.setState({showCreateCourseWork: showCreateCourseWork, 
+      selectedCourseId: this.state.selectedCourseId,
+      showAssignments: !this.state.showAssignments,
+    });
+  }
+
+  showInvitePeople = (showInvitePeople) => {
+    this.setState({showInvitePeople: showInvitePeople, 
       selectedCourseId: this.state.selectedCourseId,
       showAssignments: !this.state.showAssignments,
     });
@@ -101,6 +109,7 @@ export default class Course extends Component {
       <Fragment>
          {<FloatingButton         
          showCreateCourseWork={this.createCourseWorkClick} 
+         showInvitePeople={this.showInvitePeople}
          isTeacherLogin={this.state.isTeacherLogin}
          selectedCourseId={this.state.selectedCourseId}
          />}
@@ -159,6 +168,10 @@ export default class Course extends Component {
             
             {this.state.showCreateCourseWork ?
             <CreateCourseWork showCreateCourseWork={this.createCourseWorkClick}/>
+            : ""
+            }
+            {this.state.showInvitePeople ?
+            <InvitePeople showInvitePeople={this.showInvitePeople}/>
             : ""
             }
             {this.state.showAssignments?

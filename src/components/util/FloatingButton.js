@@ -26,6 +26,10 @@ export default class FloatingButton extends Component {
     //window.location.href = '/home/createcourseWork';
   }
 
+  onClickAddPeople  = () => {
+    this.props.showInvitePeople(true);
+  }
+
 //   var mydict = new Array();
 // mydict['onClickMethod']   = 'this.onConferenceClick';
 /* Somewhere: */
@@ -77,6 +81,11 @@ export default class FloatingButton extends Component {
          {this.props.isTeacherLogin && (this.props.selectedCourseId !== 'null') ? 
           <Action text="Create Coursework" onClick={this.onClickCreateCourseWork} > 
             <i className="fas fa-tasks fa-1g" />
+          </Action>
+          : ""}
+         {this.props.isTeacherLogin && (this.props.selectedCourseId !== 'null') ? 
+          <Action text="People" onClick={this.onClickAddPeople} > 
+            <i className="fas fa-user-plus fa-1g" />
           </Action>
           : ""}
         </Fab>
