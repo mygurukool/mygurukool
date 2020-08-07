@@ -1,6 +1,7 @@
 /*global gapi*/
 import * as _apiUtils from "../util/AxiosUtil";
 import * as _gconsts from "../util/gConsts";
+import {DEFAULT_GROUP_NAME} from "../util/constants";
 
 export let user = {
   name: "Name",
@@ -259,8 +260,8 @@ export function fetchGroupList(courses){
   let groupList = [];
   courses && courses.map((course) => {
     let name = course.section;
-    if(name===null || typeof(name) === 'undefined') {name = 'undefined'} //TODO: temp for Sudha's testing, to be deleted
-    //if(name!==null && typeof(name) !== 'undefined' && !groupList.includes(name)) groupList.push(name) //TODO enable this when the testing code is deleted
+    if(name===null || typeof(name) === DEFAULT_GROUP_NAME) {name = DEFAULT_GROUP_NAME} //TODO: temp for Sudha's testing, to be deleted
+    //if(name!==null && typeof(name) !== DEFAULT_GROUP_NAME && !groupList.includes(name)) groupList.push(name) //TODO enable this when the testing code is deleted
     if(!groupList.includes(name)) groupList.push(name);
   });
   return groupList;
@@ -270,7 +271,7 @@ export function coursesByGroupName(courses, groupName){
   let coursesByGroup = [];
   courses && courses.map((course) => {
     if(course.section === groupName) coursesByGroup.push(course);
-    else if(groupName === 'undefined') coursesByGroup.push(course); //TODO: temp for Sudha's testing, to be deleted
+    else if(groupName === DEFAULT_GROUP_NAME) coursesByGroup.push(course); //TODO: temp for Sudha's testing, to be deleted
   });
   return coursesByGroup;
 }
