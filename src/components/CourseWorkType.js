@@ -2,6 +2,7 @@ import React from "react";
 import { Form, Button, DropdownButton, Dropdown, Modal } from "react-bootstrap";
 import * as _classworkUtil from "./google/ClassworkUtil";
 import {driveFileTypes} from "./util/gConsts"
+import {COURSE_ID} from "./util/constants"
 import DriveFileTypeDropdown from "./util/DropdownUtil";
 
 const driveFileTypeList = Object.keys(driveFileTypes).map(key => driveFileTypes[key]);
@@ -57,10 +58,10 @@ export default class CourseWorkType extends React.Component {
 
   handleClick = async (eventId) => {
     if(eventId !== 'cancel'){
-      let courseWork = {title: this.state.titleField, 
+      let courseWork = {title: this.state.titleField.trim(), 
                         description: this.state.instructionsField, 
                         workType: this.props.workTypeData.type,
-                        courseId: sessionStorage.getItem("COURSE_ID"),
+                        courseId: sessionStorage.getItem(COURSE_ID),
                         driveFiles: this.state.driveFiles,
                       };
       _classworkUtil.createCourseWork(courseWork).then((res) => console.log(res));
