@@ -75,8 +75,8 @@ export default class FloatingButton extends Component {
            <i className="fas fa-plus-circle fa-1g" />
          </Action>:""}
          {this.props.isTeacherLogin && (this.props.selectedCourseId !== 'null') ? 
-          <Action text="Create Course Work" onClick={this.onClickCreateCourseWork} > 
-            <i className="fas fa-plus-circle fa-1g" />
+          <Action text="Create Coursework" onClick={this.onClickCreateCourseWork} > 
+            <i className="fas fa-tasks fa-1g" />
           </Action>
           : ""}
         </Fab>
