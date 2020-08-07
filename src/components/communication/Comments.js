@@ -21,6 +21,7 @@ export default class Comments extends Component {
     this.syncComments = this.syncComments.bind(this);
     this.mergeComments = this.mergeComments.bind(this);
     this.syncWithServer = this.syncWithServer.bind(this);
+    this.input = React.createRef();
   }
 
   closeComment = () => {
@@ -95,7 +96,7 @@ export default class Comments extends Component {
   }
 
   syncComments() {
-    let fileName = this.props.subjectName + "_CommentTranscript.json";
+    let fileName = this.props.subjectName.trim() + "_CommentTranscript.json";
 
     //update the file else get file by Name
     if (this.state.gDriveCommentsFileId) {
@@ -243,7 +244,7 @@ export default class Comments extends Component {
             <Input
               placeholder={defaultPlaceHolder}
               defaultValue=""
-              ref="input"
+              ref={this.input}
               multiline={false}
               autofocus={true}
               // buttonsFloat="left"
@@ -251,13 +252,13 @@ export default class Comments extends Component {
                 this.startTimeOut();
                 message = e.target.value;
                 if (e.keyUp && e.shiftKey && e.charCode === 13) {
-                  this.refs.input.clear();
+                  this.input.current.clear();
                   return true;
                 }
                 if (e.charCode === 13) {
                   // this.refs.input &&
                   message = e.target.value;
-                  this.refs.input.clear();
+                  this.input.current.clear();
                   this.addMessage(message, type);
                   return false;
                 }
