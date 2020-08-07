@@ -119,17 +119,20 @@ export function googleClassroomGetCourses() {
   return axiosGet(_gconsts.GOOGLE_CLASSROOM_API + "courses")
 }
 
-export function googleClassroomCourseStudentsList(courseId, studentId ="me") {
-  return axiosGet(_gconsts.GOOGLE_CLASSROOM_API + `courses/${courseId}/students/${studentId}`)
+export function googleClassroomCourseStudentsList(courseId, studentId ="") {
+  let url = _gconsts.GOOGLE_CLASSROOM_API + `courses/${courseId}/students`;
+  if(studentId !== "") url = url + `/${studentId}`;
+  return axiosGet(url)
 }
 
-export function googleClassroomCourseTeachersList(courseId, teacherId ="me") {
-  return axiosGet(_gconsts.GOOGLE_CLASSROOM_API + `courses/${courseId}/teachers/${teacherId}`)
+export function googleClassroomCourseTeachersList(courseId, teacherId ="") {
+  let url = _gconsts.GOOGLE_CLASSROOM_API + `courses/${courseId}/teachers`;
+  if(teacherId !== "") url = url + `/${teacherId}`;
+  return axiosGet(url)
 }
 
 export function googleClassroomCreateCourse(course) {
   const url = _gconsts.GOOGLE_CLASSROOM_API + "courses"
-
   return axios.post(url,
     JSON.stringify(course), { headers: {
       Authorization: `Bearer ${sessionStorage.getItem(
@@ -187,7 +190,7 @@ export function googleClassroomSubmissionTurnIn(courseId, courseworkId, submissi
 export function googleClassroomCreateCourseWork(courseId, coursework) {
   const url = _gconsts.GOOGLE_CLASSROOM_API + `courses/${courseId}/courseWork/`
   
-  alert("Axiosutils.googleClassroomCreateCourseWork: " + JSON.stringify(coursework))
+  alert("Axiosutils.googleClassroomCreateCourseWork: " + JSON.stringify(coursework) + " url: " + url)
   // const courseWorkBlob = new Blob([coursework], {type: 'text/json;charset=utf-8'})  // 'application/json'}) //
 
   // let data = new FormData()
