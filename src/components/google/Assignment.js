@@ -14,7 +14,6 @@ import Video from "../Video";
 import * as _util from "../util/utils";
 import * as _classworkUtil from "./ClassworkUtil";
 
-
 let user;
  
 export default class Course extends Component {
@@ -32,6 +31,7 @@ export default class Course extends Component {
       isTeacherLogin: false,
       hasTeacherAccepted: true,
       isLoading: false,
+      hasAssignments: false,
     };
      this.extractMaterials = this.extractMaterials.bind(this);
   }
@@ -103,7 +103,7 @@ export default class Course extends Component {
   loadAssignment(courseId, isTeacherLogin) {
     this.setState({isLoading: true});
       _classworkUtil.loadAssignments(courseId, isTeacherLogin).then((response) =>{
-        this.setState({assignments: response, isLoading: false});
+        this.setState({assignments: response, hasAssignments: response.length, isLoading: false});
         console.log(response)
       })
   };
@@ -112,165 +112,181 @@ export default class Course extends Component {
     let hasDriveFiles = false;
     return (
       <Fragment>
-          <div className="tabcontent col-12">
-            {this.state.isLoading ? (
-              <img src={_util.loaderRandomGifs()} className="loaderIcon" />
-            ) : (
-              ""
-            )}
+        <div className="tabcontent col-12">
+          {this.state.isLoading ? (
+            <img src={_util.loaderRandomGifs()} className="loaderIcon" />
+          ) : (
+            ""
+          )}
 
-            <Accordion
-              allowZeroExpanded={true}
-              onChange={(e) => this.setState({ openedItems: e })}
-              preExpanded={this.state.openedItems}
-            >
-              <Fragment>
-                {this.state.assignments &&
-                  this.state.assignments.map((assignment, i) => (
-                    <AccordionItem key={assignment.id} uuid={assignment.id}>
-                      <Fragment>
-                        <AccordionItemHeading>
-                          <AccordionItemButton>
-                            <div className="row">
-                              <div className="float-left col-12 exercisetitle">
-                                {assignment.title
-                                  ? assignment.title
-                                  : "No Exercise Data"}
-                                <small className="text-muted float-right">
-                                  {/* TODO: Proper DateFormat*/}
-                                  {assignment.dueDate
-                                    ? "Due Date " +
-                                      assignment.dueDate.day +
-                                      "." +
-                                      assignment.dueDate.month +
-                                      "." +
-                                      assignment.dueDate.year +
-                                      ",  Time: " +
-                                      assignment.dueTime.hours +
-                                      ":" +
-                                      assignment.dueTime.minutes
-                                    : ""}
-                                </small>
-                              </div>
-                            </div>
-                          </AccordionItemButton>
-                        </AccordionItemHeading>
-                        <AccordionItemPanel>
-                          <div className="card-body">
-                            <div className="row float-right">
-                              {this.getSubmissionTurnInState(
-                                assignment.courseId,
-                                assignment.id
-                              )}
-                              <button
-                                type="button"
-                                className="btn btn-primary turnin"
-                                disabled={!this.props.isActive}
-                                onClick={() =>this.handleSubmissionTurnIn(
-                                    assignment.courseId,
-                                    assignment.id,
-                                    this.state.submissionId
-                                  )
-                                }
-                              >
-                                <i className="fas fa-check"></i>{" "}
-                                {this.state.turnInState}
-                              </button>
-                            </div>
-                            <div className="row">
-                              <div className="col-12">
-                                <b>Exercise Instructions</b>
-                                {assignment.description ? (
-                                  <ul>{assignment.description}</ul>
-                                ) : (
-                                  ""
-                                )}
-                                {this.extractMaterials(assignment.materials)}
-                                {this.state.material.formUrls &&
-                                  this.state.material.formUrls.map(
-                                    (formUrl) => (
-                                      <ul>
-                                        <iframe
-                                          sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                                          src={formUrl}
-                                          width="100%"
-                                          height="700"
-                                          allowtransparency="true"
-                                          frameBorder="0"
-                                        ></iframe>
-                                      </ul>
-                                    )
-                                  )}
-                              </div>
-                              <div className="col-12">
-                                <b>Exercise Audio/ Video Explanation</b>
-                                {/* <div className="col-6"> */}
-                                {this.state.material.youtubeVideos &&
-                                  this.state.material.youtubeVideos.map(
-                                    (youtube) =>
-                                      youtube ? (
-                                        <Video
-                                          id={youtube.id}
-                                          name={youtube.title}
-                                          thumbnailUrl={youtube.thumbnailUrl}
-                                        />
-                                      ) : (
-                                        ""
-                                      )
-                                  )}
-                              </div>
-                              <div className="col-12">
-                                <Interaction
-                                  userName={this.props.userName}
-                                  courseId={assignment.courseId}
-                                  subjectName={assignment.title}
-                                  isActive={this.props.isActive}
-                                />
-                              </div>
-                              {/* </div> */}
-                            </div>
-                            <div className="card card-body fileblock row">
-                              <div className="col-12">
-                                {this.state.material.exerciseDetails &&
-                                  this.state.material.exerciseDetails.map(
-                                    (exerciseDetail) =>
-                                      exerciseDetail
-                                        ? ((hasDriveFiles = true),
-                                          (
-                                            <FileUpload
-                                              exerciseDetails={exerciseDetail}
-                                              userName={this.props.userName}
-                                              courseId={assignment.courseId}
-                                              assignmentId={assignment.id}
-                                              isActive={this.props.isActive}
-                                            />
-                                          ))
-                                        : ""
-                                  )}
-                                {!hasDriveFiles ? (
-                                  <FileUpload
-                                    exerciseDetails={""}
-                                    userName={this.props.userName}
-                                    courseId={assignment.courseId}
-                                    assignmentId={assignment.id}
-                                    isActive={this.props.isActive}
-                                  />
-                                ) : (
-                                  ""
-                                )}
-                              </div>
-                              <div className="col-12">
-                                {/* {this.state.formUpload} */}
-                              </div>
+          <Accordion
+            allowZeroExpanded={true}
+            onChange={(e) => this.setState({ openedItems: e })}
+            preExpanded={this.state.openedItems}
+          >
+            <Fragment>
+              {this.state.hasAssignments ? (
+                this.state.assignments.map((assignment, i) => (
+                  <AccordionItem key={assignment.id} uuid={assignment.id}>
+                    <Fragment>
+                      <AccordionItemHeading>
+                        <AccordionItemButton>
+                          <div className="row">
+                            <div className="float-left col-12 exercisetitle">
+                              {assignment.title
+                                ? assignment.title
+                                : "No Exercise Data"}
+                              <small className="text-muted float-right">
+                                {/* TODO: Proper DateFormat*/}
+                                {assignment.dueDate
+                                  ? "Due Date " +
+                                    assignment.dueDate.day +
+                                    "." +
+                                    assignment.dueDate.month +
+                                    "." +
+                                    assignment.dueDate.year +
+                                    ",  Time: " +
+                                    assignment.dueTime.hours +
+                                    ":" +
+                                    assignment.dueTime.minutes
+                                  : ""}
+                              </small>
                             </div>
                           </div>
-                        </AccordionItemPanel>
-                      </Fragment>
-                    </AccordionItem>
-                  ))}
-              </Fragment>
-            </Accordion>
-          </div>
+                        </AccordionItemButton>
+                      </AccordionItemHeading>
+                      <AccordionItemPanel>
+                        <div className="card-body">
+                          <div className="row float-right">
+                            {this.getSubmissionTurnInState(
+                              assignment.courseId,
+                              assignment.id
+                            )}
+                            <button
+                              type="button"
+                              className="btn btn-primary turnin"
+                              disabled={!this.props.isActive}
+                              onClick={() =>
+                                this.handleSubmissionTurnIn(
+                                  assignment.courseId,
+                                  assignment.id,
+                                  this.state.submissionId
+                                )
+                              }
+                            >
+                              <i className="fas fa-check"></i>{" "}
+                              {this.state.turnInState}
+                            </button>
+                          </div>
+                          <div className="row">
+                            <div className="col-12">
+                              <b>Exercise Instructions</b>
+                              {assignment.description ? (
+                                <ul>{assignment.description}</ul>
+                              ) : (
+                                ""
+                              )}
+                              {this.extractMaterials(assignment.materials)}
+                              {this.state.material.formUrls &&
+                                this.state.material.formUrls.map((formUrl) => (
+                                  <ul>
+                                    <iframe
+                                      sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                                      src={formUrl}
+                                      width="100%"
+                                      height="700"
+                                      allowtransparency="true"
+                                      frameBorder="0"
+                                    ></iframe>
+                                  </ul>
+                                ))}
+                            </div>
+                            <div className="col-12">
+                              <b>Exercise Audio/ Video Explanation</b>
+                              {/* <div className="col-6"> */}
+                              {this.state.material.youtubeVideos &&
+                                this.state.material.youtubeVideos.map(
+                                  (youtube) =>
+                                    youtube ? (
+                                      <Video
+                                        id={youtube.id}
+                                        name={youtube.title}
+                                        thumbnailUrl={youtube.thumbnailUrl}
+                                      />
+                                    ) : (
+                                      ""
+                                    )
+                                )}
+                            </div>
+                            <div className="col-12">
+                              <Interaction
+                                userName={this.props.userName}
+                                courseId={assignment.courseId}
+                                subjectName={assignment.title}
+                                isActive={this.props.isActive}
+                              />
+                            </div>
+                            {/* </div> */}
+                          </div>
+                          <div className="card card-body fileblock row">
+                            <div className="col-12">
+                              {this.state.material.exerciseDetails &&
+                                this.state.material.exerciseDetails.map(
+                                  (exerciseDetail) =>
+                                    exerciseDetail
+                                      ? ((hasDriveFiles = true),
+                                        (
+                                          <FileUpload
+                                            exerciseDetails={exerciseDetail}
+                                            userName={this.props.userName}
+                                            courseId={assignment.courseId}
+                                            assignmentId={assignment.id}
+                                            isActive={this.props.isActive}
+                                          />
+                                        ))
+                                      : ""
+                                )}
+                              {!hasDriveFiles ? (
+                                <FileUpload
+                                  exerciseDetails={""}
+                                  userName={this.props.userName}
+                                  courseId={assignment.courseId}
+                                  assignmentId={assignment.id}
+                                  isActive={this.props.isActive}
+                                />
+                              ) : (
+                                ""
+                              )}
+                            </div>
+                            <div className="col-12">
+                              {/* {this.state.formUpload} */}
+                            </div>
+                          </div>
+                        </div>
+                      </AccordionItemPanel>
+                    </Fragment>
+                  </AccordionItem>
+                ))
+              ) : (
+                <div>
+                <div className="row">
+                  <b>
+                    Congratulations! <br/><br/>
+                    You are ready to create your first Coursework, following instructions shall guide you.
+                  </b>
+                </div>
+                <div className="row">
+                  <img
+                    src={_util.loadHelpIconByName("createCourseWork")}
+                    width="215"
+                    height="317"
+                  />
+                </div>
+                </div>
+              )}
+            </Fragment>
+          </Accordion>
+        </div>
       </Fragment>
     );
   }

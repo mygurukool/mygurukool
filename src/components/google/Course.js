@@ -1,18 +1,15 @@
-/* global gapi */
 import React, { Component, Fragment } from "react";
 import "../../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import * as _util from "../util/utils";
 import "@fortawesome/fontawesome-free/css/all.css";
-// import {REACT_APP_GOOGLE_OAUTH_TUTOR_SCOPES} from "../util/gConsts"
-// import { ACCESS_TOKEN } from "../util/constants";
-// import {Modal, Button} from "react-bootstrap";
 import * as _classworkUtil from "./ClassworkUtil";
 import Assignment from "./Assignment"
 import FloatingButton from "../util/FloatingButton";
 import CreateCourseWork from "../CreateCourseWork";
 import TeacherAuthorization from "./TeacherAuthorization";
 import {HAS_TEACHER_ACCEPTED} from "../util/constants";
+import {COURSE_ID} from "../util/constants"
 
 let user;
  
@@ -36,7 +33,6 @@ export default class Course extends Component {
      this.child = React.createRef();
   }
 
-  
   createCourseWorkClick = async (showCreateCourseWork) => {
     this.setState({showCreateCourseWork: showCreateCourseWork, 
       selectedCourseId: this.state.selectedCourseId,
@@ -45,7 +41,7 @@ export default class Course extends Component {
   }
 
   componentDidMount() { 
-  //  sessionStorage.setItem("COURSE_ID", this.state.selectedCourseId);
+    sessionStorage.setItem(COURSE_ID, this.state.selectedCourseId);
     this.setState({isLoading: true});
 
     //loading user profile
@@ -75,13 +71,13 @@ export default class Course extends Component {
   }
 
   async fetchCoursesToDisplay(groupName){
-  //  sessionStorage.setItem("COURSE_ID", null);
+    sessionStorage.setItem(COURSE_ID, null);
     await this.setState({courses: _classworkUtil.coursesByGroupName(this.state.coursesCompleteList, groupName), 
       showAssignments: false,}); 
   }
 
   loadAssignment = (event) => {
-  //  sessionStorage.setItem("COURSE_ID", this.state.courses[event.target.id].id);
+    sessionStorage.setItem(COURSE_ID, this.state.courses[event.target.id].id);
     this.setState({
       currentView: this.state.courses[event.target.id].name, 
       showAssignments: true, showCreateCourseWork: false, selectedCourseId: this.state.courses[event.target.id].id,

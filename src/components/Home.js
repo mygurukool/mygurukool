@@ -12,13 +12,15 @@ import FloatingButton from "./util/FloatingButton";
 import GroupName from "./GroupName";
 // import GroupNameDropdown from "./util/DropdownUtil";
 import CreateCourse from "./CreateCourse";
+import Welcome from "./Welcome";
+import {DEFAULT_GROUP_NAME} from "./util/constants";
 
 class Home extends Component {
   constructor() {
     super();
     this.toggleBtmHeight = this.toggleBtmHeight.bind(this);
     this.state = {
-      userData: { name: "name", group: ["groupName"], isTeacherLogin: false, selectedCourseId: 'null' },
+      userData: { name: "name", group: [DEFAULT_GROUP_NAME], isTeacherLogin: false, selectedCourseId: 'null' },
       cssContainer: "container",
       showCreateCourse:false,
     };
@@ -51,6 +53,10 @@ class Home extends Component {
 
   groupSelection = (groupName) => {
     this.child.loadCourses(groupName);
+  }
+
+  welcomeAction = (showCreateCourse) => {
+    this.createCourseClick(showCreateCourse);
   }
 
   handleConferencePanelSize = (resize) => {
@@ -162,6 +168,7 @@ class Home extends Component {
         : 
          <CreateCourse hideCreateCourse={this.createCourseClick}/>
         }
+        {this.state.userData.group.length === 0 ? <Welcome welcomeAction={this.welcomeAction}/>:""}
       </Wrapper>
     );
   }
