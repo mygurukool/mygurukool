@@ -32,7 +32,7 @@ export default class CreateCourseWork extends React.Component {
     return (
       // {"create course"}
       <div className="container">
-        <div className="row-12">
+        <div className="alert alert-success">
           <Form.Label>
             <b>{this.state.courseworkTitle}</b>
           </Form.Label>

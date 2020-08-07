@@ -74,12 +74,12 @@ export default class CourseWorkType extends React.Component {
     return (
       <div className="container">
         <div className="row">
-          <div className="col-6">
+          <div className="col-11">
             <Button id="cancel" variant="secondary" type="cancel" onClick={(e) => this.handleClick(e.target.id)}>
               X
             </Button>
           </div>
-          <div className="col-6 float-right">
+          <div className="col-1">
             <Button id="submit" 
               variant="primary"
               type="submit"
