@@ -8,6 +8,11 @@ function importSubjectIcons(r) {
   return r.keys().map(r);
 }
 
+const _helpIcons = importHelpIcons(require.context('./../../assets/help', false, /\.(png|jpe?g|jpg|gif|svg)$/));
+function importHelpIcons(r) {
+  return r.keys().map(r);
+}
+
 
 // parse OneNote Page
 export function parseOneNotePage(page) {
@@ -74,8 +79,10 @@ export function parseOneNotePage(page) {
 }
 
 export function loadIconBySubject(subjectName) {
-  let subjectIcon = "";
+  let subjectIcon;
   _subjectIcons.map(function (icon) {
+    // subjectIcon = iconFetch(icon, subjectName.toLowerCase());
+    // alert("subjectIcon: " + subjectIcon)
     let lastIndexOfbackSlash = icon.lastIndexOf("/");
     if (
       subjectName
@@ -98,4 +105,30 @@ export function loaderRandomGifs() {
   let min=0;
   let max = _loadingGifs.length;
   return (_loadingGifs[Math.floor(Math.random() * (max - min + 1)) + min]);
+}
+
+export function loadHelpIconByName(name){
+  let helpIcon;
+  _helpIcons.map(function(icon){
+   // alert("icon " + icon + "... name: " + name)
+    helpIcon = iconFetch(icon, name);
+  });
+  return helpIcon; 
+}
+
+function iconFetch(iconObj, fetchIconName){
+  let icon;
+  let lastIndexOfbackSlash = iconObj.lastIndexOf("/");
+  if (
+    fetchIconName
+      .includes(
+        iconObj.substring(
+          lastIndexOfbackSlash + 1,
+          iconObj.indexOf(".", lastIndexOfbackSlash)
+        )
+      )
+  ) {
+    icon = iconObj;
+  }
+  return icon;
 }
