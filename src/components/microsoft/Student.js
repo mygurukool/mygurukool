@@ -34,7 +34,7 @@ export default class Student extends Component {
 
     this.state = {
       studentData: null,
-      user: {name:"", group:""},
+      user: {name:"", group:[]},
       displayName: "",
       sections: "", //Subjects
       tabIndex: 0,
@@ -73,7 +73,10 @@ export default class Student extends Component {
       this.setState(prevState => {
         let user = Object.assign({}, prevState.user);  // creating copy of state variable
         user.name = response.data.displayName;         // update the name property, assign a new value 
-        user.group = response.data.department;                         
+      /** TODO: variable group is now list of groups, where as Microsoft implementation has only one group
+       *  Once microsoft group list is implemented, "user.group[0]" should be replaced with appropriate value in group list
+       */
+        user.group[0] = response.data.department;                         
         return { user };                               // return new object
       })
 
@@ -81,7 +84,10 @@ export default class Student extends Component {
       this.handleStudentDataFetch();
 
       //Profile department is translated to GroupName
-      _apiUtils.loadSite(this.state.user.group).then((response) => {
+      /** TODO: variable group is now list of groups, where as Microsoft implementation has only one group
+       *  Once microsoft group list is implemented, "user.group[0]" should be replaced with appropriate value in group list
+       */
+      _apiUtils.loadSite(this.state.user.group[0]).then((response) => {
         this.setState({ groupDetails: response.data });
 
         //load subjects
