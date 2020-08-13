@@ -1,8 +1,9 @@
 import React from "react";
-import { Form, Button, Alert } from "react-bootstrap";
+import { Form, Button } from "react-bootstrap";
 import AddPeople from "./AddPeople";
 import {getTeachersList, getStudentsList} from "./ClassworkUtil";
-import {COURSE_ID} from "../util/constants"
+import {COURSE_ID} from "../util/constants";
+import {roleType} from "../util/gConsts";
 
 export default class InvitePeople extends React.Component {
   constructor(props) {
@@ -22,20 +23,17 @@ export default class InvitePeople extends React.Component {
     )
   }
   showAddPeopleModal = (showModal) => {
-    alert("showAddPeopleModal " + showModal);
     this.setState(
       { showModal: showModal,})
   };
-  onCancel = async () => {
-    this.props.showInvitePeople(false);
+  onCancel = () => {
+    this.props.showInvitePeople(true);
   };
-  addStudent = async () => {
-    alert("add addStudent");
-    this.setModalData("Student");
+  addStudent = () => {
+    this.setModalData(roleType.STUDENT);
   };
-  addTeacher = async () => {
-    alert("add teacher");
-    this.setModalData("Teacher");
+  addTeacher = () => {
+    this.setModalData(roleType.TEACHER);
     // let resp = await _classworkUtil
     //   .createCourse(this.state.courseName, this.state.className)
     //   .then(res => res);
@@ -97,14 +95,14 @@ export default class InvitePeople extends React.Component {
                   </Form.Label>
                 </div>
                 <div className="col-md-2">
-                  <a href="" target="_blank" onClick={this.addTeacher}>
+                  <a href="#" target="" onClick={this.addTeacher}>
                     <i className="fas fa-user-plus fa-1g"></i>
                   </a>
                 </div>
               </div>
               <table className="col-12 table table-stripped">
                 <tbody>
-                {this.state.teachersList.length > 0
+                {this.state.teachersList && this.state.teachersList.length > 0
                   ? this.state.teachersList.map((teacher) => (
                       <tr>
                         <td>{teacher.profile.name.fullName}</td>
@@ -121,14 +119,14 @@ export default class InvitePeople extends React.Component {
                   </Form.Label>
                 </div>
                 <div className="col-md-2">
-                  <a href="" target="_blank" onClick={this.addStudent}>
+                  <a href="#" target="" onClick={this.addStudent}>
                     <i className="fas fa-user-plus fa-1g"></i>
                   </a>
                 </div>
               </div>
               <table className="col-12 table table-stripped">
                 <tbody>
-                {this.state.studentList.length > 0
+                {this.state.studentList && this.state.studentList.length > 0
                   ? this.state.studentList.map((student) => (
                       <tr>
                         <td>{student.profile.name.fullName}</td>
@@ -140,10 +138,10 @@ export default class InvitePeople extends React.Component {
             </Form.Group>
           </Form>
           {this.state.showModal ? (
-            <AddPeople
-              invitePeopleType={this.state.invitePeopleType}
-              showAddPeopleModal={this.showAddPeopleModal}
-            />
+              <AddPeople
+                invitePeopleType={this.state.invitePeopleType}
+                showAddPeopleModal={this.showAddPeopleModal}
+              />
           ) : (
             ""
           )}

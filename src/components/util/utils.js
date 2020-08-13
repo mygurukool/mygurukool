@@ -132,3 +132,14 @@ function iconFetch(iconObj, fetchIconName){
   }
   return icon;
 }
+
+export function getKeyFromEnumValue(enumObj, value){
+  let keyObj=[]; 
+  Object.keys(enumObj).map(function (key) { 
+    if(enumObj[key] === value) {
+      keyObj.push(key)
+      return;
+    } 
+  })
+  return keyObj;
+}

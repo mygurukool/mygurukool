@@ -4,7 +4,7 @@
 export const REACT_APP_GOOGLE_OAUTH_SCOPES =
   "https://www.googleapis.com/auth/userinfo.profile https://www.googleapis.com/auth/classroom.courses.readonly https://www.googleapis.com/auth/classroom.coursework.me https://www.googleapis.com/auth/classroom.rosters.readonly https://www.googleapis.com/auth/drive";  
 
-export const REACT_APP_GOOGLE_OAUTH_TUTOR_SCOPES = "https://www.googleapis.com/auth/classroom.coursework.students https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.coursework.students";
+export const REACT_APP_GOOGLE_OAUTH_TUTOR_SCOPES = "https://www.googleapis.com/auth/classroom.coursework.students https://www.googleapis.com/auth/classroom.courses https://www.googleapis.com/auth/classroom.coursework.students https://www.googleapis.com/auth/classroom.rosters";
 
 export const GOOGLE_USERINFO_API  = "https://www.googleapis.com/userinfo/v2/";
 
@@ -35,4 +35,12 @@ export const courseWorkType = {
 //   "Material",
 //   "Reuse post",
 }
+
+export const roleType = {
+  TEACHER: 'teachers',
+  STUDENT: 'students',
+  // TEACHER: {TEACHER: 'teachers'},
+  // STUDENT: {STUDENT: 'students'},
+}
+
 

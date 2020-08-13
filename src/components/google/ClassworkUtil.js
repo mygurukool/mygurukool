@@ -254,7 +254,6 @@ export function getTeachersList(courseId){
 export function getStudentsList(courseId){
   return new Promise((resolve, reject) => {
     _apiUtils.googleClassroomCourseStudentsList(courseId).then((resStudent) =>{
-      console.log("getStudentsList: " + JSON.stringify(resStudent));
       resolve(resStudent)
     }).catch((error) => {reject(error); console.error("Error during google getTeachersList:", error)});
   })
@@ -398,3 +397,32 @@ export function createCourseWork(coursework){
 
       //Assign student to course
   }
+
+
+  // invite 142097205021
+  export function invitePeople(courseId, emailIds, roleType){
+    alert(roleType)
+    let emailIdArray = emailIds.split(',');
+    emailIdArray.map((email) => {
+        //creating coursework
+      return new Promise((resolve, reject) => {
+        _apiUtils.googleClassroomCreateInvitation(courseId, email.trim(), roleType.toString()).then((response) => {
+          console.log("googleClassroomCreateInvitation: "+ JSON.stringify(response));
+          resolve(response);
+          }).catch((error) => {reject(error); console.error("Error during google invitePeople: ", error)})
+      })
+    })
+  }
+
+  export async function getInvitations(){
+    return  _apiUtils.googleClassroomGetInvitations()
+    .then((response) =>  response)
+    .catch((error) => {console.error("Error during google invitePeople: ", error)})
+    // return new Promise((resolve, reject) => {
+    //   _apiUtils.googleClassroomGetInvitations().then((response) => {
+    //     console.log("googleClassroomGetInvitations: "+ JSON.stringify(response));
+    //     resolve(response);
+    //     }).catch((error) => {reject(error); console.error("Error during google invitePeople: ", error)})
+    // })
+  }
+

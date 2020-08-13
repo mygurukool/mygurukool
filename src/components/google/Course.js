@@ -48,7 +48,7 @@ export default class Course extends Component {
     });
   }
 
-  componentDidMount() { 
+  async componentDidMount() { 
     sessionStorage.setItem(COURSE_ID, this.state.selectedCourseId);
     this.setState({isLoading: true});
 
@@ -76,6 +76,9 @@ export default class Course extends Component {
       this.props.userData(user);
       this.setState({selectedCourseId: "null"});
     });
+
+    let invites = await _classworkUtil.getInvitations().then((response) => response);
+    alert("invites: " + JSON.stringify(invites))
   }
 
   async fetchCoursesToDisplay(groupName){
