@@ -78,7 +78,7 @@ export default class Course extends Component {
     });
 
     let invites = await _classworkUtil.getInvitations().then((response) => response);
-    alert("invites: " + JSON.stringify(invites))
+    //alert("invites: " + JSON.stringify(invites))
   }
 
   async fetchCoursesToDisplay(groupName){

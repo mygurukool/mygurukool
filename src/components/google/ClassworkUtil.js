@@ -161,7 +161,7 @@ function reCreateCourse(courseParam){
 export function createCourse(courseName, className){
   const courseContent = { name : courseName, ownerId: "me", section: className};
   _apiUtils.googleClassroomCreateCourse(courseContent).then((response) => {
-    alert(response)
+    //alert(response)
     console.log("createCourse " + response);  
   });
 
@@ -262,7 +262,7 @@ export function getStudentsList(courseId){
 //TODO: currently not used.. to be deleted in near future should this function is not needed anymore
 export function destructClassname_Courses(courses){
   let destructObj = {courses:[], group: null};
-  alert("destructClassname_Courses: " + courses.length)
+  //alert("destructClassname_Courses: " + courses.length)
   courses && courses.map((course) => {
     if(destructObj.group === null) destructObj.group = course.name.substring(0, course.name.indexOf("-"));
      course.name = course.name.split(/[\-]+/).pop().trim();
@@ -401,7 +401,7 @@ export function createCourseWork(coursework){
 
   // invite 142097205021
   export function invitePeople(courseId, emailIds, roleType){
-    alert(roleType)
+    //alert(roleType)
     let emailIdArray = emailIds.split(',');
     emailIdArray.map((email) => {
         //creating coursework

@@ -24,7 +24,7 @@ export default class Interaction extends Component {
   }
 
   cancelClick = (event) => {
-    alert("cancelClick");
+    //alert("cancelClick");
     this.setState({
       showMessageBlock: false,
     });

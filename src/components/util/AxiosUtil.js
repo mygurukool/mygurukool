@@ -190,7 +190,7 @@ export function googleClassroomSubmissionTurnIn(courseId, courseworkId, submissi
 export function googleClassroomCreateCourseWork(courseId, coursework) {
   const url = _gconsts.GOOGLE_CLASSROOM_API + `courses/${courseId}/courseWork/`
   
-  alert("Axiosutils.googleClassroomCreateCourseWork: " + JSON.stringify(coursework) + " url: " + url)
+  //alert("Axiosutils.googleClassroomCreateCourseWork: " + JSON.stringify(coursework) + " url: " + url)
   // const courseWorkBlob = new Blob([coursework], {type: 'text/json;charset=utf-8'})  // 'application/json'}) //
 
   // let data = new FormData()
