@@ -326,7 +326,7 @@ export function autoAcceptCourseInvitation(){
 
 export function createCourseWork(coursework){
   let courseId = coursework.courseId;
-  let courseWork = {title: coursework.title, description: coursework.instructions, workType:coursework.workType,
+  let courseWork = {title: coursework.title, description: coursework.description, workType:coursework.workType,
                     associatedWithDeveloper: true, state:'PUBLISHED', //maxPoints: 1
                     materials: [],   
                   };
