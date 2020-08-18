@@ -12,6 +12,10 @@ import {HAS_TEACHER_ACCEPTED} from "../util/constants";
 import {COURSE_ID} from "../util/constants"
 import InvitePeople from "./InvitePeople";
 
+/**
+ * User Object structure, this must be update appropriately
+ * user: {id, name, group, selectedCourseId, isTeacherLogin}
+ */
 let user;
  
 export default class Course extends Component {
@@ -49,6 +53,7 @@ export default class Course extends Component {
   }
 
   async componentDidMount() { 
+    let isTeacherLogin = false;
     sessionStorage.setItem(COURSE_ID, this.state.selectedCourseId);
     this.setState({isLoading: true});
 
@@ -66,15 +71,15 @@ export default class Course extends Component {
       this.fetchCoursesToDisplay(user.group[0]);
       if (this.state.courses.length > 0 && this.state.courses[0].hasOwnProperty("teacherFolder")) 
         _classworkUtil.isTeacher(user.id, this.state.courses[0].id).then((resTeacher) =>{
-                if(resTeacher && this.props.isActive)
-                  this.setState({isTeacherLogin: true});
+            if(resTeacher && this.props.isActive)
+              isTeacherLogin = true;
+
+            //now set the user data to callback object(userData)
+            user.isTeacherLogin= isTeacherLogin;
+            user.selectedCourseId = "null";
+            this.props.userData(user);
+            this.setState({selectedCourseId: "null", isTeacherLogin: isTeacherLogin});
           });
-      
-      //now set the user data to callback object(userData)
-      user.isTeacherLogin= this.setState.isTeacherLogin;
-      user.selectedCourseId = "null";
-      this.props.userData(user);
-      this.setState({selectedCourseId: "null"});
     });
 
     let invites = await _classworkUtil.getInvitations().then((response) => response);
@@ -179,8 +184,9 @@ export default class Course extends Component {
             }
             {this.state.showAssignments?
             <Assignment
-              courseId={this.state.selectedCourseId} 
-              isTeacherLogin={this.state.isTeacherLogin} 
+              // courseId={this.state.selectedCourseId} 
+              // isTeacherLogin={this.state.isTeacherLogin} 
+              user={user}
               isActive={this.props.isActive}/>
             : ""}
             {/* // This code to explicity call child function to fix the issue: Assignments view is state >>  

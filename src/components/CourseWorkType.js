@@ -1,11 +1,12 @@
 import React from "react";
 import { Form, Button, DropdownButton, Dropdown, Modal } from "react-bootstrap";
 import * as _classworkUtil from "./google/ClassworkUtil";
-import {driveFileTypes} from "./util/gConsts"
+import {driveFileTypes, courseWorkAction, addFileTypes, actionButtonText} from "./util/gConsts"
 import {COURSE_ID} from "./util/constants"
 import DriveFileTypeDropdown from "./util/DropdownUtil";
 
 const driveFileTypeList = Object.keys(driveFileTypes).map(key => driveFileTypes[key]);
+const addFileTypeList = Object.keys(addFileTypes).map(key => addFileTypes[key]);
 const TITLE_FIELD = "titleField";
 const DRIVE_FILE_NAME_FIELD = "driveFileNameField";
 
@@ -17,12 +18,23 @@ export default class CourseWorkType extends React.Component {
       titleField: "",
       driveFileNameField: "",
       driveFileType: "",
+      addFileType: "",
       isAssignDisabled: true,
       driveFiles: [],
       showDriveFileModal: false,
+      showAddFileModal: false,
+      submitButtonText: "",
+      assignmentToEdit: null,
     };
     this.child = React.createRef();
     this.handleChange = this.handleChange.bind(this);
+  }
+
+  componentDidMount(){
+    this.setState({
+      submitButtonText: (this.props.workTypeData.action === courseWorkAction.CREATE) ? 'Assign' : 'Save',
+      assignmentToEdit: this.props.workTypeData.assignmentToEdit,
+    });
   }
 
   createDriveFiles = async () => {
@@ -36,6 +48,10 @@ export default class CourseWorkType extends React.Component {
 
   driveFileSelected = async (fileType) =>{
     await this.setState({showDriveFileModal: true, driveFileType: fileType});
+  }
+
+  addFileSelected = async (fileType) =>{
+    await this.setState({showAddFileModal: true, addFileType: fileType});
   }
 
   handleChange = async (event) => {
@@ -66,7 +82,11 @@ export default class CourseWorkType extends React.Component {
                       };
       _classworkUtil.createCourseWork(courseWork).then((res) => console.log(res));
     }
-    this.props.showCreateCourseWork(false);
+    if(this.props.workTypeData.action === courseWorkAction.CREATE) {
+      this.props.showCreateCourseWork(false);
+    } else {
+      this.props.showEditCourseWork(false);
+    }
   };
 
   render() {
@@ -86,7 +106,7 @@ export default class CourseWorkType extends React.Component {
               disabled={this.state.isAssignDisabled}
               onClick={(e) => this.handleClick(e.target.id)}
             >
-              Assign
+              {this.state.submitButtonText}
             </Button>
           </div>
         </div>
@@ -101,6 +121,7 @@ export default class CourseWorkType extends React.Component {
             <Form.Control
               type="input"
               name={TITLE_FIELD}
+              defaultValue= {this.state.assignmentToEdit ? this.state.assignmentToEdit.title: ""}
               //placeholder="eg: English, French"
               onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
               onChange={(e) => this.handleChange(e)}
@@ -113,12 +134,18 @@ export default class CourseWorkType extends React.Component {
             <Form.Control
               as="textarea"
               name="instructionsField"
+              defaultValue= {this.state.assignmentToEdit ? this.state.assignmentToEdit.description: ""}
               //placeholder="Class 3A"
               onChange={(e) => this.handleChange(e)}
             />
           </Form.Group>
           <DriveFileTypeDropdown 
-            dropdownTitleText="+ Create" 
+            dropdownTitleText={actionButtonText.ADD}
+            itemList={addFileTypeList}
+            itemSelection={this.addFileSelected}
+          />
+          <DriveFileTypeDropdown 
+            dropdownTitleText={actionButtonText.CREATE} 
             itemList={driveFileTypeList}
             itemSelection={this.driveFileSelected}
           />

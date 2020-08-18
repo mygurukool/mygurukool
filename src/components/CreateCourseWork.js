@@ -3,11 +3,11 @@ import { Form } from "react-bootstrap";
 import * as _classworkUtil from "./google/ClassworkUtil";
 import CourseWorkTypeDropdown from "./util/DropdownUtil";
 import CourseWorkType from "./CourseWorkType";
-import {courseWorkType} from "./util/gConsts";
+import {courseWorkType, courseWorkAction, actionButtonText} from "./util/gConsts";
 
 const courseWorkList = Object.keys(courseWorkType).map(key => courseWorkType[key]);
 
-let workTypeObject = { type: "" };
+let workTypeObject = { type: "", action: courseWorkAction.CREATE };
 
 export default class CreateCourseWork extends React.Component {
   constructor(props) {
@@ -41,7 +41,7 @@ export default class CreateCourseWork extends React.Component {
           this.state.selectedCourseWorkType === null ? 
           <Fragment>
             <CourseWorkTypeDropdown
-            dropdownTitleText="+ Create" 
+            dropdownTitleText={actionButtonText.CREATE} 
             itemList={courseWorkList}
             itemSelection={this.courseWorkTypeSelection}
           />

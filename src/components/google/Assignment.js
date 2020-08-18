@@ -13,9 +13,12 @@ import {
 import Video from "../Video";
 import * as _util from "../util/utils";
 import * as _classworkUtil from "./ClassworkUtil";
+import EditCourseWork from "../EditCourseWork";
 
-let user;
- 
+let fontSizeSmall = '1.25em';
+let fontSizeBig = '1.75em';
+let assignmentToEdit; // = {title:"", description:""};
+
 export default class Course extends Component {
   constructor(props) {
     super(props);
@@ -32,14 +35,42 @@ export default class Course extends Component {
       hasTeacherAccepted: true,
       isLoading: false,
       hasAssignments: false,
+      user: this.props.user,
+      isAssginmentEditHovered: false,
+      assignmentFontSize: fontSizeSmall,
+      showEditCourseWork: false
     };
      this.extractMaterials = this.extractMaterials.bind(this);
   }
 
   componentDidMount() { 
-    this.loadAssignment(this.props.courseId, this.props.isTeacherLogin);
+    this.loadAssignment(this.state.user.selectedCourseId, this.state.user.isTeacherLogin);
   }
   
+  onEditClick = (assignment) => {
+    // assignmentToEdit.title = title;
+    // assignmentToEdit.description = description;
+    assignmentToEdit = assignment;
+    // alert("Edit Clicked: " + JSON.stringify(assignment))
+    this.setState({showEditCourseWork: true, 
+      //selectedCourseId: this.state.selectedCourseId,
+    });
+  }
+
+  toggleHover = () => {
+    let fontSize= !this.state.isAssginmentEditHovered? fontSizeBig : fontSizeSmall
+    this.setState(prevState => ({
+      isAssginmentEditHovered: !prevState.isAssginmentEditHovered, 
+      assignmentFontSize: fontSize,
+    }));
+  }
+
+  editCourseWorkClick = async (showEditCourseWork) => {
+    this.setState({showEditCourseWork: showEditCourseWork, 
+      //selectedCourseId: this.state.selectedCourseId,
+    });
+  }
+
   getSubmissionTurnInState(courseId, assignmentId) {
     // _apiUtils.googleClassroomGetCourseworkSubmissions(courseId, assignmentId).then((response) => {
     //     let state      = response.data.studentSubmissions[0].state
@@ -103,8 +134,8 @@ export default class Course extends Component {
   loadAssignment(courseId, isTeacherLogin) {
     this.setState({isLoading: true});
       _classworkUtil.loadAssignments(courseId, isTeacherLogin).then((response) =>{
-        this.setState({assignments: response, hasAssignments: response.length, isLoading: false});
         console.log(response)
+        this.setState({assignments: response, hasAssignments: response ? response.length : false, isLoading: false});
       })
   };
 
@@ -125,7 +156,7 @@ export default class Course extends Component {
             preExpanded={this.state.openedItems}
           >
             <Fragment>
-              {this.state.hasAssignments ? (
+              {!this.state.showEditCourseWork ? (this.state.hasAssignments ? (
                 this.state.assignments.map((assignment, i) => (
                   <AccordionItem key={assignment.id} uuid={assignment.id}>
                     <Fragment>
@@ -150,6 +181,13 @@ export default class Course extends Component {
                                     ":" +
                                     assignment.dueTime.minutes
                                   : ""}
+                                  <div onMouseEnter={this.toggleHover} onMouseLeave={this.toggleHover}>
+                                    {this.props.user.isTeacherLogin ? 
+                                    <a href="#" target="" onClick={(e) => this.onEditClick(assignment)}>
+                                      <i className="fas fa-pencil-alt" style={{ fontSize: this.state.assignmentFontSize }}></i>
+                                    </a>
+                                    : ""}
+                                  </div>
                               </small>
                             </div>
                           </div>
@@ -220,8 +258,10 @@ export default class Course extends Component {
                             </div>
                             <div className="col-12">
                               <Interaction
-                                userName={this.props.userName}
-                                courseId={assignment.courseId}
+                                // userName={this.props.userName}
+                                // isTeacherLogin={this.props.isTeacherLogin}
+                                // courseId={assignment.courseId}
+                                user={this.state.user}
                                 subjectName={assignment.title}
                                 isActive={this.props.isActive}
                               />
@@ -238,8 +278,9 @@ export default class Course extends Component {
                                         (
                                           <FileUpload
                                             exerciseDetails={exerciseDetail}
-                                            userName={this.props.userName}
-                                            courseId={assignment.courseId}
+                                            user={this.state.user}
+                                            //userName={this.state.user.name}
+                                            //courseId={assignment.courseId}
                                             assignmentId={assignment.id}
                                             isActive={this.props.isActive}
                                           />
@@ -249,8 +290,9 @@ export default class Course extends Component {
                               {!hasDriveFiles ? (
                                 <FileUpload
                                   exerciseDetails={""}
-                                  userName={this.props.userName}
-                                  courseId={assignment.courseId}
+                                  user={this.state.user}
+                                  //userName={this.state.user.name}
+                                  //courseId={assignment.courseId}
                                   assignmentId={assignment.id}
                                   isActive={this.props.isActive}
                                 />
@@ -283,7 +325,9 @@ export default class Course extends Component {
                   />
                 </div>
                 </div>
-              )}
+              ))
+              : <EditCourseWork assignmentToEdit={assignmentToEdit} showEditCourseWork={this.editCourseWorkClick}/>
+              }
             </Fragment>
           </Accordion>
         </div>

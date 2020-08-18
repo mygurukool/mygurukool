@@ -26,6 +26,14 @@ export const driveFileTypes = {
   DRIVE_DRAWINGS : 'Drawings',
 }
 
+//Add files types
+export const addFileTypes = {
+  FILE : 'File',
+  YOU_TUBE : 'YouTube',
+  LINK : 'Link',
+  GOOGLE_DRVE: 'Google Drive',
+}
+
 //CourseWork Type Enums
 export const courseWorkType = {
   //COURSE_WORK_TYPE_UNSPECIFIED: 
@@ -34,6 +42,16 @@ export const courseWorkType = {
   MULTIPLE_CHOICE_QUESTION : 'Quiz Assignment',
 //   "Material",
 //   "Reuse post",
+}
+
+export const courseWorkAction = {
+  CREATE: 'Create',
+  EDIT: 'Edit',
+}
+
+export const actionButtonText = {
+  ADD: 'Add',
+  CREATE: 'Create',
 }
 
 export const roleType = {

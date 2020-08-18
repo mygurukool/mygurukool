@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { Dropdown } from "react-bootstrap";
+import {actionButtonText} from "./gConsts"
 
 const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
   <a
@@ -19,7 +20,20 @@ const CustomToggle = React.forwardRef(({ children, onClick }, ref) => (
 export default class DropdownUtil extends Component {
   constructor(props) {
     super(props);
-    this.state = ({customToggle:this.props.customToggle});
+    this.state = ({
+      customToggle:this.props.customToggle,
+      displayIcon: null,
+    });
+    this.getActionIcon = this.getActionIcon.bind(this);
+  }
+
+  getActionIcon(action){
+    let icon='';
+    switch (action) {
+      case actionButtonText.ADD: icon = "fas fa-paperclip"; break;
+      case actionButtonText.CREATE: icon = "fas fa-plus"; break;
+    }
+    return icon;
   }
 
   handleChange = (event) => {
@@ -36,7 +50,7 @@ export default class DropdownUtil extends Component {
         </Dropdown.Toggle>
       ):(
         <Dropdown.Toggle id="dropdown-custom-components"> 
-        {this.props.dropdownTitleText}
+       <i class={this.getActionIcon(this.props.dropdownTitleText)}> {this.props.dropdownTitleText}</i>
         </Dropdown.Toggle>
       )
       }
