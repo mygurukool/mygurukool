@@ -309,24 +309,26 @@ export default class Assignment extends Component {
                       </AccordionItemPanel>
                     </Fragment>
                   </AccordionItem>
-                ))
-              ) : (
-                <div>
-                <div className="row">
-                  <b>
-                    Congratulations! <br/><br/>
-                    You are ready to create your first Coursework, following instructions shall guide you.
-                  </b>
-                </div>
-                <div className="row">
-                  <img
-                    src={_util.loadHelpIconByName("createCourseWork")}
-                    width="215"
-                    height="317"
-                  />
-                </div>
-                </div>
-              ))
+                )) 
+              ) : (this.state.user.selectedCourseId && this.state.user.selectedCourseId !== 'null' ?(
+                    <div>
+                    <div className="row">
+                      <b>
+                        Congratulations! <br/><br/>
+                        You are ready to create your first Coursework, following instructions shall guide you.
+                      </b>
+                    </div>
+                    <div className="row">
+                      <img
+                        src={_util.loadHelpIconByName("createCourseWork")}
+                        width="215"
+                        height="317"
+                      />
+                    </div>
+                    </div>
+                  ): ""
+                )
+                )
               : <EditCourseWork assignmentToEdit={assignmentToEdit} showEditCourseWork={this.editCourseWorkClick}/>
               }
             </Fragment>

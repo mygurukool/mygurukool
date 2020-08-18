@@ -33,7 +33,8 @@ export default class Course extends Component {
       isLoading: false,
       isAssignmentsViewStale: true,  //TODO: used along with *refs* 
       selectedCourseId:"null",
-      showAssignments: false,
+      //showAssignments: false,
+      showCreateCourseWork: false,
     };
      this.child = React.createRef();
   }
@@ -41,14 +42,16 @@ export default class Course extends Component {
   createCourseWorkClick = async (showCreateCourseWork) => {
     this.setState({showCreateCourseWork: showCreateCourseWork, 
       selectedCourseId: this.state.selectedCourseId,
-      showAssignments: !this.state.showAssignments,
+      //showAssignments: !this.state.showAssignments,
+      isAssignmentsViewStale: !this.state.isAssignmentsViewStale,
     });
   }
 
   showInvitePeople = (showInvitePeople) => {
     this.setState({showInvitePeople: showInvitePeople, 
       selectedCourseId: this.state.selectedCourseId,
-      showAssignments: !this.state.showAssignments,
+      //showAssignments: !this.state.showAssignments,
+      isAssignmentsViewStale: !this.state.isAssignmentsViewStale,
     });
   }
 
@@ -89,14 +92,17 @@ export default class Course extends Component {
   async fetchCoursesToDisplay(groupName){
     sessionStorage.setItem(COURSE_ID, null);
     await this.setState({courses: _classworkUtil.coursesByGroupName(this.state.coursesCompleteList, groupName), 
-      showAssignments: false,}); 
+      //showAssignments: false, 
+      isAssignmentsViewStale: !this.state.isAssignmentsViewStale,}); 
   }
 
   loadAssignment = (event) => {
     sessionStorage.setItem(COURSE_ID, this.state.courses[event.target.id].id);
     this.setState({
       currentView: this.state.courses[event.target.id].name, 
-      showAssignments: true, showCreateCourseWork: false, selectedCourseId: this.state.courses[event.target.id].id,
+      //showAssignments: true, 
+      showCreateCourseWork: false, selectedCourseId: this.state.courses[event.target.id].id, 
+      isAssignmentsViewStale: !this.state.isAssignmentsViewStale,
     });
     user.selectedCourseId = this.state.courses[event.target.id].id;
     this.props.userData(user);
