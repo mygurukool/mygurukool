@@ -19,7 +19,7 @@ let fontSizeSmall = '1.25em';
 let fontSizeBig = '1.75em';
 let assignmentToEdit; // = {title:"", description:""};
 
-export default class Course extends Component {
+export default class Assignment extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -43,9 +43,10 @@ export default class Course extends Component {
      this.extractMaterials = this.extractMaterials.bind(this);
   }
 
-  componentDidMount() { 
-    this.loadAssignment(this.state.user.selectedCourseId, this.state.user.isTeacherLogin);
-  }
+ // componentDidMount() { 
+ //   alert("componentDidMount user: " + JSON.stringify(this.state.user));
+ //   this.loadAssignment(this.state.user.selectedCourseId, this.state.user.isTeacherLogin);
+ // }
   
   onEditClick = (assignment) => {
     // assignmentToEdit.title = title;

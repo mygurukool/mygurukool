@@ -31,7 +31,7 @@ export default class Course extends Component {
       submissionId: "",
       isTeacherLogin: false,
       isLoading: false,
-    //  isAssignmentsViewStale: true,  //TODO: used along with *refs* 
+      isAssignmentsViewStale: true,  //TODO: used along with *refs* 
       selectedCourseId:"null",
       showAssignments: false,
     };
@@ -100,9 +100,9 @@ export default class Course extends Component {
     });
     user.selectedCourseId = this.state.courses[event.target.id].id;
     this.props.userData(user);
-    // this.setState({isAssignmentsViewStale: false}, 
-    //   this.awaitAndLoadAssignments  }
-    //);
+    this.setState({isAssignmentsViewStale: false}, 
+      this.awaitAndLoadAssignments
+     );
   }
 
     awaitAndLoadAssignments = () => {
@@ -182,17 +182,17 @@ export default class Course extends Component {
             <InvitePeople showInvitePeople={this.showInvitePeople}/>
             : ""
             }
-            {this.state.showAssignments?
-            <Assignment
-              // courseId={this.state.selectedCourseId} 
-              // isTeacherLogin={this.state.isTeacherLogin} 
-              user={user}
-              isActive={this.props.isActive}/>
-            : ""}
+            {/* // {     alert("course user: " + JSON.stringify(user)), this.state.showAssignments?
+            // <Assignment
+            //   // courseId={this.state.selectedCourseId} 
+            //   // isTeacherLogin={this.state.isTeacherLogin} 
+            //   user={user}
+            //   isActive={this.props.isActive}/>
+            // : ""} */}
             {/* // This code to explicity call child function to fix the issue: Assignments view is state >>  
-                //not updating with the newly selected course has no assignments
+                not updating with the newly selected course has no assignments */}
             {!this.state.isAssignmentsViewStale ?
-            <Assignment ref={instance => { this.child = instance; }} isActive={this.props.isActive}/> : ""} */}
+            <Assignment ref={instance => { this.child = instance; }} user={user} isActive={this.props.isActive}/> : ""}
            </div>
         </div>
       </Fragment>
