@@ -15,6 +15,7 @@ export default class Comments extends Component {
       show: true,
       messageList: [], //  [studentMsg, teacherMsg], //TODO: Dev hack, msglist tobe del for prod
       gDriveCommentsFileId: null,
+      commentButtonText: this.props.user.isTeacherLogin? 'Send comments to Students' : 'Feel free to ask!!',
     };
     this.showInputElement = this.showInputElement.bind(this);
     this.startTimeOut = this.startTimeOut.bind(this);
@@ -191,7 +192,7 @@ export default class Comments extends Component {
       type: "text",
       theme: "white",
       view: "list",
-      title: "Author name: " + this.props.userName,
+      title: "Author name: " + this.props.user.name,
       //titleColor: this.getRandomColor(),
       text: message,
       status: "read",
@@ -316,7 +317,7 @@ export default class Comments extends Component {
           onClick={this.openComments}
           disabled={!this.props.isActive}
         >
-          <i className="fas fa-question-circle"></i> Feel free to ask!!
+          <i className="fas fa-question-circle"></i> {this.state.commentButtonText}
         </button>
         {this.state.showMessageBlock === true ? (
           <div className="card card-body fileblock col-12">

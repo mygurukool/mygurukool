@@ -19,8 +19,9 @@ export default class FileUpload extends Component {
       fileName: "",
       exerciseFiles: "",
       showFlash: false,
-      courseId: props.courseId,
+      courseId: props.user.selectedCourseId,
       assignmentId: props.assignmentId,
+      exerciseButtonText: this.props.user.isTeacherLogin? 'Upload Exercise Material' : 'Upload Exercise',
     };
     this.handleFileChange = this.handleFileChange.bind(this);
     this.cancelClick = this.cancelClick.bind(this);
@@ -91,7 +92,7 @@ export default class FileUpload extends Component {
           onClick={this.handleUploadClick}
           disabled={!this.props.isActive}
         >
-          <i className="fas fa-upload"></i> Upload Exercise
+          <i className="fas fa-upload"></i> {this.state.exerciseButtonText}
         </button>
       </tr>
     );
@@ -228,7 +229,7 @@ export default class FileUpload extends Component {
                   this.state.groupId,
                   driveRes.data.value[0].id,
                   res.data.value[0].id,
-                  this.props.userName,
+                  this.props.user.name,
                   this.file.name
                 )
                 .then((response) => {
@@ -381,7 +382,7 @@ export default class FileUpload extends Component {
                 <tr>
                   <td className="filename">
                     {exe.name.replace(
-                      this.props.userName.replace("/", "_") + "_",
+                      this.props.user.name.replace("/", "_") + "_",
                       ""
                     )}
                   </td>

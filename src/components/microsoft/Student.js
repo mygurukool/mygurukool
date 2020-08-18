@@ -300,9 +300,7 @@ export default class Student extends Component {
                                       groupData={this.state.groupDetails.id}
                                       subjectName={this.state.currentView}
                                       title={exe.title}
-                                      userName={
-                                        this.state.user.name
-                                      }
+                                      user={this.state.user}
                                       // the value true is current default, shall be adopted as the logic demands
                                       // while representing archive material
                                       isActive={true}

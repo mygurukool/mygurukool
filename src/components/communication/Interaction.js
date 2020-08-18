@@ -50,8 +50,9 @@ export default class Interaction extends Component {
   render() {
     return (
       <Comments
-        userName={this.props.userName}
-        courseId={this.props.courseId}
+        // userName={this.props.userName}
+        // courseId={this.props.courseId}
+        user={this.props.user}
         subjectName={this.props.subjectName}
         resetTimeout={this.resetTimeOut}
         isActive={this.props.isActive}
@@ -76,7 +77,7 @@ export default class Interaction extends Component {
       //       >
       //         <div>
       //           <Comments
-      //             userName={this.props.userName}
+      //             userName={this.props.user.name}
       //             resetTimeout={this.resetTimeOut}
       //           />
       //         </div>
