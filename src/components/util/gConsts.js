@@ -13,6 +13,8 @@ export const GOOGLE_CLASSROOM_API = "https://classroom.googleapis.com/v1/";
 export const GOOGLE_DRIVE_API        = "https://www.googleapis.com/drive/v3/"
 export const GOOGLE_DRIVE_UPLOAD_API = "https://www.googleapis.com/upload/drive/v3/"
 
+export const GOOGLE_PEOPLE_API = "https://people.googleapis.com/v1/"
+
 //features/ functionality related constants
 export const COURSE_ACTIVE = "ACTIVE";
 export const COURSE_ARCHIVED = "ARCHIVED";
