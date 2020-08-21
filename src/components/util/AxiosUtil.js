@@ -315,6 +315,31 @@ export function googleClassroomCreateDriveFile(name, mime, driveId=""){
   )
 }
 
+// -- Google People
+export function googlePeopleGetConnections(forUser="me") {
+  return axiosGet(_gconsts.GOOGLE_PEOPLE_API + `people/${forUser}/connections?personFields=emailAddresses,metadata`)
+}
+
+export function googlePeopleCreateContact(withEmailAddress) {
+  const contact = {
+    emailAddresses: [ { value: withEmailAddress } ],
+    memberships: [ {
+      contactGroupMembership: { contactGroupResourceName: "contactGroups/myContacts" }
+    } ]
+  }
+
+  const url = _gconsts.GOOGLE_PEOPLE_API + `people:createContact`
+
+  return axios.post(url,
+    JSON.stringify(contact), { headers: {
+      Authorization: `Bearer ${sessionStorage.getItem(
+        _constants.ACCESS_TOKEN
+      )}`,
+      "Content-Type": "application/json"
+    } },
+  )
+}
+
 // -- helpers
 function axiosCall(url) {
   let api_url =
