@@ -56,7 +56,7 @@ export default class Course extends Component {
   }
 
   async componentDidMount() { 
-    let isTeacherLogin = false;
+    //let isTeacherLogin = false;
     sessionStorage.setItem(COURSE_ID, this.state.selectedCourseId);
     this.setState({isLoading: true});
 
@@ -66,24 +66,22 @@ export default class Course extends Component {
     });
 
     //loading subjects
-    _classworkUtil.loadSubjects(this.props.isActive).then((subjectRes) => {
-      console.log("Course.componentDidMount.userProfile: ", subjectRes);
-      this.setState({isLoading: false, coursesCompleteList: subjectRes, });     
-      user.group = _classworkUtil.fetchGroupList(subjectRes);
-     
-      this.fetchCoursesToDisplay(user.group[0]);
-      if (this.state.courses.length > 0 && this.state.courses[0].hasOwnProperty("teacherFolder")) 
-        _classworkUtil.isTeacher(user.id, this.state.courses[0].id).then((resTeacher) =>{
-            if(resTeacher && this.props.isActive)
-              isTeacherLogin = true;
-
-            //now set the user data to callback object(userData)
-            user.isTeacherLogin= isTeacherLogin;
-            user.selectedCourseId = "null";
-            this.props.userData(user);
-            this.setState({selectedCourseId: "null", isTeacherLogin: isTeacherLogin});
-          });
-    });
+    let subjectRes = await _classworkUtil.loadSubjects(this.props.isActive).then(subjectRes  => subjectRes);
+    console.log("Course.componentDidMount.userProfile: ", subjectRes);
+    this.setState({isLoading: false, coursesCompleteList: subjectRes, });     
+    user.group = _classworkUtil.fetchGroupList(subjectRes);
+    
+    this.fetchCoursesToDisplay(user.group[0]);
+    if (this.state.courses.length > 0 && this.state.courses[0].hasOwnProperty("teacherFolder")) {
+      let resTeacher = await _classworkUtil.isTeacher(user.id, this.state.courses[0].id).then(resTeacher => resTeacher);
+      if(resTeacher && this.props.isActive){
+        user.isTeacherLogin= true;
+      }
+    }
+    //now set the user data to callback object(userData)
+    user.selectedCourseId = "null";
+    this.props.userData(user);
+    this.setState({selectedCourseId: user.selectedCourseId, isTeacherLogin: user.isTeacherLogin});
 
     let invites = await _classworkUtil.getInvitations().then((response) => response);
     //alert("invites: " + JSON.stringify(invites))
