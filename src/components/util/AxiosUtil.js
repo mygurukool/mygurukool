@@ -340,6 +340,36 @@ export function googlePeopleCreateContact(withEmailAddress) {
   )
 }
 
+// -- Google People - get a gmail account userId.
+// -- NOTE: API call/definition to remain as defined
+// -- while implementation may vary/improve over time.
+export async function googlePeopleGetUserID(forEmail) {
+  const contact = { emailAddresses: [ { value: forEmail } ] }
+
+  const url = _gconsts.GOOGLE_PEOPLE_API + `people:createContact`
+
+  const response = await axios.post(url,
+    JSON.stringify(contact), { headers: {
+      Authorization: `Bearer ${sessionStorage.getItem(
+        _constants.ACCESS_TOKEN
+      )}`,
+      "Content-Type": "application/json"
+    } },
+  )
+
+  const data = await response.data
+
+  let user   = { email: forEmail }
+
+  for (const source of data.metadata.sources) {
+    if (source.type === "PROFILE") {
+      user.id = source.id
+    }
+  }
+
+  return user
+}
+
 // -- helpers
 function axiosCall(url) {
   let api_url =
