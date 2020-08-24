@@ -1,6 +1,6 @@
 /*global gapi*/
 import * as _apiUtils from "../util/AxiosUtil";
-import * as _gconsts from "../util/gConsts";
+import {driveFileTypes, addFileTypes} from "../util/gConsts";
 import {DEFAULT_GROUP_NAME} from "../util/constants";
 
 export let user = {
@@ -292,23 +292,23 @@ export function coursesByGroupName(courses, groupName){
 }
 
 export function getDriveFileLink(name, contentType, driveId=""){
-  let formUrl;
+  let driveFile;
   let mime;
   let fileType
   switch (contentType) {
-    case _gconsts.driveFileTypes.DRIVE_FORMS: mime = 'application/vnd.google-apps.form'; fileType = 'forms'; break;
-    case _gconsts.driveFileTypes.DRIVE_DOCS: mime = 'application/vnd.google-apps.document'; fileType = 'document'; break;
-    case _gconsts.driveFileTypes.DRIVE_SLIDES: mime = 'application/vnd.google-apps.presentation'; fileType = 'presentation'; break;
-    case _gconsts.driveFileTypes.DRIVE_SHEETS: mime = 'application/vnd.google-apps.spreadsheet'; fileType = 'spreadsheets'; break;
-    case _gconsts.driveFileTypes.DRIVE_DRAWINGS: mime = 'application/vnd.google-apps.drawing'; fileType = 'drawings'; break;
+    case driveFileTypes.DRIVE_FORMS: mime = 'application/vnd.google-apps.form'; fileType = 'forms'; break;
+    case driveFileTypes.DRIVE_DOCS: mime = 'application/vnd.google-apps.document'; fileType = 'document'; break;
+    case driveFileTypes.DRIVE_SLIDES: mime = 'application/vnd.google-apps.presentation'; fileType = 'presentation'; break;
+    case driveFileTypes.DRIVE_SHEETS: mime = 'application/vnd.google-apps.spreadsheet'; fileType = 'spreadsheets'; break;
+    case driveFileTypes.DRIVE_DRAWINGS: mime = 'application/vnd.google-apps.drawing'; fileType = 'drawings'; break;
   }
   return new Promise((resolve, reject) => {
     _apiUtils
     .googleClassroomCreateDriveFile(name, mime, driveId)
     .then((response) => {
       console.log(response)
-      formUrl= `https://docs.google.com/${fileType}/d/${response.data.id}/edit`
-      resolve(formUrl)
+      driveFile = {id: response.data.id, url: `https://docs.google.com/${fileType}/d/${response.data.id}/edit`};
+      resolve(driveFile)
     })
     .catch((error) => {reject(error); console.error("Error during getFormLink:", error);
     });
@@ -326,35 +326,85 @@ export function autoAcceptCourseInvitation(){
 
 export function createCourseWork(coursework){
   let courseId = coursework.courseId;
-  let courseWork = {title: coursework.title, description: coursework.description, workType:coursework.workType,
-                    associatedWithDeveloper: true, state:'PUBLISHED', //maxPoints: 1
-                    materials: [],   
-                  };
 
-  let materials= []
-  coursework.driveFiles.map((file) => { 
-    if(file.type === _gconsts.driveFileTypes.DRIVE_FORMS){
-      materials=
-      {
-        "link": {
-          "url": file.url,
-        }
+  //creating coursework
+  return new Promise((resolve, reject) => {
+    _apiUtils
+        .googleClassroomCreateCourseWork(courseId, buildCoursework(coursework))
+        .then((response) => {
+            console.log("googleClassroomCreateCourseWork: "+ JSON.stringify(response));
+            resolve(response);
+        }).catch((error) => {reject(error); console.error("Error during google CreateCourseWork:", error)});
+      })
+
+      //upload comments transcript file
+
+      //Assign student to course
+  }
+export function patchCourseWork(coursework){
+  let courseId = coursework.courseId;
+
+  //creating coursework
+  return new Promise((resolve, reject) => {
+    _apiUtils
+        .googleClassroomPatchCourseWork(courseId, buildCoursework(coursework),coursework.updateMask.toString())
+        .then((response) => {
+            console.log("googleClassroomPatchCourseWork: "+ JSON.stringify(response));
+            resolve(response);
+        }).catch((error) => {reject(error); console.error("Error during google PatchCourseWork:", error)});
+      })
+  }
+
+  function buildCoursework(coursework){
+    let courseWork = {id: coursework.id, title: coursework.title, description: coursework.description, workType:coursework.workType,
+                      associatedWithDeveloper: true, state:'PUBLISHED', //maxPoints: 1
+                      materials: [],
+                    };
+    let materials=[];
+    let link, youTube, driveFile, responseUrl, thumbnailUrl, alternateLink;
+    coursework.driveFiles.map((file) => { 
+      responseUrl = file.hasOwnProperty('responseUrl') ? file.responseUrl : '';
+      thumbnailUrl = file.hasOwnProperty('thumbnailUrl') ? file.thumbnailUrl : '';
+      alternateLink = file.hasOwnProperty('alternateLink') ? file.alternateLink : '';
+  
+      switch (file.type) {
+        case driveFileTypes.DRIVE_DOCS: 
+        case driveFileTypes.DRIVE_SLIDES:
+        case driveFileTypes.DRIVE_SHEETS:
+        case driveFileTypes.DRIVE_DRAWINGS: 
+              driveFile= {
+                "id": file.id,
+                "alternateLink": alternateLink,
+                "title": file.title,
+                "thumbnailUrl": thumbnailUrl,
+              }
+              materials.push({driveFile: {driveFile:driveFile}});
+              break;
+        case addFileTypes.LINK:
+        case driveFileTypes.DRIVE_FORMS:
+            link={
+            "url": file.url,
+            "title": file.title,
+            "thumbnailUrl": thumbnailUrl,
+          }
+          materials.push({link: link});
+          break;
+        case addFileTypes.YOU_TUBE: 
+            youTube={
+            "id": file.id,
+            "url": file.url,
+            "title": file.title,
+            "thumbnailUrl": thumbnailUrl,
+          }
+          materials.push({youtubeVideo: youTube});
+          break;
       }
-    } 
-    // else if(file.type === _gconsts.driveFileTypes.DRIVE_DOCS){
-    //   materials=
-    //   {
-    //     "form": {
-    //       "formUrl": file.url,
-    //       "title": file.name,
-    //     }
-    //   }
-    // } 
-  })
-  courseWork.materials.push(materials);
-  console.log("createCourseWork: " + JSON.stringify(courseWork));
+    })
+    courseWork.materials = materials;
+    console.log("buildCoursework: " + JSON.stringify(courseWork));
+    return courseWork;
 
-  // let materials:[
+     // let materials:[
   //     {driveFile:
   //       {"driveFile":
   //         {"id":"1TBdLNWckTjsW-Izh0EzThq36qeceS47f",
@@ -382,22 +432,54 @@ export function createCourseWork(coursework){
     //     },
     //     "assigneeMode":"ALL_STUDENTS",
 
-
-  //creating coursework
-  return new Promise((resolve, reject) => {
-    _apiUtils
-        .googleClassroomCreateCourseWork(courseId, courseWork)
-        .then((response) => {
-            console.log("googleClassroomCreateCourseWork: "+ JSON.stringify(response));
-            resolve(response);
-        }).catch((error) => {reject(error); console.error("Error during google CreateCourseWork:", error)});
-      })
-
-      //upload comments transcript file
-
-      //Assign student to course
   }
+  // function buildMaterialObjectFormat(file, contentType, fileType){
+  //   url= `https://docs.google.com/${fileType}/d/${response.data.id}/edit`
 
+  //   let materials;
+  //   let form, link, youTube, driveFile, responseUrl, thumbnailUrl, alternateLink, url;
+  //   coursework.driveFiles.map((file) => { 
+  //     responseUrl = file.hasOwnProperty('responseUrl') ? file.responseUrl : '';
+  //     thumbnailUrl = file.hasOwnProperty('thumbnailUrl') ? file.thumbnailUrl : '';
+  //     alternateLink = file.hasOwnProperty('alternateLink') ? file.alternateLink : '';
+  //     url = `https://docs.google.com/${fileType}/d/${file.id}/edit`
+  
+  //     switch (fileType) {
+  //       case driveFileTypes.DRIVE_DOCS: 
+  //       case driveFileTypes.DRIVE_SLIDES:
+  //       case driveFileTypes.DRIVE_SHEETS:
+  //       case driveFileTypes.DRIVE_DRAWINGS: 
+  //             driveFile= {
+  //               "id": file.id,
+  //               "alternateLink": alternateLink,
+  //               "title": file.name,
+  //               "thumbnailUrl": thumbnailUrl,
+  //             }
+  //             materials = {driveFile: {driveFile:driveFile}};
+  //             break;
+  //       case addFileTypes.LINK:
+  //       case driveFileTypes.DRIVE_FORMS:
+  //           link={
+  //           "url": file.url,
+  //           "title": file.name,
+  //           "thumbnailUrl": thumbnailUrl,
+  //         }
+  //         materials = {link: link};
+  //         break;
+  //       case addFileTypes.YOU_TUBE: 
+  //           youTube={
+  //           "id": file.id,
+  //           "url": file.url,
+  //           "title": file.name,
+  //           "thumbnailUrl": thumbnailUrl,
+  //         }
+  //         materials= {youtubeVideo: youTube};
+  //         break;
+  //     }
+  //   })
+  //   console.log("createCourseWork: " + JSON.stringify(materials));    
+  //   return materials;
+  // }
 
   // invite 142097205021
   export function invitePeople(courseId, emailIds, roleType){

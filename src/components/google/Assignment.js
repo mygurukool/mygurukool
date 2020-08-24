@@ -101,6 +101,14 @@ export default class Assignment extends Component {
           let formUrl = material.form.formUrl;
           materialObj.formUrls[i] = formUrl;
         }
+        //LINK
+        if (material && material.link) {
+          let link={};
+          link.filelink = material.link.url;
+          link.filename= material.link.title;
+          link.thumbnailUrl= material.link.thumbnailUrl;
+          materialObj.exerciseDetails[i] = link;
+        }
 
         //VIDEO
         if (material && material.youtubeVideo) {
@@ -221,7 +229,9 @@ export default class Assignment extends Component {
                             <div className="col-12">
                               <b>Exercise Instructions</b>
                               {assignment.description ? (
-                                <ul>{assignment.description}</ul>
+                                <ul dangerouslySetInnerHTML=
+                                  {{__html: assignment.description,}}>
+                                </ul>
                               ) : (
                                 ""
                               )}

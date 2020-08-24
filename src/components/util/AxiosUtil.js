@@ -207,6 +207,19 @@ export function googleClassroomCreateCourseWork(courseId, coursework) {
   )
 }
 
+export function googleClassroomPatchCourseWork(courseId, coursework, updateMask) {
+  const url = _gconsts.GOOGLE_CLASSROOM_API + `courses/${courseId}/courseWork/${coursework.id}?updateMask=${updateMask}`
+  
+  return axios.patch(url,
+    JSON.stringify(coursework), { headers: {
+      Authorization: `Bearer ${sessionStorage.getItem(
+        _constants.ACCESS_TOKEN
+      )}`,
+      "Content-Type": "application/json"
+    } },
+  )
+}
+
 export function googleClassroomGetInvitations(userId ="me") {
   return axiosGet(_gconsts.GOOGLE_CLASSROOM_API + `invitations?userId=${userId}`)
 }

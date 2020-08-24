@@ -21,7 +21,7 @@ export default class FileUpload extends Component {
       showFlash: false,
       courseId: props.user.selectedCourseId,
       assignmentId: props.assignmentId,
-      exerciseButtonText: this.props.user.isTeacherLogin? 'Upload Exercise Material' : 'Upload Exercise',
+      exerciseButtonText: 'Upload Exercise', //this.props.user.isTeacherLogin? 'Upload Exercise Material' : 'Upload Exercise',
     };
     this.handleFileChange = this.handleFileChange.bind(this);
     this.cancelClick = this.cancelClick.bind(this);
@@ -87,13 +87,16 @@ export default class FileUpload extends Component {
             </td>
           </Fragment>
         )}
-        <button
-          className="btn btn-primary float-right"
-          onClick={this.handleUploadClick}
-          disabled={!this.props.isActive}
-        >
-          <i className="fas fa-upload"></i> {this.state.exerciseButtonText}
-        </button>
+        {!this.props.user.isTeacherLogin?
+          <button
+            className="btn btn-primary float-right"
+            onClick={this.handleUploadClick}
+            disabled={!this.props.isActive}
+          >
+            <i className="fas fa-upload"></i> {this.state.exerciseButtonText}
+          </button>
+          :""
+        }
       </tr>
     );
   }
