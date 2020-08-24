@@ -13,7 +13,7 @@ export default class Header extends Component {
       <Fragment>
         <header className="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
           <div className="container">
-            <a className="navbar-brand mr-0 mr-md-2 logo">My Gurukool</a>
+            <a className="navbar-brand mr-0 mr-md-2 logo">My Gurukool (BETA)</a>
             <ul className="navbar-nav ml-md-auto">
               <li className="nav-item">
                 <i className="far fa-user">
