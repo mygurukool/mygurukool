@@ -315,12 +315,18 @@ export function getDriveFileLink(name, contentType, driveId=""){
   })
 }
 
-export function autoAcceptCourseInvitation(){
+export function autoAcceptCourseInvitations() {
   _apiUtils.googleClassroomGetInvitations().then((response) => {
-    console.log("googleClassroomGetInvitations " + JSON.stringify(response))
-    _apiUtils.googleClassroomAcceptInvitation(response.data.nextPageToken).then((response) => {
-      console.log("googleClassroomAcceptInvitation: " + response)
-    })
+    console.log("automatically accept invitations")
+    console.log(response)
+
+    let invitations = response.data.invitations
+
+    for (const invitation of invitations) {
+      _apiUtils.googleClassroomAcceptInvitation(invitation.id).then((response) => {
+        console.log(response)
+      })
+    }
   })
 }
 

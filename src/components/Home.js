@@ -15,6 +15,8 @@ import CreateCourse from "./CreateCourse";
 import Welcome from "./Welcome";
 import {DEFAULT_GROUP_NAME} from "./util/constants";
 
+import * as _googleClassworkUtil from "./google//ClassworkUtil"
+
 class Home extends Component {
   constructor() {
     super();
@@ -28,6 +30,13 @@ class Home extends Component {
     this.handleConferencePanelSize = this.handleConferencePanelSize.bind(this);
     this.floatingButtonAction = this.floatingButtonAction.bind(this);
     this.child = React.createRef();
+  }
+  componentWillMount() {
+    let provider = sessionStorage.getItem(_constants.LOGIN_PROVIDER)
+
+    if (provider === _constants.GOOGLE) {
+      _googleClassworkUtil.autoAcceptCourseInvitations()
+    }
   }
   componentDidMount() {
     this.setState({
