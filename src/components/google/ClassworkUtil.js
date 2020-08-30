@@ -398,20 +398,23 @@ export function createCourseWork(coursework){
       //Assign student to course
   }
 
+  export async function invitePeople(courseId, emailAddress, roleType) {
+    // -- NOTE: for now, let's do this one by one
+    // --       ie. only one invitation sent at a time.
+    // --
+    // -- we retrive the user ID first because we want the invitation
+    // -- to be received "in app" (instead of only via email when
+    // -- using an email address itself.)
 
-  // invite 142097205021
-  export function invitePeople(courseId, emailIds, roleType){
-    //alert(roleType)
-    let emailIdArray = emailIds.split(',');
-    emailIdArray.map((email) => {
-        //creating coursework
-      return new Promise((resolve, reject) => {
-        _apiUtils.googleClassroomCreateInvitation(courseId, email.trim(), roleType.toString()).then((response) => {
-          console.log("googleClassroomCreateInvitation: "+ JSON.stringify(response));
-          resolve(response);
-          }).catch((error) => {reject(error); console.error("Error during google invitePeople: ", error)})
-      })
-    })
+    let user   = await _apiUtils.googlePeopleGetUserID(emailAddress)
+    let invite = await _apiUtils.googleClassroomCreateInvitation(courseId, user.id, roleType.toString())
+
+    console.log("invitation sent")
+
+    console.log(invite)
+    console.log(user)
+
+    return invite
   }
 
   export async function getInvitations(){
