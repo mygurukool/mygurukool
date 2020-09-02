@@ -315,12 +315,18 @@ export function getDriveFileLink(name, contentType, driveId=""){
   })
 }
 
-export function autoAcceptCourseInvitation(){
+export function autoAcceptCourseInvitations() {
   _apiUtils.googleClassroomGetInvitations().then((response) => {
-    console.log("googleClassroomGetInvitations " + JSON.stringify(response))
-    _apiUtils.googleClassroomAcceptInvitation(response.data.nextPageToken).then((response) => {
-      console.log("googleClassroomAcceptInvitation: " + response)
-    })
+    console.log("automatically accept invitations")
+    console.log(response)
+
+    let invitations = response.data.invitations
+
+    for (const invitation of invitations) {
+      _apiUtils.googleClassroomAcceptInvitation(invitation.id).then((response) => {
+        console.log(response)
+      })
+    }
   })
 }
 
@@ -433,6 +439,7 @@ export function patchCourseWork(coursework){
     //     "assigneeMode":"ALL_STUDENTS",
 
   }
+
   // function buildMaterialObjectFormat(file, contentType, fileType){
   //   url= `https://docs.google.com/${fileType}/d/${response.data.id}/edit`
 
@@ -481,19 +488,23 @@ export function patchCourseWork(coursework){
   //   return materials;
   // }
 
-  // invite 142097205021
-  export function invitePeople(courseId, emailIds, roleType){
-    //alert(roleType)
-    let emailIdArray = emailIds.split(',');
-    emailIdArray.map((email) => {
-        //creating coursework
-      return new Promise((resolve, reject) => {
-        _apiUtils.googleClassroomCreateInvitation(courseId, email.trim(), roleType.toString()).then((response) => {
-          console.log("googleClassroomCreateInvitation: "+ JSON.stringify(response));
-          resolve(response);
-          }).catch((error) => {reject(error); console.error("Error during google invitePeople: ", error)})
-      })
-    })
+  export async function invitePeople(courseId, emailAddress, roleType) {
+    // -- NOTE: for now, let's do this one by one
+    // --       ie. only one invitation sent at a time.
+    // --
+    // -- we retrive the user ID first because we want the invitation
+    // -- to be received "in app" (instead of only via email when
+    // -- using an email address itself.)
+
+    let user   = await _apiUtils.googlePeopleGetUserID(emailAddress)
+    let invite = await _apiUtils.googleClassroomCreateInvitation(courseId, user.id, roleType.toString())
+
+    console.log("invitation sent")
+
+    console.log(invite)
+    console.log(user)
+
+    return invite
   }
 
   export async function getInvitations(){
