@@ -322,10 +322,12 @@ export function autoAcceptCourseInvitations() {
 
     let invitations = response.data.invitations
 
-    for (const invitation of invitations) {
-      _apiUtils.googleClassroomAcceptInvitation(invitation.id).then((response) => {
-        console.log(response)
-      })
+    if (invitations){
+      for (const invitation of invitations) {
+        _apiUtils.googleClassroomAcceptInvitation(invitation.id).then((response) => {
+          console.log(response)
+        })
+      }
     }
   })
 }
