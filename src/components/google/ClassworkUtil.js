@@ -322,10 +322,12 @@ export function autoAcceptCourseInvitations() {
 
     let invitations = response.data.invitations
 
-    for (const invitation of invitations) {
-      _apiUtils.googleClassroomAcceptInvitation(invitation.id).then((response) => {
-        console.log(response)
-      })
+    if (invitations !== undefined) {
+      for (const invitation of invitations) {
+        _apiUtils.googleClassroomAcceptInvitation(invitation.id).then((response) => {
+          console.log(response)
+        })
+      }
     }
   })
 }
@@ -404,23 +406,24 @@ export function createCourseWork(coursework){
       //Assign student to course
   }
 
-  export async function invitePeople(courseId, emailAddress, roleType) {
-    // -- NOTE: for now, let's do this one by one
-    // --       ie. only one invitation sent at a time.
-    // --
+  export async function invitePeople(courseId, emailAddresses, roleType) {
     // -- we retrive the user ID first because we want the invitation
     // -- to be received "in app" (instead of only via email when
     // -- using an email address itself.)
 
-    let user   = await _apiUtils.googlePeopleGetUserID(emailAddress)
-    let invite = await _apiUtils.googleClassroomCreateInvitation(courseId, user.id, roleType.toString())
+    let emails = emailAddresses.split(',')
+
+    let users   = await Promise.all(emails.map(_apiUtils.googlePeopleGetUserID))
+    let invites = await Promise.all(users.map(async user => { _apiUtils.googleClassroomCreateInvitation(
+      courseId, user.id, roleType.toString()
+    ) }))
 
     console.log("invitation sent")
 
-    console.log(invite)
-    console.log(user)
+    console.log(invites)
+    console.log(users)
 
-    return invite
+    return invites
   }
 
   export async function getInvitations(){
