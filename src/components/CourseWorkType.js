@@ -135,29 +135,29 @@ export default class CourseWorkType extends React.Component {
   };
 
   prepareCoursework = (courseworkId = "") => {
-    alert(sessionStorage.getItem(COURSE_ID))
-      let courseWork = {id: courseworkId, title: this.state.titleField.trim(), 
-                        description: this.state.instructionsField, 
-                        workType: this.props.workTypeData.type,
-                        courseId: sessionStorage.getItem(COURSE_ID),
-                        driveFiles: [
-                         // {"formUrl":"https://docs.google.com/forms/d/1kjabzYpC6rf74RF_FZPV544FUzVipYZOffoEoMygTnw/edit","title":"ffff","type":"Forms"},
-                          {"url":"https://google.com","title":"https://google.com/","thumbnailUrl":"https://classroom.google.com/webthumbnail?url=https://google.com", "type":"Link"},
-                          {"id":"1HiLP8ZtrnYEq9XgeeFj1VKpIpbpr8vr1","title":"commentTranscript1.json","alternateLink":"https://drive.google.com/open?id=1HiLP8ZtrnYEq9XgeeFj1VKpIpbpr8vr1",
-                            "thumbnailUrl":"https://drive.google.com/thumbnail?id=1HiLP8ZtrnYEq9XgeeFj1VKpIpbpr8vr1&sz=s200",
-                            "type":"Docs"},
-                            {"id":"5aPahOD4ssk","title":"Learning Addition For Kids","alternateLink":"https://www.youtube.com/watch?v=5aPahOD4ssk",
-                            "thumbnailUrl":"https://i.ytimg.com/vi/5aPahOD4ssk/default.jpg", 'type': 'YouTube',
-                            },
-                        ],
-                        updateMask: updateMask,
-                      };
-    // let courseWork = {title: this.state.titleField.trim(), 
-    //                   description: this.state.instructionsField, 
-    //                   workType: this.props.workTypeData.type,
-    //                   courseId: sessionStorage.getItem(COURSE_ID),
-    //                   driveFiles: this.state.driveFiles,
-    //                 };
+    // alert(sessionStorage.getItem(COURSE_ID))
+    //   let courseWork = {id: courseworkId, title: this.state.titleField.trim(), 
+    //                     description: this.state.instructionsField, 
+    //                     workType: this.props.workTypeData.type,
+    //                     courseId: sessionStorage.getItem(COURSE_ID),
+    //                     driveFiles: [
+    //                      // {"formUrl":"https://docs.google.com/forms/d/1kjabzYpC6rf74RF_FZPV544FUzVipYZOffoEoMygTnw/edit","title":"ffff","type":"Forms"},
+    //                       {"url":"https://google.com","title":"https://google.com/","thumbnailUrl":"https://classroom.google.com/webthumbnail?url=https://google.com", "type":"Link"},
+    //                       {"id":"1HiLP8ZtrnYEq9XgeeFj1VKpIpbpr8vr1","title":"commentTranscript1.json","alternateLink":"https://drive.google.com/open?id=1HiLP8ZtrnYEq9XgeeFj1VKpIpbpr8vr1",
+    //                         "thumbnailUrl":"https://drive.google.com/thumbnail?id=1HiLP8ZtrnYEq9XgeeFj1VKpIpbpr8vr1&sz=s200",
+    //                         "type":"Docs"},
+    //                         {"id":"5aPahOD4ssk","title":"Learning Addition For Kids","alternateLink":"https://www.youtube.com/watch?v=5aPahOD4ssk",
+    //                         "thumbnailUrl":"https://i.ytimg.com/vi/5aPahOD4ssk/default.jpg", 'type': 'YouTube',
+    //                         },
+    //                     ],
+    //                     updateMask: updateMask,
+    //                   };
+    let courseWork = {id: courseworkId, title: this.state.titleField.trim(), 
+                      description: this.state.instructionsField, 
+                      workType: this.props.workTypeData.type,
+                      courseId: sessionStorage.getItem(COURSE_ID),
+                      driveFiles: this.state.driveFiles,
+                    };
     return courseWork;
   }
 
@@ -314,13 +314,15 @@ export default class CourseWorkType extends React.Component {
               </Form.Group>
             </Form>
           </Modal.Body>
-          <div className="col-6">
-            <div className="float-left">
+          <div className="row-12">
+          <div className="col-2"></div>
+            <div className="col-3">
               <Button variant="secondary" onClick={() => this.setState({showDriveFileModal: false})}>Cancel</Button>
             </div>
-            <div className="float-right">
+            <div className="col-3 float-right">
             <Button variant="primary" onClick={this.createDriveFiles}>Go!</Button>
           </div>
+          <div className="col-2"></div>
           </div>
         </Modal>
         <table className="col-12 table table-stripped">
