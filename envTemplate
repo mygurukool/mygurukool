@@ -1,0 +1,2 @@
+DATABASE=mongodb://<path>/<dbname>
+PORT = <api_app_port eg:8000>
