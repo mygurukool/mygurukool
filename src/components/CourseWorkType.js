@@ -314,20 +314,15 @@ export default class CourseWorkType extends React.Component {
               </Form.Group>
             </Form>
           </Modal.Body>
-          <div className="row-12">
-          <div className="col-2"></div>
-            <div className="col-3">
-              <Button variant="secondary" onClick={() => this.setState({showDriveFileModal: false})}>Cancel</Button>
+          <div className="modal" ></div>
+            <div className="modal-footer">
+              <Button variant="secondary" onClick={() => this.setState({ showDriveFileModal: false })} >Cancel</Button>
+              <Button variant="primary" onClick={this.createDriveFiles} >Go!</Button>
             </div>
-            <div className="col-3 float-right">
-            <Button variant="primary" onClick={this.createDriveFiles}>Go!</Button>
-          </div>
-          <div className="col-2"></div>
-          </div>
         </Modal>
         <table className="col-12 table table-stripped">
           {this.renderStrippedTable(this.state.driveFiles)}
-        </table>
+          </table>
       </div>
     );
   }
