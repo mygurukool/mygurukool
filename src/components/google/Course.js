@@ -7,6 +7,7 @@ import * as _classworkUtil from "./ClassworkUtil";
 import Assignment from "./Assignment"
 import FloatingButton from "../util/FloatingButton";
 import CreateCourseWork from "../CreateCourseWork";
+import CreateCourse from "../CreateCourse";
 import TeacherAuthorization from "./TeacherAuthorization";
 import {HAS_TEACHER_ACCEPTED} from "../util/constants";
 import {COURSE_ID} from "../util/constants"
@@ -35,6 +36,7 @@ export default class Course extends Component {
       selectedCourseId:"null",
       //showAssignments: false,
       showCreateCourseWork: false,
+      showCreateCourse: false,
     };
      this.child = React.createRef();
   }
@@ -45,6 +47,10 @@ export default class Course extends Component {
       //showAssignments: !this.state.showAssignments,
       isAssignmentsViewStale: !this.state.isAssignmentsViewStale,
     });
+  }
+
+  createCourseClick = async (showCreateCourse) => {
+    this.setState({showCreateCourse: showCreateCourse, });
   }
 
   showInvitePeople = (showInvitePeople) => {
@@ -120,6 +126,7 @@ export default class Course extends Component {
     return (
       <Fragment>
          {<FloatingButton         
+         showCreateCourse={this.createCourseClick}
          showCreateCourseWork={this.createCourseWorkClick} 
          showInvitePeople={this.showInvitePeople}
          isTeacherLogin={this.state.isTeacherLogin}
@@ -178,6 +185,10 @@ export default class Course extends Component {
               ""
             )}
             
+            {this.state.showCreateCourse ?
+            <CreateCourse showCreateCourse={this.createCourseClick}/>
+            : ""
+            }
             {this.state.showCreateCourseWork ?
             <CreateCourseWork showCreateCourseWork={this.createCourseWorkClick}/>
             : ""
