@@ -1,16 +1,26 @@
 import React from "react";
-import { Form, Button, Modal } from "react-bootstrap";
+import { Form, Button, Modal, Row } from "react-bootstrap";
 import * as _classworkUtil from "./google/ClassworkUtil";
 import {driveFileTypes, courseWorkAction, addFileTypes, actionButtonText} from "./util/gConsts"
 import {COURSE_ID} from "./util/constants"
 import DriveFileTypeDropdown from "./util/DropdownUtil";
 import {loaderRandomGifs} from "./util/utils";
+import DateTimePicker from "./util/DateTimePicker";
+import Select from 'react-select'
 
 const driveFileTypeList = Object.keys(driveFileTypes).map(key => driveFileTypes[key]);
 const addFileTypeList = Object.keys(addFileTypes).map(key => addFileTypes[key]);
 const TITLE_FIELD = "titleField";
 const DRIVE_FILE_NAME_FIELD = "driveFileNameField";
 const INSTRUCTIONS_FIELD= 'instructionsField';
+
+//TODO: following list is temp, as an example. Must be adopted with list of students
+const forList = [
+  { value: 'chocolate', label: 'All Students' },
+  { value: 'strawberry', label: 'Student 1' },
+  { value: 'vanilla', label: 'Student 2' },
+  { value: 'vanilla1', label: 'Student 3' }
+]
 
 let updateMask=[];
 export default class CourseWorkType extends React.Component {
@@ -229,12 +239,18 @@ export default class CourseWorkType extends React.Component {
       <div className="container">
         <div className="row">
           <div className="col-11">
-            <a href="#" target="" variant="secondary" onClick={(e) => this.handleClick('cancel')}>
-            <i className="fas fa-window-close fa-2x"></i> 
+            <a
+              href="#"
+              target=""
+              variant="secondary"
+              onClick={(e) => this.handleClick("cancel")}
+            >
+              <i className="fas fa-window-close fa-2x"></i>
             </a>
           </div>
           <div className="col-1">
-            <Button id={this.state.submitButtonText} 
+            <Button
+              id={this.state.submitButtonText}
               variant="primary"
               type="submit"
               disabled={this.state.isSubmitDisabled}
@@ -246,52 +262,103 @@ export default class CourseWorkType extends React.Component {
         </div>
         <div>
           {this.state.isLoading ? (
-              <img src={loaderRandomGifs()} className="loaderIcon" />
-            ) : (
-              ""
-            )}
+            <img src={loaderRandomGifs()} className="loaderIcon" />
+          ) : (
+            ""
+          )}
         </div>
-        <Form>
-          <div className="row">
-            <Form.Label>
-              <b>{this.props.workTypeData.title}</b>
-            </Form.Label>
-          </div>
-          <Form.Group controlId="formCreateCourseWork">
-            <Form.Label>Title</Form.Label>
-            <Form.Control
-              type="input"
-              name={TITLE_FIELD}
-              defaultValue= {this.state.assignmentToEdit ? this.state.assignmentToEdit.title: ""}
-              //placeholder="eg: English, French"
-              onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
-              onChange={(e) => this.handleChange(e)}
-            />
-            {/* <Form.Text className="text-muted">
+        <div className="row">
+          <div className="col-8">
+            <Form>
+              <div className="row">
+                <Form.Label>
+                  <b>{this.props.workTypeData.title}</b>
+                </Form.Label>
+              </div>
+              <Form.Group controlId="formCreateCourseWork">
+                <Form.Label>Title</Form.Label>
+                <Form.Control
+                  type="input"
+                  name={TITLE_FIELD}
+                  defaultValue={
+                    this.state.assignmentToEdit
+                      ? this.state.assignmentToEdit.title
+                      : ""
+                  }
+                  //placeholder="eg: English, French"
+                  onKeyPress={(e) => {
+                    e.key === "Enter" && e.preventDefault();
+                  }}
+                  onChange={(e) => this.handleChange(e)}
+                />
+                {/* <Form.Text className="text-muted">
                   We'll never share your email with anyone else.
                 </Form.Text> */}
 
-            <Form.Label>Instructions</Form.Label>
-            <Form.Control
-              as="textarea"
-              name={INSTRUCTIONS_FIELD}
-              defaultValue= {this.state.assignmentToEdit ? this.state.assignmentToEdit.description: ""}
-              //placeholder="Class 3A"
-              onChange={(e) => this.handleChange(e)}
-            />
-          </Form.Group>
-          <DriveFileTypeDropdown 
-            dropdownTitleText={actionButtonText.ADD}
-            itemList={addFileTypeList}
-            itemSelection={this.addFileSelected}
-          />
-          <DriveFileTypeDropdown 
-            dropdownTitleText={actionButtonText.CREATE} 
-            itemList={driveFileTypeList}
-            itemSelection={this.driveFileSelected}
-          />
-        </Form>
+                <Form.Label>Instructions</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  name={INSTRUCTIONS_FIELD}
+                  defaultValue={
+                    this.state.assignmentToEdit
+                      ? this.state.assignmentToEdit.description
+                      : ""
+                  }
+                  //placeholder="Class 3A"
+                  onChange={(e) => this.handleChange(e)}
+                />
+              </Form.Group>
+              <DriveFileTypeDropdown
+                dropdownTitleText={actionButtonText.ADD}
+                itemList={addFileTypeList}
+                itemSelection={this.addFileSelected}
+              />
+              <DriveFileTypeDropdown
+                dropdownTitleText={actionButtonText.CREATE}
+                itemList={driveFileTypeList}
+                itemSelection={this.driveFileSelected}
+              />
+            </Form>
+          </div>
+          <div className="col-4">
+            {/* <div className="row">
+            <Form.Label>
+              <b>workTypeData.title</b>
+            </Form.Label>
+          </div> */}
 
+            <Row>
+              <Form.Label>For</Form.Label>
+            </Row>
+
+            <Row>
+              <Select
+                defaultValue={[forList[0], forList[2]]}
+                isMulti
+                name="studentsList"
+                options={forList}
+                className="basic-multi-select"
+                classNamePrefix="select"
+              />
+              {/* <DropdownButton
+                alignLeft
+                title="All Students"
+                id="dropdown-menu-align-left"
+              >
+                <Dropdown.Item eventKey="option-1">
+                  <FormCheck>Student 1</FormCheck></Dropdown.Item>
+                <Dropdown.Item eventKey="option-2">Student 2</Dropdown.Item>
+                <Dropdown.Item eventKey="option-3">Student 3</Dropdown.Item>
+                <Dropdown.Divider />
+                <Dropdown.Item eventKey="some link">some link</Dropdown.Item>
+              </DropdownButton> */}
+            </Row>
+            <Row>Due</Row>
+            <Row><DateTimePicker /></Row>
+
+            
+          </div>
+        </div>
         <Modal
           show={this.state.showDriveFileModal}
           backdrop="static"
@@ -301,28 +368,37 @@ export default class CourseWorkType extends React.Component {
           <Modal.Body>
             <Form>
               <Form.Group controlId="formDriveFile">
-              <Form.Label>{this.state.driveFileType} Title</Form.Label>
+                <Form.Label>{this.state.driveFileType} Title</Form.Label>
                 <Form.Control
                   type="input"
                   name={DRIVE_FILE_NAME_FIELD}
                   autofocus="true"
                   //placeholder="eg: English, French"
-                  onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
+                  onKeyPress={(e) => {
+                    e.key === "Enter" && e.preventDefault();
+                  }}
                   onKeyDown={(e) => this.keyDown(e)}
                   onChange={(e) => this.handleChange(e)}
                 />
               </Form.Group>
             </Form>
           </Modal.Body>
-          <div className="modal" ></div>
-            <div className="modal-footer">
-              <Button variant="secondary" onClick={() => this.setState({ showDriveFileModal: false })} >Cancel</Button>
-              <Button variant="primary" onClick={this.createDriveFiles} >Go!</Button>
-            </div>
+          <div className="modal"></div>
+          <div className="modal-footer">
+            <Button
+              variant="secondary"
+              onClick={() => this.setState({ showDriveFileModal: false })}
+            >
+              Cancel
+            </Button>
+            <Button variant="primary" onClick={this.createDriveFiles}>
+              Go!
+            </Button>
+          </div>
         </Modal>
         <table className="col-12 table table-stripped">
           {this.renderStrippedTable(this.state.driveFiles)}
-          </table>
+        </table>
       </div>
     );
   }
