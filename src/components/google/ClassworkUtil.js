@@ -1,5 +1,6 @@
 /*global gapi*/
 import * as _apiUtils from "../util/AxiosUtil";
+import * as _mkgApi from "../util/MgkAPI";
 import {driveFileTypes, addFileTypes} from "../util/gConsts";
 import {DEFAULT_GROUP_NAME} from "../util/constants";
 
@@ -159,11 +160,18 @@ function reCreateCourse(courseParam){
 }
 
 export function createCourse(courseName, className){
+  let isGoogle = false;
   const courseContent = { name : courseName, ownerId: "me", section: className};
-  _apiUtils.googleClassroomCreateCourse(courseContent).then((response) => {
+  if(isGoogle){
+    _apiUtils.googleClassroomCreateCourse(courseContent).then((response) => {
     //alert(response)
-    console.log("createCourse " + response);  
-  });
+      console.log("createCourse " + response);  
+    });
+  } else {
+    //call gurukool school api
+    _mkgApi.mgkCreateCourse(courseContent)
+  }
+  
 
   // return new Promise((resolve, reject) => {
   //   _apiUtils.googleClassroomCreateCourse(courseContent).then((response) => {
