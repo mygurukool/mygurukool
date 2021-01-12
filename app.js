@@ -1,9 +1,9 @@
 const express = require('express')
 const mongoose = require('mongoose')
 const morgan = require('morgan')
-const bodyParser = require('body-parser')
+const cors = require('cors')
 require('dotenv').config()
-//import routes
+
 const courseRoutes =require('./routes/course')
 
 //app
@@ -16,9 +16,10 @@ mongoose.connect(process.env.DATABASE, {
 }).then(() => console.log('DB Connected'))
 
 
-//middlewares
+//middleware
 app.use(morgan('dev'))
-app.use(bodyParser.json())
+app.use(express.json())
+app.use(cors())
 
 //routes middleware
 app.use('/api', courseRoutes)
