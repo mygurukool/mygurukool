@@ -4,7 +4,8 @@ const morgan = require('morgan')
 const cors = require('cors')
 require('dotenv').config()
 
-const courseRoutes =require('./routes/course')
+const coursesRoutes =require('./routes/courses')
+const assignmentsRoutes =require('./routes/assignments')
 
 //app
 const app = express()
@@ -22,7 +23,9 @@ app.use(express.json())
 app.use(cors())
 
 //routes middleware
-app.use('/api', courseRoutes)
+app.use('/api', coursesRoutes)
+app.use('/api', assignmentsRoutes)
+
 
 const port = process.env.port || 8000
 
