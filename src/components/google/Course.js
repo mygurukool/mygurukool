@@ -4,6 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import * as _util from "../util/utils";
 import "@fortawesome/fontawesome-free/css/all.css";
 import * as _classworkUtil from "./ClassworkUtil";
+import * as _mkgClassworkUtil from "../mkg/ClassworkUtil";
 import Assignment from "./Assignment"
 import FloatingButton from "../util/FloatingButton";
 import CreateCourseWork from "../CreateCourseWork";
@@ -37,6 +38,8 @@ export default class Course extends Component {
       //showAssignments: false,
       showCreateCourseWork: false,
       showCreateCourse: false,
+      refreshCourses: false,
+      source: "",
     };
      this.child = React.createRef();
   }
@@ -53,6 +56,11 @@ export default class Course extends Component {
     this.setState({showCreateCourse: showCreateCourse, });
   }
 
+  refreshCourses = async (refreshCourses) => {
+    this.setState({refreshCourses: refreshCourses, });
+    sessionStorage.setItem('refreshCourses', true)
+  }
+
   showInvitePeople = (showInvitePeople) => {
     this.setState({showInvitePeople: showInvitePeople, 
       selectedCourseId: this.state.selectedCourseId,
@@ -60,6 +68,13 @@ export default class Course extends Component {
       isAssignmentsViewStale: !this.state.isAssignmentsViewStale,
     });
   }
+
+  // componentDidUpdate(){
+  //   // alert('componentDidUpdate: refreshCourses' + sessionStorage.getItem('refreshCourses'))
+  //   if (this.state.refreshCourses){
+
+  //   }
+  // }
 
   async componentDidMount() { 
     //let isTeacherLogin = false;
@@ -72,7 +87,9 @@ export default class Course extends Component {
     });
 
     //loading subjects
-    let subjectRes = await _classworkUtil.loadSubjects(this.props.isActive).then(subjectRes  => subjectRes);
+    let subjectResGoogle = await _classworkUtil.loadSubjects(this.props.isActive).then(subjectRes => subjectRes);
+    let mkgSubjectsRes = await _mkgClassworkUtil.loadMkgSubjects().then(mkgSubjectsRes => mkgSubjectsRes);
+    let subjectRes = [...subjectResGoogle, ...mkgSubjectsRes]
     console.log("Course.componentDidMount.userProfile: ", subjectRes);
     this.setState({isLoading: false, coursesCompleteList: subjectRes, });     
     user.group = _classworkUtil.fetchGroupList(subjectRes);
@@ -107,6 +124,7 @@ export default class Course extends Component {
       //showAssignments: true, 
       showCreateCourseWork: false, selectedCourseId: this.state.courses[event.target.id].id, 
       isAssignmentsViewStale: !this.state.isAssignmentsViewStale,
+      source: this.state.courses[event.target.id].hasOwnProperty ? this.state.courses[event.target.id].source : ""
     });
     user.selectedCourseId = this.state.courses[event.target.id].id;
     this.props.userData(user);
@@ -118,7 +136,7 @@ export default class Course extends Component {
     awaitAndLoadAssignments = () => {
       const { isAssignmentsViewStale } = this.state;
       if(!isAssignmentsViewStale)
-      this.child.loadAssignment(this.state.selectedCourseId, this.state.isTeacherLogin);
+      this.child.loadAssignment(this.state.selectedCourseId, this.state.isTeacherLogin, this.state.source);
     }
 
   render() {
@@ -186,7 +204,7 @@ export default class Course extends Component {
             )}
             
             {this.state.showCreateCourse ?
-            <CreateCourse showCreateCourse={this.createCourseClick}/>
+            <CreateCourse showCreateCourse={this.createCourseClick} isCourseCreated={this.refreshCourses}/>
             : ""
             }
             {this.state.showCreateCourseWork ?

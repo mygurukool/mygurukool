@@ -1,6 +1,7 @@
 /*global gapi*/
 import * as _apiUtils from "../util/AxiosUtil";
 import * as _mkgApi from "../util/MgkAPI";
+import * as _mkgClassworkUtil from "../mkg/ClassworkUtil";
 import {driveFileTypes, addFileTypes} from "../util/gConsts";
 import {DEFAULT_GROUP_NAME} from "../util/constants";
 
@@ -199,19 +200,25 @@ export function createCourse(courseName, className){
 //             function(err) { console.error("Execute error", err); });
 // }
 
-export function loadAssignments(courseId, associatedWithDeveloperCheck){
-      return new Promise((resolve, reject) => {
-        _apiUtils.loadGoogleAssignments(courseId)
-        .then((response) => {
-            //console.log("ClassworkUtil.loadAssignment: " + JSON.stringify(response.data))
-            let assignments = response.data.courseWork;
-            if(associatedWithDeveloperCheck){
-              associatedWithDeveloperAction(course, assignments);
-            }
-            resolve(assignments)
-        })
-        .catch((error) => {reject(error); console.log("ClassworkUtil.loadAssignment: " + error)});
-      })
+export function loadAssignments(courseId, associatedWithDeveloperCheck, source){
+  if(source === 'MKG')
+    return _mkgClassworkUtil.loadMkgAssignments(courseId)
+  else return googleAssignments(courseId, associatedWithDeveloperCheck)
+}
+
+function googleAssignments(courseId, associatedWithDeveloperCheck){
+  return new Promise((resolve, reject) => {
+    _apiUtils.loadGoogleAssignments(courseId)
+    .then((response) => {
+        //console.log("ClassworkUtil.loadAssignment: " + JSON.stringify(response.data))
+        let assignments = response.data.courseWork;
+        if(associatedWithDeveloperCheck){
+          associatedWithDeveloperAction(course, assignments);
+        }
+        resolve(assignments)
+    })
+    .catch((error) => {reject(error); console.log("ClassworkUtil.loadAssignment: " + error)});
+  })
 }
 
 export function loadSubjects(subjectsStatus){

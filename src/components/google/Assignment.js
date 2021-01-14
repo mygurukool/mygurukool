@@ -140,12 +140,13 @@ export default class Assignment extends Component {
     this.state.material = materialObj;
   }
 
-  loadAssignment(courseId, isTeacherLogin) {
+  loadAssignment(courseId, isTeacherLogin, source) {
     this.setState({isLoading: true});
-      _classworkUtil.loadAssignments(courseId, isTeacherLogin).then((response) =>{
-        console.log(response)
-        this.setState({assignments: response, hasAssignments: response ? response.length : false, isLoading: false});
-      })
+    //calling google assignments
+    _classworkUtil.loadAssignments(courseId, isTeacherLogin, source).then((response) =>{
+      console.log(response)
+      this.setState({assignments: response, hasAssignments: response ? response.length : false, isLoading: false});
+    })
   };
 
   render() {
