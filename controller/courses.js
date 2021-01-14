@@ -38,7 +38,7 @@ exports.list = (req, res) => {
       .exec()
       .then((data) => {
         console.log(data);
-        res.status(200).json(data);
+        res.status(200).json({'courses': data});
       });
   } catch (error) {
     console.log(error);
