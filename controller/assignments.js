@@ -14,7 +14,7 @@ exports.create = (req, res) => {
 };
 
 exports.get = (req, res) => {
-  return res.json(req.assignment);
+  return res.json({'assignment': req.assignment});
 };
 
 exports.list = (req, res) => {
@@ -23,7 +23,21 @@ exports.list = (req, res) => {
       .exec()
       .then((data) => {
         console.log(data);
-        res.status(200).json(data);
+        res.status(200).json({'assignments': data});
+      });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ err });
+  }
+};
+
+exports.getByCourseId = (req, res) => {
+  try {
+    Assignments.find({courseId: req.params.courseId})
+      .exec()
+      .then((data) => {
+        console.log(data);
+        res.status(200).json({'assignments': data});
       });
   } catch (error) {
     console.log(error);
