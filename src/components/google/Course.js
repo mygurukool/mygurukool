@@ -118,7 +118,9 @@ export default class Course extends Component {
 
   loadAssignment = (event) => {
     sessionStorage.setItem(COURSE_ID, this.state.courses[event.target.id].id);
-    sessionStorage.setItem(DATA_SOURCE, this.state.courses[event.target.id].hasOwnProperty ? this.state.courses[event.target.id].source : "")
+    sessionStorage.setItem(DATA_SOURCE, 
+                    this.state.courses[event.target.id].hasOwnProperty(DATA_SOURCE) 
+                    ? this.state.courses[event.target.id].DATA_SOURCE : "")
     this.setState({
       currentView: this.state.courses[event.target.id].name, 
       //showAssignments: true, 
@@ -135,7 +137,7 @@ export default class Course extends Component {
     awaitAndLoadAssignments = () => {
       const { isAssignmentsViewStale } = this.state;
       if(!isAssignmentsViewStale)
-      this.child.loadAssignment(this.state.selectedCourseId, this.state.isTeacherLogin, sessionStorage.getItem(DATA_SOURCE));
+      this.child.loadAssignment(this.state.selectedCourseId, this.state.isTeacherLogin);
     }
 
   render() {

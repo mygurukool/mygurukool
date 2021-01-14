@@ -141,10 +141,10 @@ export default class Assignment extends Component {
     this.state.material = materialObj;
   }
 
-  loadAssignment(courseId, isTeacherLogin, source) {
+  loadAssignment(courseId, isTeacherLogin) {
     this.setState({isLoading: true});
     //calling google assignments
-    _mkgClassworkUtil.loadAssignments(courseId, isTeacherLogin, source).then((response) =>{
+    _mkgClassworkUtil.loadAssignments(courseId, isTeacherLogin).then((response) =>{
       console.log(response)
       this.setState({assignments: response, hasAssignments: response ? response.length : false, isLoading: false});
     })
