@@ -18,7 +18,7 @@ import InvitePeople from "./InvitePeople";
  * user: {id, name, group, selectedCourseId, isTeacherLogin}
  */
 let user;
- 
+
 export default class Course extends Component {
   constructor(props) {
     super(props);
@@ -32,7 +32,7 @@ export default class Course extends Component {
       submissionId: "",
       isTeacherLogin: false,
       isLoading: false,
-      isAssignmentsViewStale: true,  //TODO: used along with *refs* 
+      isAssignmentsViewStale: true,  //TODO: used along with *refs*
       selectedCourseId:"null",
       //showAssignments: false,
       showCreateCourseWork: false,
@@ -44,7 +44,7 @@ export default class Course extends Component {
   }
 
   createCourseWorkClick = async (showCreateCourseWork) => {
-    this.setState({showCreateCourseWork: showCreateCourseWork, 
+    this.setState({showCreateCourseWork: showCreateCourseWork,
       selectedCourseId: this.state.selectedCourseId,
       //showAssignments: !this.state.showAssignments,
       isAssignmentsViewStale: !this.state.isAssignmentsViewStale,
@@ -61,7 +61,7 @@ export default class Course extends Component {
   }
 
   showInvitePeople = (showInvitePeople) => {
-    this.setState({showInvitePeople: showInvitePeople, 
+    this.setState({showInvitePeople: showInvitePeople,
       selectedCourseId: this.state.selectedCourseId,
       //showAssignments: !this.state.showAssignments,
       isAssignmentsViewStale: !this.state.isAssignmentsViewStale,
@@ -75,7 +75,7 @@ export default class Course extends Component {
   //   }
   // }
 
-  async componentDidMount() { 
+  async componentDidMount() {
     //let isTeacherLogin = false;
     sessionStorage.setItem(COURSE_ID, this.state.selectedCourseId);
     this.setState({isLoading: true});
@@ -86,13 +86,11 @@ export default class Course extends Component {
     });
 
     //loading subjects
-    let subjectResGoogle = await _classworkUtil.loadSubjects(this.props.isActive).then(subjectRes => subjectRes);
-    let mkgSubjectsRes = await _mkgClassworkUtil.loadMkgSubjects().then(mkgSubjectsRes => mkgSubjectsRes);
-    let subjectRes = [...subjectResGoogle, ...mkgSubjectsRes]
+    let subjectRes = await _mkgClassworkUtil.loadSubjects(this.props.isActive).then(subjectRes => subjectRes);
     console.log("Course.componentDidMount.userProfile: ", subjectRes);
-    this.setState({isLoading: false, coursesCompleteList: subjectRes, });     
+    this.setState({isLoading: false, coursesCompleteList: subjectRes, });
     user.group = _classworkUtil.fetchGroupList(subjectRes);
-    
+
     this.fetchCoursesToDisplay(user.group[0]);
     if (this.state.courses.length > 0 && this.state.courses[0].hasOwnProperty("teacherFolder")) {
       let resTeacher = await _classworkUtil.isTeacher(user.id, this.state.courses[0].id).then(resTeacher => resTeacher);
@@ -111,25 +109,25 @@ export default class Course extends Component {
 
   async fetchCoursesToDisplay(groupName){
     sessionStorage.setItem(COURSE_ID, null);
-    await this.setState({courses: _classworkUtil.coursesByGroupName(this.state.coursesCompleteList, groupName), 
-      //showAssignments: false, 
-      isAssignmentsViewStale: !this.state.isAssignmentsViewStale,}); 
+    await this.setState({courses: _classworkUtil.coursesByGroupName(this.state.coursesCompleteList, groupName),
+      //showAssignments: false,
+      isAssignmentsViewStale: !this.state.isAssignmentsViewStale,});
   }
 
   loadAssignment = (event) => {
     sessionStorage.setItem(COURSE_ID, this.state.courses[event.target.id].id);
-    sessionStorage.setItem(DATA_SOURCE, 
-                    this.state.courses[event.target.id].hasOwnProperty(DATA_SOURCE) 
+    sessionStorage.setItem(DATA_SOURCE,
+                    this.state.courses[event.target.id].hasOwnProperty(DATA_SOURCE)
                     ? this.state.courses[event.target.id].DATA_SOURCE : "")
     this.setState({
-      currentView: this.state.courses[event.target.id].name, 
-      //showAssignments: true, 
-      showCreateCourseWork: false, selectedCourseId: this.state.courses[event.target.id].id, 
+      currentView: this.state.courses[event.target.id].name,
+      //showAssignments: true,
+      showCreateCourseWork: false, selectedCourseId: this.state.courses[event.target.id].id,
       isAssignmentsViewStale: !this.state.isAssignmentsViewStale,
     });
     user.selectedCourseId = this.state.courses[event.target.id].id;
     this.props.userData(user);
-    this.setState({isAssignmentsViewStale: false}, 
+    this.setState({isAssignmentsViewStale: false},
       this.awaitAndLoadAssignments
      );
   }
@@ -144,9 +142,9 @@ export default class Course extends Component {
     let hasDriveFiles = false;
     return (
       <Fragment>
-         {<FloatingButton         
+         {<FloatingButton
          showCreateCourse={this.createCourseClick}
-         showCreateCourseWork={this.createCourseWorkClick} 
+         showCreateCourseWork={this.createCourseWorkClick}
          showInvitePeople={this.showInvitePeople}
          isTeacherLogin={this.state.isTeacherLogin}
          selectedCourseId={this.state.selectedCourseId}
@@ -203,7 +201,7 @@ export default class Course extends Component {
             ) : (
               ""
             )}
-            
+
             {this.state.showCreateCourse ?
             <CreateCourse showCreateCourse={this.createCourseClick} isCourseCreated={this.refreshCourses}/>
             : ""
@@ -218,12 +216,12 @@ export default class Course extends Component {
             }
             {/* // {     alert("course user: " + JSON.stringify(user)), this.state.showAssignments?
             // <Assignment
-            //   // courseId={this.state.selectedCourseId} 
-            //   // isTeacherLogin={this.state.isTeacherLogin} 
+            //   // courseId={this.state.selectedCourseId}
+            //   // isTeacherLogin={this.state.isTeacherLogin}
             //   user={user}
             //   isActive={this.props.isActive}/>
             // : ""} */}
-            {/* // This code to explicity call child function to fix the issue: Assignments view is state >>  
+            {/* // This code to explicity call child function to fix the issue: Assignments view is state >>
                 not updating with the newly selected course has no assignments */}
             {!this.state.isAssignmentsViewStale ?
             <Assignment ref={instance => { this.child = instance; }} user={user} isActive={this.props.isActive}/> : ""}
