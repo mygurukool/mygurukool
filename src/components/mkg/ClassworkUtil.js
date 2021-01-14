@@ -1,4 +1,5 @@
 import * as _mkgApi from "../util/MgkAPI";
+import {MKG} from "./util/constants"
 
 export function loadMkgSubjects(subjectsStatus) {
   // load courses(Subjects)
@@ -33,12 +34,18 @@ export function loadMkgAssignments(courseId) {
   });
 }
 
+export function createCourseWork(coursework){
+}
+
+export function patchCourseWork(coursework){
+}
+
 function renameKey_Id(data) {
   return JSON.parse(JSON.stringify(data).split('"_id":').join('"id":'));
 }
 
 function addMKGFlag(data) {
   return data.map((item) => {
-   item['source']='MKG'
+   item['source'] = MKG
   })
 }

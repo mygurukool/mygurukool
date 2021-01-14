@@ -3,7 +3,7 @@ import * as _apiUtils from "../util/AxiosUtil";
 import * as _mkgApi from "../util/MgkAPI";
 import * as _mkgClassworkUtil from "../mkg/ClassworkUtil";
 import {driveFileTypes, addFileTypes} from "../util/gConsts";
-import {DEFAULT_GROUP_NAME} from "../util/constants";
+import {DEFAULT_GROUP_NAME, MKG} from "../util/constants";
 
 export let user = {
   name: "Name",
@@ -201,7 +201,7 @@ export function createCourse(courseName, className){
 // }
 
 export function loadAssignments(courseId, associatedWithDeveloperCheck, source){
-  if(source === 'MKG')
+  if(source === MKG)
     return _mkgClassworkUtil.loadMkgAssignments(courseId)
   else return googleAssignments(courseId, associatedWithDeveloperCheck)
 }
@@ -370,7 +370,7 @@ export function patchCourseWork(coursework){
   //creating coursework
   return new Promise((resolve, reject) => {
     _apiUtils
-        .googleClassroomPatchCourseWork(courseId, buildCoursework(coursework),coursework.updateMask.toString())
+        .googleClassroomPatchCourseWork(courseId, buildCoursework(coursework),coursework.updateMask)
         .then((response) => {
             console.log("googleClassroomPatchCourseWork: "+ JSON.stringify(response));
             resolve(response);

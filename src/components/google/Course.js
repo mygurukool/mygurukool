@@ -10,8 +10,7 @@ import FloatingButton from "../util/FloatingButton";
 import CreateCourseWork from "../CreateCourseWork";
 import CreateCourse from "../CreateCourse";
 import TeacherAuthorization from "./TeacherAuthorization";
-import {HAS_TEACHER_ACCEPTED} from "../util/constants";
-import {COURSE_ID} from "../util/constants"
+import {COURSE_ID, DATA_SOURCE, HAS_TEACHER_ACCEPTED} from "../util/constants"
 import InvitePeople from "./InvitePeople";
 
 /**
@@ -119,12 +118,12 @@ export default class Course extends Component {
 
   loadAssignment = (event) => {
     sessionStorage.setItem(COURSE_ID, this.state.courses[event.target.id].id);
+    sessionStorage.setItem(DATA_SOURCE, this.state.courses[event.target.id].hasOwnProperty ? this.state.courses[event.target.id].source : "")
     this.setState({
       currentView: this.state.courses[event.target.id].name, 
       //showAssignments: true, 
       showCreateCourseWork: false, selectedCourseId: this.state.courses[event.target.id].id, 
       isAssignmentsViewStale: !this.state.isAssignmentsViewStale,
-      source: this.state.courses[event.target.id].hasOwnProperty ? this.state.courses[event.target.id].source : ""
     });
     user.selectedCourseId = this.state.courses[event.target.id].id;
     this.props.userData(user);
@@ -136,7 +135,7 @@ export default class Course extends Component {
     awaitAndLoadAssignments = () => {
       const { isAssignmentsViewStale } = this.state;
       if(!isAssignmentsViewStale)
-      this.child.loadAssignment(this.state.selectedCourseId, this.state.isTeacherLogin, this.state.source);
+      this.child.loadAssignment(this.state.selectedCourseId, this.state.isTeacherLogin, sessionStorage.getItem(DATA_SOURCE));
     }
 
   render() {
