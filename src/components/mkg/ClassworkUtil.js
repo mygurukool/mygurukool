@@ -1,5 +1,6 @@
 import * as _mkgApi from "../util/MgkAPI";
-import {MKG} from "./util/constants"
+import {MKG} from "../util/constants"
+import * as _classworkUtil from "../google/ClassworkUtil"
 
 export function loadMkgSubjects(subjectsStatus) {
   // load courses(Subjects)
@@ -42,6 +43,12 @@ export function patchCourseWork(coursework){
 
 function renameKey_Id(data) {
   return JSON.parse(JSON.stringify(data).split('"_id":').join('"id":'));
+}
+
+export function loadAssignments(courseId, associatedWithDeveloperCheck, source){
+  if(source === MKG)
+    return loadMkgAssignments(courseId)
+  else return _classworkUtil.loadGoogleAssignments(courseId, associatedWithDeveloperCheck)
 }
 
 function addMKGFlag(data) {

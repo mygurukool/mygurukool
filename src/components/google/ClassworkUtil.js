@@ -200,13 +200,7 @@ export function createCourse(courseName, className){
 //             function(err) { console.error("Execute error", err); });
 // }
 
-export function loadAssignments(courseId, associatedWithDeveloperCheck, source){
-  if(source === MKG)
-    return _mkgClassworkUtil.loadMkgAssignments(courseId)
-  else return googleAssignments(courseId, associatedWithDeveloperCheck)
-}
-
-function googleAssignments(courseId, associatedWithDeveloperCheck){
+export function loadGoogleAssignments(courseId, associatedWithDeveloperCheck, source){
   return new Promise((resolve, reject) => {
     _apiUtils.loadGoogleAssignments(courseId)
     .then((response) => {
