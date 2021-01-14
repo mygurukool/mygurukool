@@ -7,3 +7,6 @@ export const MESSAGE_WINDOW_TIMEOUT = 5 * 60 * 1000;
 export const HAS_TEACHER_ACCEPTED = "hasTeacherAccepted";
 export const COURSE_ID = "COURSE_ID";
 export const DEFAULT_GROUP_NAME = 'undefined'
+
+export const DATA_SOURCE = "DATA_SOURCE"
+export const MKG = 'MKG'
