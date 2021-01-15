@@ -60,6 +60,46 @@ exports.update = (req, res) => {
   });
 };
 
+exports.patch = (req, res) => {
+  const id = req.params.id;
+  const updates = req.body;
+  
+  try {
+    Assignments.findByIdAndUpdate(id, updates, {new: true})
+      .exec()
+      .then((data) => {
+        console.log(data);
+        res.status(200).json({'assignments': data});
+      });
+  } catch (error) {
+    console.log(error);
+    res.status(500).json({ err });
+  }
+}
+
+/* template for query param ( update mask)
+exports.patch = (req, res) => {
+  // const id = req.params.id;
+  // const updates = req.body;
+  const assignment = req.assignment;
+
+  console.log('req ' + JSON.stringify(req.query))
+  updateMask && updateMask.map((item) => {
+    if(item === TITLE) assignment.title = req.body.title
+    else if(item === INSTRUCTIONS_FIELD) assignment.description = req.body.description
+  })
+
+  assignment.save((err, data) => {
+    if (err) {
+      return res.status(400).json({
+        error: "patch not successful",
+      });
+    }
+    console.log(data)
+    res.json(data);
+  });
+*/
+
 // since we are using remove as delete is an inbuit word for javascript
 
 exports.remove = (req, res) => {
