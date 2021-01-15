@@ -1,8 +1,9 @@
 import React from "react";
 import { Form, Button, Modal, Row,  Col, CardGroup, Card, Container } from "react-bootstrap";
 import * as _classworkUtil from "./google/ClassworkUtil";
+import * as _mkgClassworkUtil from "./mkg/ClassworkUtil";
 import {driveFileTypes, courseWorkAction, addFileTypes, actionButtonText} from "./util/gConsts"
-import {COURSE_ID} from "./util/constants"
+import {COURSE_ID, TITLE_FIELD, INSTRUCTIONS_FIELD, DRIVE_FILE_NAME_FIELD} from "./util/constants"
 import DriveFileTypeDropdown from "./util/DropdownUtil";
 import {loaderRandomGifs} from "./util/utils";
 import DateTimePicker from "./util/DateTimePicker";
@@ -10,9 +11,6 @@ import Select from 'react-select'
 
 const driveFileTypeList = Object.keys(driveFileTypes).map(key => driveFileTypes[key]);
 const addFileTypeList = Object.keys(addFileTypes).map(key => addFileTypes[key]);
-const TITLE_FIELD = "titleField";
-const DRIVE_FILE_NAME_FIELD = "driveFileNameField";
-const INSTRUCTIONS_FIELD= 'instructionsField';
 
 //TODO: following list is temp, as an example. Must be adopted with list of students
 const forStudentList = [
@@ -71,7 +69,6 @@ export default class CourseWorkType extends React.Component {
     });
     if(this.props.workTypeData.assignmentToEdit && this.props.workTypeData.assignmentToEdit.materials)
     this.extractFilesToEdit(this.props.workTypeData.assignmentToEdit.materials);
-    
   }
 
   extractFilesToEdit(materials){
@@ -85,7 +82,7 @@ export default class CourseWorkType extends React.Component {
         localFile && localFile.push(file.form);
       } else if(file.link !== undefined){
         localFile && localFile.push(file.link);
-      } 
+      }
       this.setState({driveFiles: localFile});
     })
   }
@@ -100,7 +97,7 @@ export default class CourseWorkType extends React.Component {
     // let file = await _classworkUtil.getDriveFileLink(this.state.driveFileNameField, this.state.driveFileType).then(response  => response);
     // let fileData = {title: this.state.driveFileNameField, url: fileUrl, type: this.state.driveFileType};
     // let driveFiles = this.state.driveFiles;
-    driveFiles.push(fileData);  
+    driveFiles.push(fileData);
     await this.setState({driveFiles: driveFiles, isLoading: false});
   }
 
@@ -122,18 +119,18 @@ export default class CourseWorkType extends React.Component {
     const { name } = target;
     if((name === TITLE_FIELD) && value.length > 0){
       this.enableSubmitButton();
-      this.updateMask('title');
+      this.updateMask(TITLE_FIELD);
     }
 
     if(this.props.workTypeData.action === courseWorkAction.EDIT){
       if((name === INSTRUCTIONS_FIELD) && value.length > 0){
         this.enableSubmitButton();
-        this.updateMask('description');
+        this.updateMask(INSTRUCTIONS_FIELD);
       }
     }
 
     await this.setState({
-      [name]: value, 
+      [name]: value,
     });
   };
 
@@ -150,19 +147,20 @@ export default class CourseWorkType extends React.Component {
 
   handleClick = async (eventId) => {
     if(eventId !== 'cancel'){
-      if(eventId === 'Assign')
-        _classworkUtil.createCourseWork(this.prepareCoursework()).then((res) => console.log(res));
-      else if(eventId === 'Save')
-      alert(updateMask.toString())
-        _classworkUtil.patchCourseWork(this.prepareCoursework(this.state.assignmentToEdit.id)).then((res) => console.log(res));
-    } 
+      if(eventId === 'Assign'){
+        _mkgClassworkUtil.createAssignment(this.prepareCoursework()).then((res) => console.log(res));
+      }
+      else if(eventId === 'Save'){
+        _mkgClassworkUtil.patchAssignment(this.prepareCoursework(this.state.assignmentToEdit.id)).then((res) => console.log(res));
+      }
+    }
     this.handleCourseworkMutateGUI();
   };
 
   prepareCoursework = (courseworkId = "") => {
     // alert(sessionStorage.getItem(COURSE_ID))
-    //   let courseWork = {id: courseworkId, title: this.state.titleField.trim(), 
-    //                     description: this.state.instructionsField, 
+    //   let courseWork = {id: courseworkId, title: this.state.titleField.trim(),
+    //                     description: this.state.instructionsField,
     //                     workType: this.props.workTypeData.type,
     //                     courseId: sessionStorage.getItem(COURSE_ID),
     //                     driveFiles: [
@@ -177,12 +175,14 @@ export default class CourseWorkType extends React.Component {
     //                     ],
     //                     updateMask: updateMask,
     //                   };
-    let courseWork = {id: courseworkId, title: this.state.titleField.trim(), 
-                      description: this.state.instructionsField, 
+    let courseWork = {id: courseworkId, title: this.state.titleField.trim(),
+                      description: this.state.instructionsField,
                       workType: this.props.workTypeData.type,
                       courseId: sessionStorage.getItem(COURSE_ID),
                       driveFiles: this.state.driveFiles,
+                      updateMask: updateMask,
                     };
+    updateMask = []
     return courseWork;
   }
 
@@ -247,7 +247,7 @@ export default class CourseWorkType extends React.Component {
         ))
       : "";
   }
-  
+
   render() {
     const { instructionsField, titleField, driveFileNameField } = this.state;
     return (
@@ -312,7 +312,7 @@ export default class CourseWorkType extends React.Component {
               </Container>
             </Card.Header>
           </Card>
-  
+
         </>
         <div>
           <CardGroup>

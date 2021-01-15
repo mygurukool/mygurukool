@@ -10,3 +10,8 @@ export const DEFAULT_GROUP_NAME = 'undefined'
 
 export const DATA_SOURCE = "DATA_SOURCE"
 export const MKG = 'MKG'
+
+// Assignment screen constants
+export const TITLE_FIELD = "titleField";
+export const DRIVE_FILE_NAME_FIELD = "driveFileNameField";
+export const INSTRUCTIONS_FIELD= 'instructionsField';
