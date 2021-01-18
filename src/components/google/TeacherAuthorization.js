@@ -20,7 +20,7 @@ export default class TeacherAuthorization extends React.Component {
         let googleUser = gapi.auth2.getAuthInstance().currentUser.get();
         googleUser.grant(options).then(
           function (success) {
-            sessionStorage.setItem(ACCESS_TOKEN, success.wc.access_token);
+            sessionStorage.setItem(ACCESS_TOKEN, success.Bc.access_token);
           },
           function (fail) {
             alert(JSON.stringify({ message: "fail", value: fail }));
