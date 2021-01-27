@@ -1,7 +1,7 @@
 /*global gapi*/
 import * as _apiUtils from "../util/AxiosUtil";
 import * as _mkgApi from "../util/MgkAPI";
-import * as _mkgClassworkUtil from "../mkg/ClassworkUtil";
+import * as _mkgClassworkUtil from "../mgk/ClassworkUtil";
 import {driveFileTypes, addFileTypes} from "../util/gConsts";
 import {DEFAULT_GROUP_NAME, MKG} from "../util/constants";
 

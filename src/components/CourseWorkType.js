@@ -1,7 +1,7 @@
 import React from "react";
 import { Form, Button, Modal, Row,  Col, CardGroup, Card, Container } from "react-bootstrap";
 import * as _classworkUtil from "./google/ClassworkUtil";
-import * as _mkgClassworkUtil from "./mkg/ClassworkUtil";
+import * as _mgkClassworkUtil from "./mgk/ClassworkUtil";
 import {driveFileTypes, courseWorkAction, addFileTypes, actionButtonText} from "./util/gConsts"
 import {COURSE_ID, TITLE_FIELD, INSTRUCTIONS_FIELD, DRIVE_FILE_NAME_FIELD} from "./util/constants"
 import DriveFileTypeDropdown from "./util/DropdownUtil";
@@ -148,10 +148,10 @@ export default class CourseWorkType extends React.Component {
   handleClick = async (eventId) => {
     if(eventId !== 'cancel'){
       if(eventId === 'Assign'){
-        _mkgClassworkUtil.createAssignment(this.prepareCoursework()).then((res) => console.log(res));
+        _mgkClassworkUtil.createAssignment(this.prepareCoursework()).then((res) => console.log(res));
       }
       else if(eventId === 'Save'){
-        _mkgClassworkUtil.patchAssignment(this.prepareCoursework(this.state.assignmentToEdit.id)).then((res) => console.log(res));
+        _mgkClassworkUtil.patchAssignment(this.prepareCoursework(this.state.assignmentToEdit.id)).then((res) => console.log(res));
       }
     }
     this.handleCourseworkMutateGUI();

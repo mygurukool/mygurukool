@@ -4,7 +4,7 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import * as _util from "../util/utils";
 import "@fortawesome/fontawesome-free/css/all.css";
 import * as _classworkUtil from "./ClassworkUtil";
-import * as _mkgClassworkUtil from "../mkg/ClassworkUtil";
+import * as _mgkClassworkUtil from "../mgk/ClassworkUtil";
 import Assignment from "./Assignment"
 import FloatingButton from "../util/FloatingButton";
 import CreateCourseWork from "../CreateCourseWork";
@@ -86,7 +86,7 @@ export default class Course extends Component {
     });
 
     //loading subjects
-    let subjectRes = await _mkgClassworkUtil.loadSubjects(this.props.isActive).then(subjectRes => subjectRes);
+    let subjectRes = await _mgkClassworkUtil.loadSubjects(this.props.isActive).then(subjectRes => subjectRes);
     console.log("Course.componentDidMount.userProfile: ", subjectRes);
     this.setState({isLoading: false, coursesCompleteList: subjectRes, });
     user.group = _classworkUtil.fetchGroupList(subjectRes);

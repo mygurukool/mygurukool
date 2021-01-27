@@ -13,7 +13,7 @@ import {
 import Video from "../Video";
 import * as _util from "../util/utils";
 import * as _classworkUtil from "./ClassworkUtil";
-import * as _mkgClassworkUtil from "../mkg/ClassworkUtil";
+import * as _mgkClassworkUtil from "../mgk/ClassworkUtil";
 import EditCourseWork from "../EditCourseWork";
 
 let fontSizeSmall = '1.25em';
@@ -144,7 +144,7 @@ export default class Assignment extends Component {
   loadAssignment(courseId, isTeacherLogin) {
     this.setState({isLoading: true});
     //calling google assignments
-    _mkgClassworkUtil.loadAssignments(courseId, isTeacherLogin).then((response) =>{
+    _mgkClassworkUtil.loadAssignments(courseId, isTeacherLogin).then((response) =>{
       console.log(response)
       this.setState({assignments: response, hasAssignments: response ? response.length : false, isLoading: false});
     })
