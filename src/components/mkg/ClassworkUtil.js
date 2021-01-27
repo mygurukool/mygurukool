@@ -1,4 +1,4 @@
-import * as _mkgApi from "../util/MgkAPI";
+import * as _mgkApi from "../util/MgkAPI";
 import {DATA_SOURCE, MKG, TITLE_FIELD, INSTRUCTIONS_FIELD, DRIVE_FILE_NAME_FIELD} from "../util/constants"
 import { driveFileTypes, addFileTypes } from "../util/gConsts";
 import * as _classworkUtil from "../google/ClassworkUtil";
@@ -7,16 +7,16 @@ export async function loadSubjects(subjectsStatus) {
   let subjectResGoogle = await _classworkUtil
     .loadSubjects(subjectsStatus)
     .then((subjectRes) => subjectRes);
-  let mkgSubjectsRes = await loadMkgSubjects().then(
-    (mkgSubjectsRes) => mkgSubjectsRes
+  let mgkSubjectsRes = await loadMgkSubjects().then(
+    (mgkSubjectsRes) => mgkSubjectsRes
   );
-  return [...subjectResGoogle, ...mkgSubjectsRes];
+  return [...subjectResGoogle, ...mgkSubjectsRes];
 }
 
-function loadMkgSubjects() {
+function loadMgkSubjects() {
   // load courses(Subjects)
   return new Promise((resolve, reject) => {
-    _mkgApi
+    _mgkApi
       .mgkLoadSubjects()
       .then((subjectRes) => {
         let resp = renameKey_Id(subjectRes.data.courses);
@@ -25,14 +25,14 @@ function loadMkgSubjects() {
       })
       .catch((error) => {
         reject(error);
-        console.error("Error during loadMkgSubjects:", error);
+        console.error("Error during loadMgkSubjects:", error);
       });
   });
 }
 
-function loadMkgAssignments(courseId) {
+function loadMgkAssignments(courseId) {
   return new Promise((resolve, reject) => {
-    _mkgApi
+    _mgkApi
       .mgkLoadAssignments(courseId)
       .then((response) => {
         //console.log("ClassworkUtil.loadAssignment: " + JSON.stringify(response.data))
@@ -41,14 +41,14 @@ function loadMkgAssignments(courseId) {
       })
       .catch((error) => {
         reject(error);
-        console.log("ClassworkUtil.loadMkgAssignments: " + error);
+        console.log("ClassworkUtil.loadMgkAssignments: " + error);
       });
   });
 }
 
 export function loadAssignments(courseId, associatedWithDeveloperCheck) {
   if (sessionStorage.getItem(DATA_SOURCE) === MKG)
-    return loadMkgAssignments(courseId);
+    return loadMgkAssignments(courseId);
   else
     return _classworkUtil.loadGoogleAssignments(
       courseId,
@@ -62,15 +62,15 @@ export function createAssignment(coursework) {
 
     //creating coursework
     return new Promise((resolve, reject) => {
-      _mkgApi
+      _mgkApi
         .createAssignment(courseId, coursework)
         .then((response) => {
-          console.log("mkgCreateAssignment: " + JSON.stringify(response));
+          console.log("mgkCreateAssignment: " + JSON.stringify(response));
           resolve(response);
         })
         .catch((error) => {
           reject(error);
-          console.error("Error during mkg CreateCourseWork:", error);
+          console.error("Error during mgk CreateCourseWork:", error);
         });
     });
   } else _classworkUtil.createCourseWork(buildCoursework(coursework));
@@ -82,15 +82,15 @@ export function patchAssignment(coursework) {
 
     //patching coursework
     return new Promise((resolve, reject) => {
-      _mkgApi
+      _mgkApi
         .patchAssignment(assignmentId, buildCoursework(coursework, coursework.updateMask))
         .then((response) => {
-          console.log("mkgPatchAssignment: " + JSON.stringify(response));
+          console.log("mgkPatchAssignment: " + JSON.stringify(response));
           resolve(response);
         })
         .catch((error) => {
           reject(error);
-          console.error("Error during mkg PatchAssignment:", error);
+          console.error("Error during mgk PatchAssignment:", error);
         });
     });
   } else _classworkUtil.patchCourseWork(buildCoursework(coursework));
