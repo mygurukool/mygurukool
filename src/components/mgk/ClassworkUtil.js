@@ -4,13 +4,19 @@ import { driveFileTypes, addFileTypes } from "../util/gConsts";
 import * as _classworkUtil from "../google/ClassworkUtil";
 
 export async function loadSubjects(subjectsStatus) {
-  let subjectResGoogle = await _classworkUtil
+  let subjects = await _classworkUtil
     .loadSubjects(subjectsStatus)
     .then((subjectRes) => subjectRes);
-  let mgkSubjectsRes = await loadMgkSubjects().then(
-    (mgkSubjectsRes) => mgkSubjectsRes
-  );
-  return [...subjectResGoogle, ...mgkSubjectsRes];
+
+  let mgkSubjectsRes
+  try {
+    mgkSubjectsRes = await loadMgkSubjects()
+    .then((mgkSubjectsRes) => mgkSubjectsRes)
+    subjects = [...subjects, ...mgkSubjectsRes]
+  } catch (error) {
+    console.log('error loadSubjects/ mgkSubjects: ' + error)
+  }
+  return subjects;
 }
 
 function loadMgkSubjects() {
