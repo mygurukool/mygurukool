@@ -1,0 +1,16 @@
+
+#GET http://localhost:8081/api/courses
+
+###
+
+POST http://localhost:8080/api/organization/create
+
+{
+    "creatorName": "name",
+  "orgName":"org",
+  "orgSize":"3",
+  "orgAddress":"sdfdsfsd",
+  "orgCountry":"CG"
+	
+
+}
