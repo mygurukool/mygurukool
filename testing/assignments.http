@@ -1,0 +1,18 @@
+#getByCourseId
+GET http://localhost:8081/api/assignments/courseId/3.1
+###
+
+#getBy assignmentId
+GET http://localhost:8081/api/assignments/6103e3e68b552e5b0042bb99
+
+###
+
+#create
+POST http://localhost:8081/api/assignments/courseId/3 HTTP/1.1
+Content-Type: application/json; charset=utf-8
+
+{
+    "courseId": "3.1",
+    "title": "assignmenttitle",
+    "description": "assignment description"
+}
