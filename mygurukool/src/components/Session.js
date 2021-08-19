@@ -1,6 +1,8 @@
 /* global gapi */
 
 import React, { Component, Fragment } from "react";
+import {Link} from "react-router-dom";
+
 import "..//App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import Header from "./Header";
@@ -79,6 +81,12 @@ export default class Session extends Component {
               >
                 <img src={google} className="googleIcon" />
                 Login With Google Account
+              </button>
+              <button
+                className="btn btn-lg btn-submit btn-block text-dark"
+                type="button"
+                >
+                <Link to="/organisation">Create Organisation</Link>
               </button>
             </div>
           </div>

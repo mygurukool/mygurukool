@@ -8,7 +8,7 @@ import Session from "./components/Session";
 import Home from "./components/Home";
 import Organisation from'./components/organisation/organisation.container'
 import "bootstrap/dist/css/bootstrap.min.css";
-import { BrowserRouter, Route } from "react-router-dom";
+import { BrowserRouter, Route ,Link} from "react-router-dom";
 
 import * as _constants from "./components/util/constants"
 import * as _gconsts from "./components/util/gConsts"
@@ -52,7 +52,7 @@ function App() {
           render={() => (
             <div className="App">
              
-              <Organisation />
+              <Session />
             </div>
           )}
         />
@@ -62,6 +62,15 @@ function App() {
           render={() => (
             <div className="App">
               <Home />
+            </div>
+          )}
+        />
+        <Route
+          exact={true}
+          path="/organisation"
+          render={() => (
+            <div className="App">
+              <Organisation />
             </div>
           )}
         />
