@@ -20,6 +20,10 @@ const organizationSchema = mongoose.Schema({
   orgCountry:{
     type:'string',
     require:true
+  },
+  creatorId:{
+    type:'ObjectId',
+    require:true
   }
 });
 

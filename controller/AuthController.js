@@ -1,7 +1,8 @@
 const  jwt  =  require('jsonwebtoken');
-const Joi = require('joi'); 
 const bcrypt = require('bcrypt');
 var User = require('../model/user');
+const Organization = require('../model/organizationSchema');
+
 var {arragneError} = require('../utils/utils');
 
 const {
@@ -16,7 +17,7 @@ const accessTokenSecret = 'youraccesstokensecret';
 exports.Login = async function(req, res) {
 
   const { body } = req;  
-  console.log(body)
+  
   var result = LoginValidation(body)
   const { value, error } = result;
 
@@ -27,11 +28,17 @@ exports.Login = async function(req, res) {
   }
        
 
-  User.findOne({ email:value.email }).then((result)=>{
+  User.findOne({ email:value.email }).then( async (result)=>{
     console.log(result)
-      try{
+      // try{
         userdata = result
-        data = {id:result._id,name:result.name,email:result.email}
+        orgData = await Organization.findOne({creatorId:result._id}).then((org)=>{
+               return(org)
+              }).catch((error)=>{
+                res.send(error)
+              })  
+
+        data = {id:result._id,name:result.name,email:result.email,org:orgData}
         passwordHash = userdata.password
       
         if(bcrypt.compareSync(req.body.password,passwordHash)){
@@ -45,10 +52,10 @@ exports.Login = async function(req, res) {
         else{
           res.send('User Not Exist...')
         }
-      }
-      catch{
-        res.json('Something went wrong..')
-      }
+      // }
+      // catch{
+      //   res.json('Something went wrong..')
+      // }
  
     }).catch((error)=>{
       console.log(error)
@@ -69,8 +76,6 @@ exports.Registration = function(req,res){
     res.send(customeError)
 
   }
-
-
 
   var d = new Date(),
   month = '' + (d.getMonth() + 1),

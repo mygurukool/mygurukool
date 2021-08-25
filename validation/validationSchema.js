@@ -33,11 +33,7 @@ exports.RegistrationValidation = function(body){
                       'string.max': `"first_name" should have a minimum length of {#limit}`,
                       'any.required': `"first_name" is a required field`
                     }),
-    
-    middle_name: Joi.string()
-                    .min(5)
-                    .max(30)
-                    .required(),          
+
     last_name: Joi.string()
                   .min(5)
                   .max(30)
@@ -53,9 +49,9 @@ exports.RegistrationValidation = function(body){
                   'any.required': `"mobile" is a required field`
                 }),
 
-    date_of_birth: Joi.date()
-                      .greater('1-1-1974')
-                      .less('12-31-2022'),
+    // date_of_birth: Joi.date()
+    //                   .greater('1-1-1974')
+    //                   .less('12-31-2022'),
 
     username: Joi.string()
                   .min(5)
@@ -82,10 +78,6 @@ exports.RegistrationValidation = function(body){
     state: Joi.string()
               .required(),   
 
-    about: Joi.string()
-              .min(50)
-              .max(250)
-              .required(),  
             
   }).options({ abortEarly: false });
 
@@ -94,21 +86,47 @@ exports.RegistrationValidation = function(body){
 }
 
 exports.OrganizationValidation = function(body){
-  const JoiSchema = Joi.object({
-        
-    creatorName: Joi.string()
-              .required(),
-                
+  const JoiSchema = Joi.object({     
+            
     orgName: Joi.string()
-          .required(),
+             .required(),
+    username: Joi.string()
+             .required(),
+    password: Joi.string()
+             .required(),
+    first_name: Joi.string()
+             .required(),          
     orgSize: Joi.string()
               .required(),
     orgAddress: Joi.string()
                .required(),
     orgCountry: Joi.string()
-              .required(),      
+                .required(),              
   }).options({ abortEarly: false });
 
 
   return JoiSchema.validate(body); 
-}
+} 
+
+exports.TeacherValidation = function(body){
+  const JoiSchema = Joi.object({     
+            
+    first_name: Joi.string()
+             .required(),
+    last_name: Joi.string()
+             .required(),
+    username: Joi.string()
+             .required(),
+    password: Joi.string()
+             .required(),          
+    email: Joi.string()
+              .required(),
+    experience: Joi.string()
+               .required(),    
+    country:Joi.string()
+              .required(),                  
+  }).options({ abortEarly: false });
+
+
+  return JoiSchema.validate(body); 
+} 

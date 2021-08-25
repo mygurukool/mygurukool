@@ -1,12 +1,14 @@
-const bcrypt = require('bcrypt');
 const{TeacherValidation} = require('../validation/validationSchema.js')
+const  jwt  =  require('jsonwebtoken');
+const bcrypt = require('bcrypt');
 const Organization = require('../model/organizationSchema');
+const teacherSchema = require('../model/teacherSchema')
 var User = require('../model/user');
 var {arragneError} = require('../utils/utils');
 
 
 exports.Create = async function(req,res) {
-  const {body} = req;
+    const {body,userDetails} = req;
 
     var validate = TeacherValidation(body)
     const {value,error} = validate
@@ -20,20 +22,22 @@ exports.Create = async function(req,res) {
     var users = {
       username:value.username,
       password:bcrypt.hashSync(value.password,10),
-      first_name:value.creatorName,
-      country:value.orgCountry,
+      first_name:value.first_name,
+      email:value.email,
+      country:value.country
     }
     
   try {  
   
     const user = new User(users);
     await user.save()
-   
 
-    value.creatorId = user._id
-    value.creatorName = user.first_name
+    value.orgId = userDetails.data.org._id
+    value.organization = userDetails.data.org.orgName
+    value.userId = user._id
+    
 
-    const org = new Organization(value)
+    const org = new teacherSchema(value)
     await org.save();
 
     return res.status(201).send({success: "Data Inserted Successfully"});
@@ -41,5 +45,14 @@ exports.Create = async function(req,res) {
   } catch (error) {
     console.log(error);
   }
+}
+
+exports.GetTeachers = async function(req,res){
+  var org = await teacherSchema.find().then((result)=>{
+              return result
+            }).catch((error)=>{
+              console.log(error)
+            })
+  res.json(org)          
 }
 

@@ -17,6 +17,18 @@ const teacherSchema = mongoose.Schema({
     type:'string',
     require:true
   },
+  experience:{
+    type:'string',
+    require:true
+  },
+  orgId:{
+    type:'object',
+    require:true
+  },
+  userId:{
+    type:'object',
+    require:true
+  },
 
 });
 

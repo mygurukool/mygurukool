@@ -6,30 +6,22 @@ const users = new mongoose.Schema(
       type: String,
       required: true,
     },
-    middle_name: {
-      type: String,
-      required: true,
-    },
     last_name: {
       type: String,
-      required: true,
+      required: false,
     },
     mobile: {
       type: String,
-      required: true,
-    },
-    date_of_birth: {
-      type: Date,
-      required: true,
+      required: false,
     },
     username: {
       type: String,
       required: true,
     },
-    email: {
+    email:{
       type: String,
-      unique: true,
       required: true,
+      unique:true
     },
     password: {
       type: String,
@@ -41,15 +33,11 @@ const users = new mongoose.Schema(
     },
     city: {
       type: String,
-      required: true,
+      required: false,
     },
     state: {
       type: String,
-      required: true,
-    },
-    about: {
-      type: String,
-      required: true,
+      required: false,
     },
     user_type: { 
 

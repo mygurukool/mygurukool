@@ -22,10 +22,15 @@ mongoose.connect(process.env.DATABASE, {
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
 
+var corsOptions = {
+    origin: 'http://localhost:3000',
+    optionsSuccessStatus: 200 // For legacy browser support
+}
+
 //middleware
 app.use(morgan('dev'))
 app.use(express.json())
-app.use(cors())
+app.use(cors(corsOptions));
 
 //routes middleware
 app.use('/api', coursesRoutes)
