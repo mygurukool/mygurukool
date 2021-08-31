@@ -64,7 +64,7 @@ const Index = (props) => {
   };
   return (
     <>
-    <div  className="pb-5">
+    <div>
      <Home/>
      </div>
      </>

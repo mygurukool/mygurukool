@@ -1,7 +1,10 @@
 *{
     font-family: 'Montserrat', sans-serif;
 }
-
+body{
+    background: url(../../../img/home-img/bg.jpeg) top left no-repeat;
+    background-size: cover;
+}
 .home-header{
     background: #fff;
     padding: 15px 0px;
@@ -98,6 +101,22 @@
 }
 
 .tab-section{
+    background: #fff;
+    .accordion{
+        border:0px;
+        .accordion__item{
+            &:nth-child(2){
+                .accordion__button{
+                    padding:30px 15px 30px 45px;
+                }
+            }
+            &:nth-child(3){
+                .accordion__button{
+                    padding:40px 15px 40px 45px;
+                }
+            }
+        }
+    }
     .nav-tabs{
         justify-content: center;
         border-color:#D7D7D7;
@@ -113,12 +132,12 @@
                 .tab-icon{
                     background: #D5D5D5;
                     border-radius:100%;
-                    width: 75px;
-                    height: 75px;
+                    width: 95px;
+                    height: 95px;
                     margin:0px auto 20px;
                     display: flex;
                     img{
-                        max-width: 40px;
+                        width: 40px;
                         margin: auto;
                     }
                     svg{
@@ -148,40 +167,24 @@
     }
     .tab-content{
         background: #FFFFFF;
-        border: 1px solid #E9E9E9;
-        box-sizing: border-box;
-        box-shadow: 0px 4px 21px rgba(0, 0, 0, 0.05);
-        border-radius: 5px;
+        // border: 1px solid #E9E9E9;
+        // box-sizing: border-box;
+        // box-shadow: 0px 4px 21px rgba(0, 0, 0, 0.05);
+        // border-radius: 5px;
         padding:15px;
         .tab-pane{
-            .accordian-header{
+            .accordion__button{
                 position: relative;
                 background: #FF9154;
                 padding:20px 15px 20px 45px;
                 display: flex;
                 align-items: center;
                 justify-content: space-between;
-                margin: -20px -15px 0px;
                 cursor: pointer;
                 &:before{
-                    content: '';
-                        position: absolute;
-                        top: 21px;
-                        left: 15px;
-                        background: url(../../../img/home-img/right-arrow.svg) top center no-repeat;
-                        background-size: 23px;
-                        width: 23px;
-                        height: 23px;
-                        transform: rotate(90deg);
-                        transition: 0.5s all ease;
+                    position: absolute;
+                    left: 15px;
                 }
-                &.icon-rotate{
-                    &:before{
-                        transform: rotate(0deg);
-                        transition: 0.5s all ease;
-                    }
-                }
-
                 .accordian-title{
                     font-weight: 600;
                     font-size: 20px;
@@ -246,7 +249,7 @@
     padding:10px 15px !important;
     margin: 30px 0px 0px 0px !important;
     &::before{
-        display: none;
+        display: none !important;
     }
     h2{
         margin: 0px;
@@ -276,3 +279,30 @@
 .txt-white{
     color:#fff;
 }
+.br-0{
+    border-radius: 0px !important;
+}
+
+.sticky-box{
+    position: sticky;
+    top:0px;
+    z-index: 2;
+    background: #fff;
+    padding-top: 20px;
+}
+.content-scroll{
+    max-height: calc(100vh - 90px);
+    overflow-y: auto;
+}
+.content-scroll::-webkit-scrollbar {
+    width: 8px;
+  }
+  .content-scroll::-webkit-scrollbar-track {
+    background: #eee;
+  }
+  
+  .content-scroll::-webkit-scrollbar-thumb {
+    background: #6e52d1;
+    border-radius: 10px;
+  }
+  
