@@ -63,6 +63,7 @@
     "reactstrap": "8.9.0"
   },
   "devDependencies": {
+    "@svgr/webpack": "^5.5.0",
     "gulp": "4.0.2",
     "gulp-append-prepend": "1.0.9"
   },
