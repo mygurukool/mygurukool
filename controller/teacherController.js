@@ -132,3 +132,15 @@ exports.TeacherImport = async function(req,res){
   }
  
 }
+
+exports.UploadImage = async function(req,res,err){
+      if(req.file == undefined){
+        res.status(200).json({
+          message : "Only .png, .jpg and .jpeg format allowed."
+        })
+      }else{
+        res.status(200).json({
+          message : "Photo uploaded successfully."
+        })
+      }
+} 
