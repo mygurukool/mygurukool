@@ -14,6 +14,7 @@ router.post('/registration',AuthController.Registration);
 //organization 
 router.post('/teacher/create/',isLogin, teacherController.Create);
 router.get('/teacher/teachersList/',isLogin, teacherController.GetTeachers);
+router.post('/teacher/import',isLogin,uploadFile.single("file"),teacherController.TeacherImport);
 
 router.post('/organization/create/',Organization.Create);
 
