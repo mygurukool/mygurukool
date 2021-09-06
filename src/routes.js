@@ -22,6 +22,7 @@ import Register from "views/examples/Register.js";
 import Login from "views/examples/Login.js";
 import Tables from "views/examples/Tables.js";
 import Icons from "views/examples/Icons.js";
+import Demo from "components/Home/Demo";
 
 var routes = [
   {
@@ -57,6 +58,13 @@ var routes = [
     name: "Teachers",
     icon: "ni ni-bullet-list-67 text-red",
     component: Tables,
+    layout: "/admin",
+  },
+  {
+    path: "/Demo",
+    name: "Teachers",
+    icon: "ni ni-bullet-list-67 text-red",
+    component: Demo,
     layout: "/admin",
   },
   // {

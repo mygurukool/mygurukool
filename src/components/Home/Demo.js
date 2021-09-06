@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState }  from 'react'
 import "../../assets/plugins/nucleo/css/nucleo.css"
 import "../../assets/plugins/nucleo/css/home.scss"
 import "@fortawesome/fontawesome-free/css/all.min.css";
@@ -18,8 +18,8 @@ import { ReactComponent as Download } from 'assets/img/home-img/download.svg'
 import { ReactComponent as Eye } from 'assets/img/home-img/eye.svg'
 import { ReactComponent as EyeBlack } from 'assets/img/home-img/eye-black.svg'
 import classnames from 'classnames';
-import { useHistory } from "react-router-dom";
 import { Link } from "react-router-dom";
+import ShowMoreText from "react-show-more-text";
 import {
     Button,
     TabContent,
@@ -39,8 +39,8 @@ import {
 } from 'react-accessible-accordion';
 
 
-  
-const Home = () => {
+export default function Demo() {
+   
     const [activeTab, setActiveTab] = useState('1');
 
     const toggle = tab => {
@@ -49,10 +49,12 @@ const Home = () => {
     const [isOpen, setIsOpen] = useState(true);
 
     const showtoggle = () => setIsOpen(!isOpen); 
-
-  return (
-    <>
-      <div>
+    const executeOnClick = (isExpanded) => {
+        console.log(isExpanded);
+    }
+    return (
+       
+        <div>
           <header className="home-header">
               <div className="container">
                   <div className="header-content">
@@ -160,29 +162,27 @@ const Home = () => {
                                 </Nav>
                             </div>
                             <TabContent activeTab={activeTab}>
-                            <div style={{display: "flex", marginBottom: "30px"}}>
-                                <Link to="/admin/Demo" style={{marginRight: "20px"}}>
-                                    <Button className="btn-red bg-yellow txt-black"
-                                        color="info"
-                                        size="sm"
-                                    >
-                                        Demo
-                                    </Button>
-                                </Link>
-                            </div>
+                       
                                 <TabPane tabId="1">
-                                    <Accordion allowMultipleExpanded>
-                                        <AccordionItem>
-                                            <AccordionItemHeading>
-                                                <AccordionItemButton>
-                                                    <h2 className="accordian-title">Grammer Part II </h2>
-                                                    <div className="accordian-date">
-                                                        <span>Date:</span> 22-12-2020
-                                                    </div>
-                                                </AccordionItemButton>
-                                            </AccordionItemHeading>
-                                            <AccordionItemPanel>
-                                            <div className="accordian-body">
+                                <div className="accordion__button">
+                                    <h2 className="accordian-title">Grammer Part II </h2>
+                                    <div className="accordian-date">
+                                        <span>Date:</span> 22-12-2020
+                                    </div>
+                                </div>
+                                <div className="accordian-body">
+                                    <ShowMoreText
+                                        /* Default options */
+                                        lines={3}
+                                        more="Show more"
+                                        less="Show less"
+                                        className="content-css"
+                                        anchorClass="my-anchor-css-class"
+                                        onClick={executeOnClick()}
+                                        expanded={false}
+                                        width={1000}
+                                        truncatedEndingComponent={"... "}
+                                    >
                                                 <div className="accordian-content">
                                                     <div className="flex-row">
                                                         <h2>Exercise Instruction</h2>
@@ -268,20 +268,29 @@ const Home = () => {
                                                             </Table>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            </AccordionItemPanel>
-                                        </AccordionItem>
-                                        <AccordionItem>
-                                            <AccordionItemHeading>
-                                                <AccordionItemButton>
-                                                    <h2 className="accordian-title">Grammer Part III </h2>
-                                                    <div className="accordian-date">
-                                                        <span>Date:</span> 22-12-2020
-                                                    </div>
-                                                </AccordionItemButton>
-                                            </AccordionItemHeading>
-                                            <AccordionItemPanel>
-                                            <div className="accordian-body">
+                                    </ShowMoreText>
+                                </div>
+
+
+                                <div className="accordion__button">
+                                    <h2 className="accordian-title">Grammer Part II </h2>
+                                    <div className="accordian-date">
+                                        <span>Date:</span> 22-12-2020
+                                    </div>
+                                </div>
+                                <div className="accordian-body">
+                                    <ShowMoreText
+                                        /* Default options */
+                                        lines={3}
+                                        more="Show more"
+                                        less="Show less"
+                                        className="content-css"
+                                        anchorClass="my-anchor-css-class"
+                                        onClick={executeOnClick()}
+                                        expanded={false}
+                                        width={1000}
+                                        truncatedEndingComponent={"... "}
+                                    >
                                                 <div className="accordian-content">
                                                     <div className="flex-row">
                                                         <h2>Exercise Instruction</h2>
@@ -367,109 +376,8 @@ const Home = () => {
                                                             </Table>
                                                     </div>
                                                 </div>
-                                            </div>
-                                            </AccordionItemPanel>
-                                        </AccordionItem>
-                                        <AccordionItem>
-                                            <AccordionItemHeading>
-                                                <AccordionItemButton>
-                                                    <h2 className="accordian-title">Grammer Part IV </h2>
-                                                    <div className="accordian-date">
-                                                        <span>Date:</span> 22-12-2020
-                                                    </div>
-                                                </AccordionItemButton>
-                                            </AccordionItemHeading>
-                                            <AccordionItemPanel>
-                                            <div className="accordian-body">
-                                                <div className="accordian-content">
-                                                    <div className="flex-row">
-                                                        <h2>Exercise Instruction</h2>
-                                                        <Button
-                                                            className="btn-red bg-yellow txt-black"
-                                                            color="info"
-                                                            size="sm"
-                                                        >
-                                                            <Check/>
-                                                            Turn In
-                                                        </Button>
-                                                    </div>
-                                                    <p>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.</p>
-                                                    <Button
-                                                            className="btn-red bg-yellow txt-black"
-                                                            color="info"
-                                                            size="sm"
-                                                        >
-                                                            <Video/>
-                                                            Watch video
-                                                        </Button>
-
-                                                    <div className="border-top">
-                                                        <div className="accordion__button tbl-header">
-                                                            <h2>Hausaufgabe - Grammatic</h2>
-                                                            <div>
-                                                            <Button
-                                                                    className="btn-red bg-green txt-black"
-                                                                    color="info"
-                                                                    size="sm"
-                                                                >
-                                                                    <Eye/>
-                                                                    
-                                                                </Button>
-                                                                <Button
-                                                                    className="btn-red bg-green txt-black"
-                                                                    color="info"
-                                                                    size="sm"
-                                                                >
-                                                                    <Download/>
-                                                                    
-                                                                </Button>
-                                                                <Button
-                                                                    className="btn-red bg-green txt-white"
-                                                                    color="info"
-                                                                    size="sm"
-                                                                >
-                                                                    <Upload className="mr-2"/>
-                                                                    Upload Exercise
-                                                                </Button>
-                                                            </div>
-                                                        </div>
-                                                    <Table  striped  hover className="mt-4 custom-table">
-                                                            <thead>
-                                                                <tr>
-                                                                <th>File Name</th>
-                                                                <th>View</th>
-                                                                </tr>
-                                                            </thead>
-                                                            <tbody>
-                                                                <tr>
-                                                                <td>File.pdf</td>
-                                                                <td> <EyeBlack/></td>
-                                                                </tr>
-                                                                <tr>
-                                                                <td>File.pdf</td>
-                                                                <td> <EyeBlack/></td>
-                                                                </tr>
-                                                                <tr>
-                                                                <td>File.pdf</td>
-                                                                <td> <EyeBlack/></td>
-                                                                </tr>
-                                                                <tr>
-                                                                <td>File.pdf</td>
-                                                                <td> <EyeBlack/></td>
-                                                                </tr>
-                                                                <tr>
-                                                                <td>File.pdf</td>
-                                                                <td> <EyeBlack/></td>
-                                                                </tr>
-                                                                
-                                                            </tbody>
-                                                            </Table>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            </AccordionItemPanel>
-                                        </AccordionItem>
-                                    </Accordion>
+                                    </ShowMoreText>
+                                </div>
                                 </TabPane>
                                 <TabPane tabId="2">
                                 dsds
@@ -490,8 +398,6 @@ const Home = () => {
               </div>
           </section>
       </div>
-    </>
-  );
-};
+    )
 
-export default Home;
+}
