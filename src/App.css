@@ -320,15 +320,17 @@ body {
   color: #202121;
 }
 header {
-  background-color: #7560ba;
-  color: #fff;
-  margin-bottom: 20px;
+  background: #fff;
+  padding: 15px 0px;
+}
+header .nav-item{
+  color:#000
 }
 header .far {
-  color: #fff;
+  color: #000;
 }
 .navbar-dark .navbar-brand.logo {
-  color: #fff;
+  color: #000;
 }
 .section-nav .alert-primary {
   background-color: #49c5b6;
