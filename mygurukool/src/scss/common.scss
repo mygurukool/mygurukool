@@ -1,0 +1,111 @@
+*{
+    font-family: 'Montserrat', sans-serif;
+}
+
+.border-shadow{
+    background: #FFFFFF;
+    box-shadow: 0px 4px 21px rgba(0, 0, 0, 0.05);
+    border-radius: 5px;
+    padding:15px;
+    border:0px;
+}
+.flex-row{
+    display: flex;
+    flex-wrap: wrap;
+}
+.flex-center-item{
+    align-items: center;
+    justify-content: center;
+}
+.title-4{
+    font-size: 20px;
+    font-weight: 500;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+}
+.title-5{
+    font-size: 16px;
+    font-weight: 500;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+    font-weight: 400;
+}
+.simple-link{
+    border:0px;
+    color: #000;
+    font-weight: 600;
+}
+.section-nav{
+    height: calc(100vh - 100px);
+    align-items: center;
+    justify-content: center;
+}
+.box-btn{
+    display: flex;
+    align-items: center;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    margin: 10px;
+    font-weight: 600;
+    font-size: 15px;
+    color: #000;
+    width: 270px;
+    height: 200px;
+    svg{
+        width: 70px;
+        height: auto;
+        margin: 0px auto 20px;
+    }
+    &:hover{
+        color:#f00;
+        text-decoration: none;
+    }
+}
+.simple-link{
+    background: transparent;
+    font-weight: 500;
+    color:#f00;
+}
+.home-header{
+    background: #fff;
+    padding: 15px 0px;
+    .header-content{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .header-left{
+            h2{
+                margin: 0px;
+                color:#000;
+                font-size: 22px;
+            }
+        }
+        .header-right{
+            ul{
+                margin: 0px;
+                li{
+                    display: inline-block;
+                    a{
+                        color:#000;
+                        text-decoration: none;
+                        margin-right: 15px;
+                        padding-right: 15px;
+                        border-right: 1px solid #F0F0F0;
+                        font-weight: 600;
+                        svg{
+                            margin-right: 10px;
+                        }
+                    }
+                    button{
+                        svg{
+                            margin-right: 10px;
+
+                        }
+                    }
+                    
+                }
+            }
+        }
+    }
+}

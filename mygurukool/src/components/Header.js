@@ -5,16 +5,21 @@ import * as _constants from "./util/constants";
 import * as _gconsts from "./util/gConsts";
 import * as _msconsts from "./util/msConsts";
 import "..//App.css";
+import "../scss/common.scss"
 import "bootstrap/dist/css/bootstrap.min.css";
 
 export default class Header extends Component {
   render() {
     return (
       <Fragment>
-        <header className="navbar navbar-expand navbar-dark flex-column flex-md-row bd-navbar">
+        <header className="home-header">
           <div className="container">
-            <a className="navbar-brand mr-0 mr-md-2 logo">My Gurukool (BETA)</a>
-            <ul className="navbar-nav ml-md-auto">
+            <div className="header-content">
+              <div className="header-left">
+                              <h2>My Gurokool (BETA)</h2>
+                </div>
+                <div className="header-right">
+                <ul className="navbar-nav ml-md-auto">
               <li className="nav-item">
                 <i className="far fa-user">
                   {/* Student Name */}
@@ -49,6 +54,9 @@ export default class Header extends Component {
                 )}
               </li>
             </ul>
+                </div>
+            </div>
+          
           </div>
         </header>
       </Fragment>
