@@ -16,6 +16,7 @@ import * as _msconsts from "./util/msConsts";
 
 import { ReactComponent as Microsoft } from '../assets/icons/microsoft.svg'
 import { ReactComponent as Google } from '../assets/icons/google.svg'
+import PageBanner from '../assets/bg.jpg'
 import { ReactComponent as Organization } from '../assets/icons/organization.svg'
 
 export default class Session extends Component {
@@ -31,6 +32,9 @@ export default class Session extends Component {
     return (
       <Fragment>
         <Header isSignedIn={this.state.isSignedIn} />
+        <div className="page-banner">
+          <img src={PageBanner} />
+        </div>
         <div className="container">
           <div className="row section-nav">
             <div>
@@ -39,7 +43,7 @@ export default class Session extends Component {
               </h2>
               <div className="flex-row ">
               <button
-                className="border-shadow box-btn"
+                className="border-shadow box-btn card-hover"
                 type="button"
                 onClick={(e) => {
                   e.preventDefault();
@@ -68,12 +72,12 @@ export default class Session extends Component {
                     random;
                 }}
               >
-                <Microsoft />
+                <div className="icon-circle"><Microsoft /></div>
                 Login With Microsoft Account
               </button>
 
               <button
-                className="border-shadow box-btn"
+                className="border-shadow box-btn card-hover"
                 type="button"
                 onClick={(e) => {
                   sessionStorage.setItem(
@@ -83,12 +87,12 @@ export default class Session extends Component {
                   window.gapi.auth2.getAuthInstance().signIn();
                 }}
               >
-               <Google />
+               <div className="icon-circle"><Google /></div>
                 Login With Google Account
               </button>
               <button
-                className="border-shadow box-btn">
-                  <Organization />
+                className="border-shadow box-btn card-hover">
+                  <div className="icon-circle"><Organization /></div>
                       Organization
                 </button>
               </div>

@@ -15,6 +15,7 @@ import * as _util from "../util/utils";
 import * as _classworkUtil from "./ClassworkUtil";
 import * as _mgkClassworkUtil from "../mgk/ClassworkUtil";
 import EditCourseWork from "../EditCourseWork";
+import ShowMoreText from "react-show-more-text";
 
 let fontSizeSmall = '1.25em';
 let fontSizeBig = '1.75em';
@@ -152,9 +153,12 @@ export default class Assignment extends Component {
 
   render() {
     let hasDriveFiles = false;
+    const executeOnClick = (isExpanded) => {
+      console.log(isExpanded);
+  }
     return (
       <Fragment>
-        <div className="tabcontent col-12">
+        <div className="tab-content col-12">
           {this.state.isLoading ? (
             <img src={_util.loaderRandomGifs()} className="loaderIcon" />
           ) : (
@@ -169,16 +173,15 @@ export default class Assignment extends Component {
             <Fragment>
               {!this.state.showEditCourseWork ? (this.state.hasAssignments ? (
                 this.state.assignments.map((assignment, i) => (
-                  <AccordionItem key={assignment.id} uuid={assignment.id}>
+                  <div key={assignment.id} uuid={assignment.id}>
                     <Fragment>
-                      <AccordionItemHeading>
-                        <AccordionItemButton>
-                          <div className="row">
-                            <div className="float-left col-12 exercisetitle">
+                          <div className="accordion__button">
+                              <h2 className="accordian-title">
                               {assignment.title
                                 ? assignment.title
                                 : "No Exercise Data"}
-                              <small className="text-muted float-right">
+                              </h2>
+                              <div className="accordian-date">
                                 {/* TODO: Proper DateFormat*/}
                                 {assignment.dueDate
                                   ? "Due Date " +
@@ -199,13 +202,23 @@ export default class Assignment extends Component {
                                     </a>
                                     : ""}
                                   </div>
-                              </small>
-                            </div>
+                              </div>
                           </div>
-                        </AccordionItemButton>
-                      </AccordionItemHeading>
-                      <AccordionItemPanel>
-                        <div className="card-body">
+                        
+                      
+                        <div className="accordian-body">
+                        <ShowMoreText
+                                        /* Default options */
+                                        lines={3}
+                                        more="Show more"
+                                        less="Show less"
+                                        className="content-css"
+                                        anchorClass="my-anchor-css-class"
+                                        onClick={executeOnClick()}
+                                        expanded={false}
+                                        width={1000}
+                                        truncatedEndingComponent={"... "}
+                                    >
                           <div className="row float-right">
                             {this.getSubmissionTurnInState(
                               assignment.courseId,
@@ -317,10 +330,11 @@ export default class Assignment extends Component {
                               {/* {this.state.formUpload} */}
                             </div>
                           </div>
+                          </ShowMoreText>
                         </div>
-                      </AccordionItemPanel>
+                      
                     </Fragment>
-                  </AccordionItem>
+                  </div>
                 )) 
               ) : (this.state.user.selectedCourseId && this.state.user.selectedCourseId !== 'null' ?(
                     <div>

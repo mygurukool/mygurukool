@@ -7,11 +7,13 @@ import * as _msconsts from "./util/msConsts";
 import "..//App.css";
 import "..//scss/comman.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
-
+import { ReactComponent as User } from '../assets/images/home-img/Person.svg'
+import { ReactComponent as Logout } from '../assets/images/home-img/logout.svg'
 export default class Header extends Component {
   render() {
     return (
       <Fragment>
+        
         <header className="home-header">
           <div className="container">
             <div  className="header-content">
@@ -21,14 +23,16 @@ export default class Header extends Component {
               <div className="header-right">
                   <ul className="navbar-nav ml-md-auto">
                     <li className="nav-item">
-                      <i className="far fa-user">
-                        {/* Student Name */}
-                        &nbsp;<b>{this.props.studentName}</b>
-                      </i>{" "}
-                      &emsp;
-                      {this.props.isSignedIn ? (
+                      <a>
+                        <User/>
+                        {this.props.studentName}
+                      </a>
+                    
+                    </li>
+                    <li>
+                    {this.props.isSignedIn ? (
                         <a
-                          className="logout"
+                          className="logout btn-red text-white"
                           href="#"
                           onClick={(e) => {
                             e.preventDefault();
@@ -47,7 +51,8 @@ export default class Header extends Component {
                             sessionStorage.clear();                    
                           }}
                         >
-                          <i className="fas fa-sign-out-alt">&nbsp;Logout</i>
+                          <Logout/>
+                          Logout
                         </a>
                       ) : (
                         ""

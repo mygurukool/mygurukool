@@ -16,6 +16,11 @@ import Welcome from "./Welcome";
 import {DEFAULT_GROUP_NAME} from "./util/constants";
 
 import * as _googleClassworkUtil from "./google//ClassworkUtil"
+import "../scss/comman.scss"
+import PageBanner from '../assets/content-bg.jpeg'
+import { ReactComponent as Comments } from '../assets/images/home-img/comments.svg'
+
+
 
 class Home extends Component {
   constructor() {
@@ -95,6 +100,9 @@ class Home extends Component {
   render() {
     return (
       <Wrapper>
+        <div className="page-banner">
+          <img src={PageBanner} />
+        </div>
         <Header
           isSignedIn={true}
           studentName={
@@ -105,20 +113,18 @@ class Home extends Component {
                          showCreateCourse={this.createCourseClick}
                          />}
         <div className={this.state.cssContainer}>
-          <div className="row section-nav">
-            <div className="col-12">
-              <div className="alert alert-primary">
+          <div className="content-scroll">
+            <div className="section-header border-shadow br-0 ">
                 {/* role="alert"> */}
                 <span>
                   {/* Group Name*/}
-                  <b>
+                  <b className="group-dropdown">
                     {<GroupName group={this.state.userData.group} groupSelection={this.groupSelection}/>}
                     {/* {<GroupNameDropdown dropdownTitleText="Class" itemList={this.state.userData.group} itemSelection={this.groupSelection}/>} */}
                   </b>
                 </span>
-                <ul className="float-right">
-                  <li>
                     <a
+                    className="btn-red bg-yellow txt-black"
                       href="#"
                       onClick={() =>
                         this.handleConferencePanelSize(
@@ -141,18 +147,17 @@ class Home extends Component {
                         )
                       }
                     > */}
-                      <i className="far fa-comments fa-1g">{'\n'}Conference</i>
+                     <Comments/>
+                      Conference
                     </a>
-                  </li>
-                </ul>
-              </div>
+                  
+              
             </div>
           </div>
-        </div>
-    
+        
+          
         {!this.state.showCreateCourse ? 
           <SplitPane
-            className="crazy-scroll"
             split="vertical"
             defaultSize={this.state.splitPercentage}
             onChange={(size) => this.toggleBtmHeight(size)}
@@ -177,6 +182,7 @@ class Home extends Component {
         : 
          <CreateCourse hideCreateCourse={this.createCourseClick}/>
         }
+        </div>
         {this.state.userData.group.length === 0 ? <Welcome welcomeAction={this.welcomeAction}/>:""}
       </Wrapper>
     );

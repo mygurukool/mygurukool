@@ -12,7 +12,7 @@ import CreateCourse from "../CreateCourse";
 import TeacherAuthorization from "./TeacherAuthorization";
 import {COURSE_ID, DATA_SOURCE, HAS_TEACHER_ACCEPTED} from "../util/constants"
 import InvitePeople from "./InvitePeople";
-
+import "../../scss/comman.scss"
 /**
  * User Object structure, this must be update appropriately
  * user: {id, name, group, selectedCourseId, isTeacherLogin}
@@ -150,9 +150,9 @@ export default class Course extends Component {
          selectedCourseId={this.state.selectedCourseId}
          />}
         <div className="container">
-          <div className="row">
-            <div className="row sub-excer-section">
-              <div className="col-12">
+          <div className="tab-section">
+            <div className="sub-excer-section">
+              <div className="sticky-box">
                 <ul
                   className="nav nav-pills mb-3 sub-nav"
                   id="pills-tab"
@@ -172,8 +172,7 @@ export default class Course extends Component {
                           href="#?"
                           onClick={this.loadAssignment}
                         >
-                          {/* Course Name */}
-                          {course.name}
+                          <div className="tab-icon">
                           {_util.loadIconBySubject(course.name) ? (
                             <img
                               src={_util.loadIconBySubject(course.name)}
@@ -183,14 +182,15 @@ export default class Course extends Component {
                           ) : (
                             ""
                           )}
+                          </div>
+                          {/* Course Name */}
+                         <h3> {course.name}</h3>
                         </a>
                       </li>
                     ))}
                 </ul>
               </div>
-            </div>
-          </div>
-          <div className="tabcontent col-12">
+              <div className="tabcontent col-12">
             {this.state.isLoading ? (
               <img src={_util.loaderRandomGifs()} className="loaderIcon" />
             ) : (
@@ -226,6 +226,9 @@ export default class Course extends Component {
             {!this.state.isAssignmentsViewStale ?
             <Assignment ref={instance => { this.child = instance; }} user={user} isActive={this.props.isActive}/> : ""}
            </div>
+            </div>
+          </div>
+          
         </div>
       </Fragment>
     );
