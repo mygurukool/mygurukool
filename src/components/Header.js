@@ -21,9 +21,9 @@ export default class Header extends Component {
                             <h2>My Gurokool (BETA)</h2>
               </div>
               <div className="header-right">
-                  <ul className="navbar-nav ml-md-auto">
+                  <ul className="navbar-items">
                     <li className="nav-item">
-                      <a>
+                      <a className="d-flex align-items-center">
                         <User/>
                         {this.props.studentName}
                       </a>
