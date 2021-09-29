@@ -3,7 +3,10 @@ import "../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import * as _apiUtils from "./util/AxiosUtil";
 import * as _constants from "./util/constants";
-
+import { ReactComponent as Upload } from '../assets/icons/upload.svg'
+import { ReactComponent as Download } from '../assets/icons/download.svg'
+import { ReactComponent as Eye } from '../assets/icons/eye.svg'
+import { ReactComponent as EyeBlack } from '../assets/icons/eye-black.svg'
 export default class FileUpload extends Component {
   constructor(props) {
     super(props);
@@ -49,7 +52,7 @@ export default class FileUpload extends Component {
 
   buildUploadBlock(fileNameToDisplay, fileLink) {
     return (
-      <tr className="testing-color-blue col-12">
+      <div className="accordion__button tbl-header">
         {/*  **** Google file thumbnail link 
          {this.props.exerciseDetails.fileThumbnailLink ? (
         <img
@@ -62,42 +65,42 @@ export default class FileUpload extends Component {
       )} */}
 
         {fileNameToDisplay === null ? (
-          <td>{"no exercise material"}</td>
+          <h2>{"no exercise material"}</h2>
         ) : (
           <Fragment>
-            <td>{fileNameToDisplay}</td>
-            <td className="filelink icons">
-              <a href={fileLink} target="_blank">
-                <i className="fas fa-eye fa-2x"></i>
+            <h2>{fileNameToDisplay}</h2>
+            <div className="">
+              <a href={fileLink} target="_blank"  className="btn-red bg-green txt-black">
+              <Eye/> 
               </a>
               &nbsp;&nbsp;
               {fileLink && fileLink.indexOf("htm") === -1 ? (
-                <a href={fileLink} target="_blank">
-                  <i className="fas fa-download fa-2x"></i>
+                <a href={fileLink} target="_blank"  className="btn-red bg-green txt-black mr-2">
+                  <Download/>
                 </a>
               ) : (
-                <a href="#?">
-                  <i
-                    className="fas fa-download fa-2x"
-                    id={this.props.exerciseDetails.fileObject}
+                <a href="#?" className="btn-red bg-green txt-black mr-2">
+                   <Download/>
+                  <i id={this.props.exerciseDetails.fileObject}
                     onClick={this.fetchFile}
                   ></i>
                 </a>
               )}
-            </td>
+            </div>
           </Fragment>
         )}
         {!this.props.user.isTeacherLogin?
           <button
-            className="btn btn-primary float-right"
+            className="btn-red bg-green txt-white"
             onClick={this.handleUploadClick}
             disabled={!this.props.isActive}
           >
-            <i className="fas fa-upload"></i> {this.state.exerciseButtonText}
+              <Upload className="mr-2"/>
+            {this.state.exerciseButtonText}
           </button>
           :""
         }
-      </tr>
+      </div>
     );
   }
   msLoadStudentUploadedFiles() {
@@ -346,7 +349,7 @@ export default class FileUpload extends Component {
         </table>
         <div>
           {this.state.hideFileUpload === false ? (
-            <div className="card card-body fileblock col-12">
+            <div className="card-body fileblock col-12">
               <div className="custom-file">
                 <input
                   type="file"

@@ -16,7 +16,7 @@ export default class GroupName extends Component {
           !showDefaultGroup ? (<b>Group: {DEFAULT_GROUP_NAME}</b>)
           :(
             <form style={{display: 'inline-block'}}onSubmit={this.handleSubmit}>
-                <label>Group&nbsp;
+                <label className="m-0">Group&nbsp;
                 <select onChange={this.handleChange}>
                   {this.props.group && this.props.group.map((item)=> {
                       return <option value={item}>{item}</option>;

@@ -3,6 +3,7 @@ import "../../App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import FileUpload from "../FileUpload";
 import Interaction from "../communication/Interaction";
+import { ReactComponent as CheckIcon } from '../../assets/icons/check.svg'
 import {
   Accordion,
   AccordionItem,
@@ -219,32 +220,35 @@ export default class Assignment extends Component {
                                         width={1000}
                                         truncatedEndingComponent={"... "}
                                     >
-                          <div className="row float-right">
-                            {this.getSubmissionTurnInState(
-                              assignment.courseId,
-                              assignment.id
-                            )}
-                            <button
-                              type="button"
-                              className="btn btn-primary turnin"
-                              disabled={!this.props.isActive}
-                              onClick={() =>
-                                this.handleSubmissionTurnIn(
-                                  assignment.courseId,
-                                  assignment.id,
-                                  this.state.submissionId
-                                )
-                              }
-                            >
-                              <i className="fas fa-check"></i>{" "}
-                              {this.state.turnInState}
-                            </button>
-                          </div>
+                         
                           <div className="row">
-                            <div className="col-12">
-                              <b>Exercise Instructions</b>
+                            <div className="col-12 accordian-content">
+                              <div className="flex-row">
+                                <h2>Exercise Instructions</h2>
+                                <div>
+                                    {this.getSubmissionTurnInState(
+                                      assignment.courseId,
+                                      assignment.id
+                                    )}
+                                    <button
+                                      type="button"
+                                      className="btn-red bg-yellow txt-black"
+                                      disabled={!this.props.isActive}
+                                      onClick={() =>
+                                        this.handleSubmissionTurnIn(
+                                          assignment.courseId,
+                                          assignment.id,
+                                          this.state.submissionId
+                                        )
+                                      }
+                                    >
+                                      <CheckIcon />{" "}
+                                      {this.state.turnInState}
+                                    </button>
+                                  </div>
+                              </div>
                               {assignment.description ? (
-                                <ul dangerouslySetInnerHTML=
+                                <ul className="p-0" dangerouslySetInnerHTML=
                                   {{__html: assignment.description,}}>
                                 </ul>
                               ) : (
@@ -253,7 +257,7 @@ export default class Assignment extends Component {
                               {this.extractMaterials(assignment.materials)}
                               {this.state.material.formUrls &&
                                 this.state.material.formUrls.map((formUrl) => (
-                                  <ul>
+                                  <ul className="p-0">
                                     <iframe
                                       sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
                                       src={formUrl}
@@ -294,8 +298,8 @@ export default class Assignment extends Component {
                             </div>
                             {/* </div> */}
                           </div>
-                          <div className="card card-body fileblock row">
-                            <div className="col-12">
+                          <div className="card-body fileblock row">
+                            <div className="col-12 p-0">
                               {this.state.material.exerciseDetails &&
                                 this.state.material.exerciseDetails.map(
                                   (exerciseDetail) =>

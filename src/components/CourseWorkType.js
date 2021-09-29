@@ -214,7 +214,7 @@ export default class CourseWorkType extends React.Component {
           // if(file.hasOwnProperty('thumbnailUrl')){
           //   imgSrc = require(file.thumbnailUrl);
           // }
-          <tr>
+          <tr class="">
             {/* <div>
                 {imgSrc? <img src={imgSrc} className="loaderIcon" /> : ''}
               </div> */}
