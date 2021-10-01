@@ -12,6 +12,7 @@ import { BrowserRouter, Route } from "react-router-dom";
 import * as _constants from "./components/util/constants"
 import * as _gconsts from "./components/util/gConsts"
 import CreateCourse from "./components/CreateCourse";
+import OrganisationCreateForm from './components/organisation/organisation.container'
 
 function googleUpdateSigninStatus(isSignedIn) {
   console.log("googleUpdateSigninStatus")
@@ -60,6 +61,15 @@ function App() {
           render={() => (
             <div className="App">
               <Home />
+            </div>
+          )}
+        />
+        <Route
+          exact={true}
+          path="/organisation"
+          render={() => (
+            <div className="App">
+              <OrganisationCreateForm />
             </div>
           )}
         />

@@ -96,8 +96,7 @@ export default class Session extends Component {
                       Organization
                 </button>
               </div>
-              <h2 className="title-5 text-center">Don't have account?, please <button type="button" className="simple-link">Signup</button> here</h2>
-              
+              <h2 className="title-5 text-center">Don't have account?, please <button type="button" className="simple-link">Signup</button> here</h2>              
             </div>
           </div>
         </div>
