@@ -149,12 +149,12 @@ export default class Course extends Component {
          isTeacherLogin={this.state.isTeacherLogin}
          selectedCourseId={this.state.selectedCourseId}
          />}
-        <div className="container">
+        <div className="container p-0">
           <div className="tab-section">
             <div className="sub-excer-section">
               <div className="sticky-box">
                 <ul
-                  className="nav nav-pills mb-3 sub-nav"
+                  className="nav nav-pills sub-nav"
                   id="pills-tab"
                   role="tablist"
                 >

@@ -153,7 +153,7 @@ class Home extends Component {
                   
               
             </div>
-          </div>
+          
         
           
         {!this.state.showCreateCourse ? 
@@ -182,6 +182,7 @@ class Home extends Component {
         : 
          <CreateCourse hideCreateCourse={this.createCourseClick}/>
         }
+        </div>
         </div>
         {this.state.userData.group.length === 0 ? <Welcome welcomeAction={this.welcomeAction}/>:""}
       </Wrapper>

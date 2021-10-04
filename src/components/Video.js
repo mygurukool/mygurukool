@@ -1,7 +1,8 @@
-import React from "react";
+import React, { Component, Fragment } from "react";
 import ModalVideo from "react-modal-video";
 import "../scss/modal-video.scss";
 import * as _constants from "./util/constants";
+import { ReactComponent as VideoIcon } from '../assets/icons/video.svg'
 
 export default class Video extends React.Component {
   constructor(props) {
@@ -54,21 +55,18 @@ export default class Video extends React.Component {
         {this.state.title ? this.state.title : ""}
         <br />
         {this.state.thumbnailUrl ? (
-          <button type="button" className="btn btn-video margin-5px" onClick={this.openModal}>
-            <img
-              src={this.state.thumbnailUrl}
-               className="thumbnailIcon"
-            />
-            <b> Im Video, Click me!!</b>
+          <button type="button" className="btn-red bg-yellow txt-black btn btn-info btn-sm" onClick={this.openModal}>
+            <VideoIcon />
+            Im Video, Click me!
           </button>
         ) : (
           <button
             type="button"
-            className="btn btn-video margin-5px"
+            className="btn-red bg-yellow txt-black btn btn-info btn-sm"
             onClick={this.openModal}
           >
-            <i class="fas fa-video"></i>
-            <b> Im Video, Click me!!</b>
+              <VideoIcon />
+            Im Video, Click me!
           </button>
         )}
       </div>
