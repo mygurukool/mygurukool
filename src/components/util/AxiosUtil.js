@@ -411,3 +411,11 @@ function axiosGet(url, params = {}) {
     },
   })
 }
+
+function saveOrganisation(url, params = {}) {
+  return axios.post('http://localhost:4000/save').then((res)=>{
+            return res.data
+         }).catch((err)=>{
+           return err
+         })
+}

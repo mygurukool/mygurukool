@@ -172,17 +172,20 @@ export default class Course extends Component {
                           href="#?"
                           onClick={this.loadAssignment}
                         >
-                          <div className="tab-icon">
+                          
                           {_util.loadIconBySubject(course.name) ? (
-                            <img
-                              src={_util.loadIconBySubject(course.name)}
-                              className="subjectIcon"
-                              id={index}
-                            />
+                            <div className="tab-icon">
+                              <img
+                                src={_util.loadIconBySubject(course.name)}
+                                className="subjectIcon"
+                                id={index}
+                              />
+                            </div>
                           ) : (
                             ""
+                            
                           )}
-                          </div>
+                          
                           {/* Course Name */}
                          <h3> {course.name}</h3>
                         </a>
