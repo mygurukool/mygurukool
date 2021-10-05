@@ -321,36 +321,36 @@ export default class FileUpload extends Component {
   render() {
     return (
       <Fragment>
-        <table className="col-12 table table-stripped">
           {this.displayFile()}
           {this.state.showFlash ? (
-            <tr>
-              <td colspan="3" className="alert alert-success">
+              <div className="alert alert-success">
                 File Uploaded Successfully
-              </td>
-            </tr>
+              </div>
           ) : (
             ""
           )}
           {this.state.fileUploadedName ? (
-            <tr>
-              <td className="filelink">
-                {this.state.fileUploadedName ? this.state.fileName : ""}
-              </td>
-              <td colspan="2" className="filelink icons">
-                {this.state.fileUploadedName ? (
-                  <a href={this.state.fileUploadedName.webUrl} target="_blank">
-                    <i className="fas fa-eye fa-2x"></i>
-                  </a>
-                ) : (
-                  ""
-                )}
-              </td>
-            </tr>
+            <table className="custom-table table table-striped table-hover">
+              <tbody>
+              <tr>
+                <td className="filelink">
+                  {this.state.fileUploadedName ? this.state.fileName : ""}
+                </td>
+                <td colspan="2" className="filelink icons">
+                  {this.state.fileUploadedName ? (
+                    <a href={this.state.fileUploadedName.webUrl} target="_blank">
+                      <i className="fas fa-eye fa-2x"></i>
+                    </a>
+                  ) : (
+                    ""
+                  )}
+                </td>
+              </tr>
+              </tbody>
+            </table>
           ) : (
             ""
           )}
-        </table>
         <div>
           {this.state.hideFileUpload === false ? (
             <div className="card-body fileblock col-12">
