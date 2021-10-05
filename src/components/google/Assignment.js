@@ -342,13 +342,11 @@ export default class Assignment extends Component {
                 )) 
               ) : (this.state.user.selectedCourseId && this.state.user.selectedCourseId !== 'null' ?(
                     <div>
-                    <div className="row">
-                      <b>
-                        Congratulations! <br/><br/>
+                    <div className="congrats-txt">
+                      <h2>
+                        <span>Congratulations!</span>
                         You are ready to create your first Coursework, following instructions shall guide you.
-                      </b>
-                    </div>
-                    <div className="row">
+                      </h2> 
                       <img
                         src={_util.loadHelpIconByName("createCourseWork")}
                         width="215"
