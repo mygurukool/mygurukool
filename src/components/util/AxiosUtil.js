@@ -60,7 +60,7 @@ export function loadAssignmentPage(pageUrl) {
 
 export function getGoogleStudentUploadedExerciseFiles(courseId, assignmentId = "-") {
   // -- if no assigment Id is specified, returns submissions for all assignments.
-  //return axiosCall(`courses/${courseId}/courseWork/${assignmentId}/studentSubmissions`);
+  return axiosCall(`courses/${courseId}/courseWork/${assignmentId}/studentSubmissions`);
 }
 
 export function getStudentUploadedExerciseFiles(driveId, titleId) {
@@ -145,7 +145,7 @@ export function googleClassroomCreateCourse(course) {
 
 export function googleClassroomGetCourseworkSubmissions(courseId, courseworkId = "-") {
   // -- if no coursework Id is specified, returns submissions for all courseworks.
- //  return axiosCall(`courses/${courseId}/courseWork/${courseworkId}/studentSubmissions`);
+   return axiosCall(`courses/${courseId}/courseWork/${courseworkId}/studentSubmissions`);
 }
 
 export function googleClassroomSubmissionAddFile(courseId, courseworkId, submissionId, fileId) {

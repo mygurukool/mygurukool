@@ -46,7 +46,7 @@ export default class FileUpload extends Component {
     if (sessionStorage.getItem("loginProvider") === _constants.MICROSOFT) {
       this.msLoadStudentUploadedFiles();
     } else {
-     // this.googleLoadStudentUploadedFiles();
+      this.googleLoadStudentUploadedFiles();
     }
   }
 
@@ -266,10 +266,14 @@ export default class FileUpload extends Component {
         let fileId = response.data.id
         _apiUtils.googleClassroomGetCourseworkSubmissions(this.state.courseId, this.state.assignmentId).then((response) => {
           let submissionId = response.data.studentSubmissions[0].id
-
+          
+          /* disabling the code to facilitate developement
+          Current error: 403, may be change in google api policies.. hint CORS
+          
           _apiUtils.googleClassroomSubmissionAddFile(
             this.state.courseId, this.state.assignmentId, submissionId, fileId
           ).then((response) => { console.log(response) })
+          */
         })
       })
     })
