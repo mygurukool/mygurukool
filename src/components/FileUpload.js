@@ -397,7 +397,7 @@ export default class FileUpload extends Component {
                       ""
                     )}
                   </td>
-                  <td className="file_icons text-left">
+                  <td className="file_icons text-right">
                     <a href={exe.webUrl} target="_blank">
                       <EyeBlack />
                     </a>
