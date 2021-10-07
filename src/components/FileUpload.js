@@ -386,23 +386,25 @@ export default class FileUpload extends Component {
           ) : (
             ""
           )}
-          <table className="table table-stripped">
+          <table className="custom-table table table-striped table-hover">
+            <tbody>
             {this.state.exerciseFiles &&
               this.state.exerciseFiles.value.map((exe, i) => (
                 <tr>
-                  <td className="filename">
+                  <td className="filename text-left">
                     {exe.name.replace(
                       this.props.user.name.replace("/", "_") + "_",
                       ""
                     )}
                   </td>
-                  <td className="file_icons">
+                  <td className="file_icons text-left">
                     <a href={exe.webUrl} target="_blank">
-                      <i className="fas fa-eye fa-2x"></i>
+                      <EyeBlack />
                     </a>
                   </td>
                 </tr>
               ))}
+              </tbody>
           </table>
         </div>
       </Fragment>
