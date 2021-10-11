@@ -208,131 +208,134 @@ export default class Assignment extends Component {
                         
                       
                         <div className="accordian-body">
-                            <ShowMoreText
-                                lines={3}
-                                more="Show more"
-                                less="Show less"
-                                className="content-css"
-                                anchorClass="my-anchor-css-class"
-                                onClick={executeOnClick()}
-                                expanded={false}
-                                width={1000}
-                            >
-                            
-                                  <div className="row">
-                                    <div className="col-12 accordian-content">
-                                      <div className="flex-row">
-                                        <h2>Exercise Instructions</h2>
-                                        <div>
-                                            {this.getSubmissionTurnInState(
-                                              assignment.courseId,
-                                              assignment.id
-                                            )}
-                                            <button
-                                              type="button"
-                                              className="btn-red bg-yellow txt-black"
-                                              disabled={!this.props.isActive}
-                                              onClick={() =>
-                                                this.handleSubmissionTurnIn(
-                                                  assignment.courseId,
-                                                  assignment.id,
-                                                  this.state.submissionId
-                                                )
-                                              }
-                                            >
-                                              <CheckIcon />{" "}
-                                              {this.state.turnInState}
-                                            </button>
-                                          </div>
-                                      </div>
-                                      {assignment.description ? (
-                                        <ul className="p-0" dangerouslySetInnerHTML=
-                                          {{__html: assignment.description,}}>
-                                        </ul>
-                                      ) : (
-                                        ""
-                                      )}
-                                      {this.extractMaterials(assignment.materials)}
-                                      {this.state.material.formUrls &&
-                                        this.state.material.formUrls.map((formUrl) => (
-                                          <ul className="p-0">
-                                            <iframe
-                                              sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
-                                              src={formUrl}
-                                              width="100%"
-                                              height="700"
-                                              allowtransparency="true"
-                                              frameBorder="0"
-                                            ></iframe>
-                                          </ul>
-                                        ))}
-                                    </div>
-                                    <div className="col-12">
-                                      <b>Exercise Audio/ Video Explanation</b>
-                                      {/* <div className="col-6"> */}
-                                      {this.state.material.youtubeVideos &&
-                                        this.state.material.youtubeVideos.map(
-                                          (youtube) =>
-                                            youtube ? (
-                                              <Video
-                                                id={youtube.id}
-                                                name={youtube.title}
-                                                thumbnailUrl={youtube.thumbnailUrl}
-                                              />
-                                            ) : (
-                                              ""
-                                            )
-                                        )}
-                                    </div>
-                                    <div className="col-12">
-                                      <Interaction
-                                        // userName={this.props.userName}
-                                        // isTeacherLogin={this.props.isTeacherLogin}
-                                        // courseId={assignment.courseId}
-                                        user={this.state.user}
-                                        subjectName={assignment.title}
-                                        isActive={this.props.isActive}
-                                      />
-                                    </div>
-                                    {/* </div> */}
-                                  </div>
-                                  <div className="card-body fileblock row">
-                                    <div className="col-12 p-0">
-                                      {this.state.material.exerciseDetails &&
-                                        this.state.material.exerciseDetails.map(
-                                          (exerciseDetail) =>
-                                            exerciseDetail
-                                              ? ((hasDriveFiles = true),
-                                                (
-                                                  <FileUpload
-                                                    exerciseDetails={exerciseDetail}
-                                                    user={this.state.user}
-                                                    //userName={this.state.user.name}
-                                                    //courseId={assignment.courseId}
-                                                    assignmentId={assignment.id}
-                                                    isActive={this.props.isActive}
-                                                  />
-                                                ))
-                                              : ""
-                                        )}
-                                      {!hasDriveFiles ? (
-                                        <FileUpload
-                                          exerciseDetails={""}
-                                          user={this.state.user}
-                                          //userName={this.state.user.name}
-                                          //courseId={assignment.courseId}
-                                          assignmentId={assignment.id}
-                                          isActive={this.props.isActive}
-                                        />
-                                      ) : (
-                                        ""
-                                      )}
-                                    </div>
-                                    <div className="col-12">
-                                      {/* {this.state.formUpload} */}
-                                    </div>
-                                  </div>
-                            </ShowMoreText>
+                        <ShowMoreText
+                          /* Default options */
+                          lines={1}
+                          more="Show more"
+                          less="Show less"
+                          className="content-css"
+                          anchorClass="my-anchor-css-class"
+                          onClick={this.executeOnClick}
+                          expanded={false}
+                          width={1000}
+                          truncatedEndingComponent={"... "}
+                      >    <div className="row">
+                      <div className="col-12 accordian-content">
+                        <div className="flex-row">
+                          <h2>Exercise Instructions</h2>
+                          <div>
+                              {this.getSubmissionTurnInState(
+                                assignment.courseId,
+                                assignment.id
+                              )}
+                              <button
+                                type="button"
+                                className="btn-red bg-yellow txt-black"
+                                disabled={!this.props.isActive}
+                                onClick={() =>
+                                  this.handleSubmissionTurnIn(
+                                    assignment.courseId,
+                                    assignment.id,
+                                    this.state.submissionId
+                                  )
+                                }
+                              >
+                                <CheckIcon />{" "}
+                                {this.state.turnInState}
+                              </button>
+                            </div>
+                        </div>
+                        {assignment.description ? (
+                          <ul className="p-0" dangerouslySetInnerHTML=
+                            {{__html: assignment.description,}}>
+                          </ul>
+                        ) : (
+                          ""
+                        )}
+                        {this.extractMaterials(assignment.materials)}
+                        {this.state.material.formUrls &&
+                          this.state.material.formUrls.map((formUrl) => (
+                            <ul className="p-0">
+                              <iframe
+                                sandbox="allow-same-origin allow-scripts allow-popups allow-forms"
+                                src={formUrl}
+                                width="100%"
+                                height="700"
+                                allowtransparency="true"
+                                frameBorder="0"
+                              ></iframe>
+                            </ul>
+                          ))}
+                      </div>
+                      <div className="col-12">
+                        <b>Exercise Audio/ Video Explanation</b>
+                        {/* <div className="col-6"> */}
+                        {this.state.material.youtubeVideos &&
+                          this.state.material.youtubeVideos.map(
+                            (youtube) =>
+                              youtube ? (
+                                <Video
+                                  id={youtube.id}
+                                  name={youtube.title}
+                                  thumbnailUrl={youtube.thumbnailUrl}
+                                />
+                              ) : (
+                                ""
+                              )
+                          )}
+                      </div>
+                      <div className="col-12">
+                        <Interaction
+                          // userName={this.props.userName}
+                          // isTeacherLogin={this.props.isTeacherLogin}
+                          // courseId={assignment.courseId}
+                          user={this.state.user}
+                          subjectName={assignment.title}
+                          isActive={this.props.isActive}
+                        />
+                      </div>
+                      {/* </div> */}
+                    </div>
+                    <div className="card-body fileblock row">
+                      <div className="col-12 p-0">
+                        {this.state.material.exerciseDetails &&
+                          this.state.material.exerciseDetails.map(
+                            (exerciseDetail) =>
+                              exerciseDetail
+                                ? ((hasDriveFiles = true),
+                                  (
+                                    <FileUpload
+                                      exerciseDetails={exerciseDetail}
+                                      user={this.state.user}
+                                      //userName={this.state.user.name}
+                                      //courseId={assignment.courseId}
+                                      assignmentId={assignment.id}
+                                      isActive={this.props.isActive}
+                                    />
+                                  ))
+                                : ""
+                          )}
+                        {!hasDriveFiles ? (
+                          <FileUpload
+                            exerciseDetails={""}
+                            user={this.state.user}
+                            //userName={this.state.user.name}
+                            //courseId={assignment.courseId}
+                            assignmentId={assignment.id}
+                            isActive={this.props.isActive}
+                          />
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                      <div className="col-12">
+                        {/* {this.state.formUpload} */}
+                      </div>
+                    </div>
+              
+                          
+                      </ShowMoreText>
+                           
                         </div>
                       
                     </Fragment>
