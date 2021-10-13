@@ -270,6 +270,8 @@ a:hover{
                 text-align: center;
                 border:0px;
                 cursor: pointer;
+                background: transparent;
+                position: relative;
                 .tab-icon{
                     background: #D5D5D5;
                     border-radius:100%;
@@ -292,9 +294,11 @@ a:hover{
                     font-size: 16px; 
                     color: #32325d; 
                     margin-bottom: 0px; 
+                    position: relative;
+                    z-index: -4;
                 }
                 &.active{
-                    background: #FFFFFF;
+                    background: transparent;
                     box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.08);
                     border-radius: 5px;
                     .tab-icon{
@@ -307,9 +311,9 @@ a:hover{
             }
             &:hover{
                 .nav-link{
-                    background: #FFFFFF;
                     box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.08);
                     border-radius: 5px;
+                    background: transparent;
                     .tab-icon{
                         background: #7561BA;
                     }
@@ -579,3 +583,29 @@ a:hover{
         margin-top: 20px;
     }
 }
+
+.input-field{
+    background: #eee;
+    padding: 13px 15px;
+    height: auto;
+    font-weight: 400;
+    border:3px solid transparent;
+    &:focus{
+        border:3px solid #15B446;
+        outline: none;
+        box-shadow: unset;
+        background: #dcdcdc;
+    }
+}
+.create-btn{
+    padding-top:30px;
+    .bg-green{
+        margin: auto;
+        svg{
+            max-width: 30px;
+            margin-left: 10px;
+            margin-right:auto;
+        }
+    }
+}
+
