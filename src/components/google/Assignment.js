@@ -211,8 +211,8 @@ export default class Assignment extends Component {
                         <ShowMoreText
                           /* Default options */
                           lines={1}
-                          more="Show more"
-                          less="Show less"
+                          more=">"
+                          less="v"
                           className="content-css"
                           anchorClass="my-anchor-css-class"
                           onClick={this.executeOnClick}
