@@ -594,10 +594,10 @@ a:hover{
     border:3px solid transparent;
     box-shadow: 0px 4px 21px rgba(0, 0, 0, 0.05);
     &:focus{
-        border:3px solid #15B446;
+        border:3px solid #687EFB;
         outline: none;
         box-shadow: unset;
-        background: #dcdcdc;
+        background: #e5e4ff;
     }
 }
 .create-btn{
@@ -657,4 +657,15 @@ textarea:-webkit-autofill:active{
 }
 .sub-excer-section{
     padding-bottom: 20px;
+}
+.text-blue{
+    color:#283bd5;
+}
+.signup-form-center{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: calc(100vh - 100px);
+    max-width: 750px;
+    margin: auto;
 }
