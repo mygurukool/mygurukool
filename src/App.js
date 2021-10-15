@@ -13,6 +13,7 @@ import * as _constants from "./components/util/constants"
 import * as _gconsts from "./components/util/gConsts"
 import CreateCourse from "./components/CreateCourse";
 import OrganisationCreateForm from './components/organisation/organisation.container'
+import TeachersContainer from './components/teachers/teachers.container'
 import CreateClass from "./components/CreateClass";
 
 function googleUpdateSigninStatus(isSignedIn) {
@@ -68,9 +69,18 @@ function App() {
         <Route
           exact={true}
           path="/organisation"
-          render={() => (
+          render={(props) => (
             <div className="App">
-              <OrganisationCreateForm />
+              <OrganisationCreateForm {...props} />
+            </div>
+          )}
+        />
+         <Route
+          exact={true}
+          path="/teachers"
+          render={(props) => (
+            <div className="App">
+              <TeachersContainer {...props} />
             </div>
           )}
         />

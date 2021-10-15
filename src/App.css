@@ -518,3 +518,8 @@ h2 small {
   background-color: #c7f3b3;
   border-radius: 5px
 }
+
+.error{
+  font-size: 11px;
+  color:red;
+}

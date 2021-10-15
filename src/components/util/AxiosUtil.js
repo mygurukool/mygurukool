@@ -2,6 +2,7 @@ import axios from "axios";
 import * as _constants from "./constants";
 import * as _gconsts from "./gConsts";
 import * as _msconsts from "./msConsts";
+const BaseUrl = 'http://localhost:4000/api/'
 
 export function userProfile() {
   let api_url =
@@ -412,10 +413,28 @@ function axiosGet(url, params = {}) {
   })
 }
 
-function saveOrganisation(url, params = {}) {
-  return axios.post('http://localhost:4000/save').then((res)=>{
+// Organisation Start
+
+export async function saveOrganisation(formData) {
+  return axios.post(`${BaseUrl}/organization/create`,formData).then((res)=>{
             return res.data
          }).catch((err)=>{
            return err
          })
 }
+
+// Organisation End
+
+// Teacher Start
+
+export async function saveTeacher(formData) {
+      return axios.post(`${BaseUrl}/teacher/create/`,formData).then((res)=>{
+            return {'success':res.data,'error':''}
+         }).catch((err)=>{
+          return {'error':err.response.data,'success':''}
+          // console.log(err.response.data);
+          // console.log(err.response.status);
+         })
+}
+
+// Teacher End
