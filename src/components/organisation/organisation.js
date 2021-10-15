@@ -30,66 +30,63 @@ export default class Organisation extends React.Component{
               <img src={PageBanner} />
             </div>
             <div className="container">
-              <div className="row" style={{marginTop:'100px'}}>
-                    <div className="col-md-1"></div>
-                    <div className="col-md-10">
+              <div className="signup-form-center">
                     <form onSubmit={((event)=>create(event))}>
+                        <div className="row">
+                            <div className="col-md-12">
+                                <h2 className="title-2 text-center text-blue">Please fill the details</h2>
+                            </div>
+                            <div className="col-md-6 mt-2">
+                                <input name="first_name" className="form-control input-field" placeholder="My Name"/>
+                            </div>
+                            <div className="col-md-6 mt-2">
+                                <input name="username" className="form-control input-field" placeholder="My Login Name"/>
+                            </div>
+                            <div className="col-md-6 mt-2">
+                                <input name="password" className="form-control input-field" placeholder="Enter Password"/>
+                            </div>
+                            <div className="col-md-6 mt-2">
+                                <input className="form-control  input-field" placeholder="Reapeat Password"/>
+                            </div>
+                            <div className="col-md-6 mt-2">
+                                <input name="orgName" className="form-control input-field" placeholder="My Organisation"/>
+                            </div>
+                            <div className="col-md-6 mt-2">
+                                <select className="form-control  input-field" name="orgSize" placeholder="size">
+                                    {
+                                        size.map((value,key)=>(
+                                            <option value={value.value} key={key}>{value.name}</option>
+                                        ))
+                                    }
+                                </select>
+                            </div>
+                            <div className="col-md-6 mt-2">
+                            { 
+                                /*<select className="form-control" name="orgCountry" placeholder="size">
+                                    { country.length > 0 ?
+                                        country.map((value,key)=>(
+                                            <option value={value.value} key={key}>{value.name}</option>
+                                        ))
+                                    : <>loading...</>}
+                                </select>*/
+                            }
 
-                      <div className="row">
-                          <div className="col-md-6 mt-2">
-                              <input name="first_name" className="form-control input-field" placeholder="My Name"/>
-                          </div>
-                          <div className="col-md-6 mt-2">
-                              <input name="username" className="form-control input-field" placeholder="My Login Name"/>
-                          </div>
-                          <div className="col-md-6 mt-2">
-                              <input name="password" className="form-control input-field" placeholder="Enter Password"/>
-                          </div>
-                          <div className="col-md-6 mt-2">
-                              <input className="form-control  input-field" placeholder="Reapeat Password"/>
-                          </div>
-                          <div className="col-md-6 mt-2">
-                              <input name="orgName" className="form-control input-field" placeholder="My Organisation"/>
-                          </div>
-                          <div className="col-md-6 mt-2">
-                              <select className="form-control  input-field" name="orgSize" placeholder="size">
-                                  {
-                                      size.map((value,key)=>(
-                                          <option value={value.value} key={key}>{value.name}</option>
-                                      ))
-                                  }
-                              </select>
-                          </div>
-                          <div className="col-md-6 mt-2">
-                             { 
-                              /*<select className="form-control" name="orgCountry" placeholder="size">
-                                   { country.length > 0 ?
-                                       country.map((value,key)=>(
-                                           <option value={value.value} key={key}>{value.name}</option>
-                                       ))
-                                   : <>loading...</>}
-                               </select>*/
-                             }
-
-                              <select className="form-control input-field" name="orgCountry" placeholder="size">
-                              <option value="in">India </option>
-                              <option value="us">US </option>
+                                <select className="form-control input-field" name="orgCountry" placeholder="size">
+                                <option value="in">India </option>
+                                <option value="us">US </option>
                             </select>
-                          </div>
-                          <div className="col-md-12 mt-2">
-                              <textarea name="orgAddress" className="form-control input-field" placeholder="address"></textarea>
-                          </div>
-                          <div className="col-md-12 mt-2 text-center create-btn">
-                              <button className="btn-red bg-green txt-white">
-                                  Create
-                                  <RightArrowIcon />
-                              </button>
-                          </div>
-                      </div>   
-                      </form>
-                    </div>    
-                    <div className="col-md-1"></div>
-    
+                            </div>
+                            <div className="col-md-12 mt-2">
+                                <textarea name="orgAddress" className="form-control input-field" placeholder="address"></textarea>
+                            </div>
+                            <div className="col-md-12 mt-2 text-center create-btn">
+                                <button className="btn-red bg-green txt-white">
+                                    Create
+                                    <RightArrowIcon />
+                                </button>
+                            </div>
+                        </div>   
+                        </form>
               </div>
             </div>
           </Fragment>
