@@ -1,7 +1,10 @@
-import React from "react";
+import React, {Fragment} from "react";
 import { Modal, Form, Button } from "react-bootstrap";
 import * as _classworkUtil from "./google/ClassworkUtil";
 import axios from "axios";
+import Header from "./Header";
+import PageBanner from "../assets/bg.jpg";
+import {ReactComponent as RightArrowIcon} from "../assets/icons/arrow.svg";
 
 export default class CreateCourse extends React.Component {
   constructor(props) {
@@ -10,6 +13,7 @@ export default class CreateCourse extends React.Component {
       className: "",
       section: "",
       ageGroup: "",
+      error:{}
     };
     this.handleChange = this.handleChange.bind(this);
   }
@@ -17,9 +21,9 @@ export default class CreateCourse extends React.Component {
   handleClick = async (e) => {
     e.preventDefault();
     let data = {
-      name: this.state.className,
-      section: this.state.section,
-      ageGroup: this.state.ageGroup,
+      name: e.target.className.value,
+      section: e.target.section.value,
+      ageGroup: e.target.ageGroup.value,
     };
     axios.post('http://localhost:4000/api/classes',data).then((result)=>{
       if (result.status === 200) {
@@ -40,56 +44,50 @@ export default class CreateCourse extends React.Component {
   };
 
   render() {
-    const { className, courseName } = this.state;
     return (
       // {"create course"}
-      <div className="container">
-        <div className="card card-body">
-          <div className="row">
+      <Fragment>
+        <Header isSignedIn={true} />
+        <div className="page-banner">
+          <img src={PageBanner} alt={"Logo"}/>
+        </div>
+        <div className="container d-flex align-items-center justify-content-center" style={{height: '85vh'}}>
+          <div className="row justify-content-md-center">
             <div className="col-md-6">
-            <Form>
-              <Form.Label>
-                <b>Create Class</b>
-              </Form.Label>
-              <Form.Group controlId="formCreateCourse">
-                <Form.Label>Class Name</Form.Label>
-                <Form.Control
-                  type="text"
-                  name="className"
-                  placeholder="class 9"
-                  onChange={(e) => this.handleChange(e)}
-                />
-
-                <Form.Label>Section</Form.Label>
-                <Form.Control
-                  type="select"
-                  name="section"
-                  placeholder="A"
-                  onChange={(e) => this.handleChange(e)}
-                />
-
-                <Form.Label>Age Group</Form.Label>
-                <select className="form-control"
-                        name="ageGroup" placeholder="size"
-                        onChange={(e) => this.handleChange(e)}>
-                  <option value="5-8">5-8</option>
-                  <option value="8-13">8-13</option>
-                  <option value="14-18">14-18</option>
-                  <option value="18+">18+</option>
-                </select>
-              </Form.Group>
-              <Button
-                variant="primary"
-                type="submit"
-                onClick={(e) => this.handleClick(e)}
-              >
-                Create
-              </Button>
-            </Form>
+              <div className="card border-info">
+                <div className="card-header bg-green">
+                  <h5 className="card-title m-0 txt-white">Create Class</h5>
+                </div>
+                <div className="card-body">
+                  <form onSubmit={((event)=>this.handleClick(event))}>
+                    <div className="row">
+                      <div className="col-md-12 mt-3">
+                        <input name="className" className="form-control input-field" placeholder="class 9"/>
+                      </div>
+                      <div className="col-md-12 mt-3">
+                        <input name="section" className="form-control input-field" placeholder="A"/>
+                      </div>
+                      <div className="col-md-12 mt-3">
+                        <select className="form-control input-field" name="ageGroup" placeholder="ageGroup">
+                          <option value="5-8">5-8</option>
+                          <option value="8-13">8-13</option>
+                          <option value="14-18">14-18</option>
+                          <option value="18+">18+</option>
+                        </select>
+                      </div>
+                      <div className="col-md-12 mt-3 text-center create-btn">
+                        <button className="btn-red txt-white bg-green">
+                          Create
+                        </button>
+                      </div>
+                    </div>
+                  </form>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-  </div>
-  );
+      </Fragment>
+    );
   }
-  }
+}

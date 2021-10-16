@@ -9,16 +9,30 @@ import "..//scss/comman.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ReactComponent as User } from '../assets/images/home-img/Person.svg'
 import { ReactComponent as Logout } from '../assets/images/home-img/logout.svg'
+import {Link} from "react-router-dom";
 export default class Header extends Component {
+
+  constructor(props) {
+    super(props);
+    this.state = {
+      isLoggedIn: false
+    }
+  }
+
+  componentWillMount() {
+    let isLoggedIn = sessionStorage.getItem(_constants.ACCESS_TOKEN, "") !== "";
+    this.setState({ isLoggedIn: isLoggedIn});
+  }
+
   render() {
     return (
       <Fragment>
-        
+
         <header className="home-header">
           <div className="container">
             <div  className="header-content">
               <div className="header-left">
-                            <h2>My Gurokool (BETA)</h2>
+                <h2>My Gurokool (BETA)</h2>
               </div>
               <div className="header-right">
                   <ul className="navbar-items">
@@ -27,8 +41,13 @@ export default class Header extends Component {
                         <User/>
                         {this.props.studentName}
                       </a>
-                    
+
                     </li>
+                    {this.state.isLoggedIn ? (
+                      <li className="nav-item">
+                        <Link to="/class/create" className="btn-red text-white">Create class</Link>
+                      </li>
+                    ):''}
                     <li>
                     {this.props.isSignedIn ? (
                         <a
@@ -48,7 +67,7 @@ export default class Header extends Component {
                                 "https://login.microsoftonline.com/common/oauth2/v2.0/logout?post_logout_redirect_uri=" +
                                 process.env.REACT_APP_OAUTH_LOGOUT_URI;
                             }
-                            sessionStorage.clear();                    
+                            sessionStorage.clear();
                           }}
                         >
                           <Logout/>
