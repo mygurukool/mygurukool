@@ -6,7 +6,8 @@ import { ReactComponent as CloseIcon } from '../../assets/icons/close.svg';
 
 const containerStyle = {
     width: '100%',
-    height: '100%',
+    height: '90%',
+    padding: '20px'
 };
 
 export default class Conference extends Component {
@@ -25,6 +26,7 @@ export default class Conference extends Component {
     this.state.resize = !this.state.resize;
     //Conference Pane=> size/e.target.id: -1:close window; 0:minimize(50%); 1:maximize
     this.props.paneMaximize(parseInt(e.target.id));
+    
   };
 
   componentDidMount(){
@@ -37,7 +39,7 @@ export default class Conference extends Component {
      const domain = 'meet.jit.si';
      const options = {
       roomName: 'GuruKoolSchoolVideoConference',
-      height: 700,
+      height: 500,
       parentNode: document.getElementById('conference'),
       interfaceConfigOverwrite: {
        filmStripOnly: false,
@@ -62,11 +64,13 @@ export default class Conference extends Component {
 
   render() {
     return (
-      <div className="row-12">
+        <div className="modal">
+        <div className="modal_content">
+        <div className="row-12">
         <div role="alert" className="bg-white">
          <div className="confrance-header">
-         <span>Video Conference</span>
-          <div>
+              <span>Video Conference</span>
+              <div>
           
           <a href="#">
             {this.state.resize ? (
@@ -92,7 +96,6 @@ export default class Conference extends Component {
             </i>
           </a>{" "}
           </div>
-          
          </div>
           <div id='conference' style={containerStyle}>
             {this.state.loading ? (
@@ -104,6 +107,10 @@ export default class Conference extends Component {
           </div>
         </div>
       </div>
+        </div>
+      </div>
+
+     
     );
   }
 }

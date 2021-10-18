@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState  } from "react";
 import SplitPane from "react-split-pane";
 import Classwork from "./Classwork";
 import Conference from "./communication/Conference";
@@ -20,9 +20,11 @@ import "../scss/comman.scss"
 import PageBanner from '../assets/content-bg.jpeg'
 import { ReactComponent as Comments } from '../assets/images/home-img/comments.svg'
 
-
+import PopUp from './util/popup';
 
 class Home extends Component {
+ 
+
   constructor() {
     super();
     this.toggleBtmHeight = this.toggleBtmHeight.bind(this);
@@ -97,7 +99,16 @@ class Home extends Component {
     this.setState({ btmHeight: newSize + "px" });
   }
 
-  render() {
+  state = {
+    seen: false
+  };
+
+  togglePop = () => {
+    this.setState({
+      seen: !this.state.seen
+    });
+  };
+  render() {  
     return (
       <Wrapper>
         <div className="page-banner">
@@ -123,6 +134,7 @@ class Home extends Component {
                     {/* {<GroupNameDropdown dropdownTitleText="Class" itemList={this.state.userData.group} itemSelection={this.groupSelection}/>} */}
                   </b>
                 </span>
+                <div className="d-flex">
                     <a
                     className="btn-red bg-yellow txt-black"
                       href="#"
@@ -137,6 +149,7 @@ class Home extends Component {
                         )
                       }
                     >
+                      
                       {/* <i className="far fa-file-archive fa-1g">Archive</i>
                     </a>{" "}
                     <a
@@ -150,8 +163,11 @@ class Home extends Component {
                      <Comments/>
                       Conference
                     </a>
-                  
-              
+                    {/* popup demo */}
+                    <a href="#" className="btn-red bg-yellow txt-black ml-2" onClick={this.togglePop}>Demo</a>
+                    {this.state.seen ? <PopUp toggle={this.togglePop} />  : ''}
+                    
+              </div>
             </div>
           
         
@@ -161,6 +177,7 @@ class Home extends Component {
             split="vertical"
             defaultSize={this.state.splitPercentage}
             onChange={(size) => this.toggleBtmHeight(size)}
+            className="remove-side-border"
           >
             <Scrollbars>
               <Classwork ref={instance => { this.child = instance; }} userData={this.handleUserData} expandArchive={true}/>
