@@ -3,7 +3,7 @@ import { Modal, Form, Button } from "react-bootstrap";
 import * as _classworkUtil from "./google/ClassworkUtil";
 import axios from "axios";
 import Header from "./Header";
-import PageBanner from "../assets/bg.jpg";
+import PageBanner from "../assets/classroom.jpg";
 import {ReactComponent as RightArrowIcon} from "../assets/icons/arrow.svg";
 
 export default class CreateCourse extends React.Component {
