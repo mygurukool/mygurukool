@@ -4,7 +4,7 @@ import React, { Component, Fragment, } from "react";
 import Tooltip from "react-simple-tooltip"
 import "..//App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "..//scss/comman.scss"
+import "..//scss/common.scss"
 import Header from "./Header";
 import { Redirect } from "react-router";
 import * as _apiUtils from "./util/AxiosUtil";

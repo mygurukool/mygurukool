@@ -16,7 +16,7 @@ import Welcome from "./Welcome";
 import {DEFAULT_GROUP_NAME} from "./util/constants";
 
 import * as _googleClassworkUtil from "./google//ClassworkUtil"
-import "../scss/comman.scss"
+import "../scss/common.scss"
 import PageBanner from '../assets/content-bg.jpeg'
 import { ReactComponent as Comments } from '../assets/images/home-img/comments.svg'
 

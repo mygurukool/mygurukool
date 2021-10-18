@@ -5,7 +5,7 @@ import * as _constants from "./util/constants";
 import * as _gconsts from "./util/gConsts";
 import * as _msconsts from "./util/msConsts";
 import "..//App.css";
-import "..//scss/comman.scss";
+import "..//scss/common.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ReactComponent as User } from '../assets/images/home-img/Person.svg'
 import { ReactComponent as Logout } from '../assets/images/home-img/logout.svg'
