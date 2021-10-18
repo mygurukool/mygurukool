@@ -1,9 +1,18 @@
 import React, { Component, Fragment } from "react";
-import PageBanner from '../../assets/org.jpg'
+import PageBanner from '../../assets/bg.jpg'
 import Header from "../Header";
 import "../../scss/comman.scss"
 import { ReactComponent as RightArrowIcon } from '../../assets/icons/arrow.svg'
-
+import {
+    FormGroup,
+    Form,
+    Input,
+    InputGroupAddon,
+    InputGroupText,
+    InputGroup,
+    Row,
+    Col
+  } from "reactstrap";
 
 
 export default class Organisation extends React.Component{
@@ -36,49 +45,80 @@ export default class Organisation extends React.Component{
                             <div className="col-md-12">
                                 <h2 className="title-2 text-center text-blue">Please fill the details</h2>
                             </div>
-                            <div className="col-md-6 mt-2">
-                                <input name="first_name" className="form-control input-field" placeholder="My Name"/>
-                            </div>
-                            <div className="col-md-6 mt-2">
-                                <input name="username" className="form-control input-field" placeholder="My Login Name"/>
-                            </div>
-                            <div className="col-md-6 mt-2">
-                                <input name="password" className="form-control input-field" placeholder="Enter Password"/>
-                            </div>
-                            <div className="col-md-6 mt-2">
-                                <input className="form-control  input-field" placeholder="Reapeat Password"/>
-                            </div>
-                            <div className="col-md-6 mt-2">
-                                <input name="orgName" className="form-control input-field" placeholder="My Organisation"/>
-                            </div>
-                            <div className="col-md-6 mt-2">
-                                <select className="form-control  input-field" name="orgSize" placeholder="size">
+                            <Col md="6">
+                                <FormGroup className="has-success">
+                                    <Input
+                                    className="is-valid form-control input-field"
+                                    placeholder="My Name"
+                                    type="text"
+                                    name="first_name"
+                                    />
+                                </FormGroup>
+                            </Col>
+                            <Col md="6">
+                                <FormGroup className="has-success">
+                                    <Input
+                                    className="is-valid form-control input-field"
+                                    placeholder="My Login Name"
+                                    type="text"
+                                    name="username"
+                                    />
+                                </FormGroup>
+                            </Col>
+                            <Col md="6">
+                                <FormGroup className="has-danger">
+                                    <Input
+                                    className="is-invalid form-control input-field"
+                                    placeholder="Enter Password"
+                                    type="password"
+                                    name="password"
+                                    />
+                                </FormGroup>
+                            </Col>
+                            <Col md="6">
+                                <FormGroup className="has-danger">
+                                    <Input
+                                    className="is-invalid form-control input-field"
+                                    placeholder="Repeat Password"
+                                    type="password"
+                                    name="password"
+                                    />
+                                </FormGroup>
+                            </Col>
+                            <Col md="6">
+                                <FormGroup className="has-success">
+                                    <Input
+                                    className="is-valid form-control input-field"
+                                    placeholder="My Organisation"
+                                    type="password"
+                                    name="orgName"
+                                    />
+                                </FormGroup>
+                            </Col>
+                            <Col md="6">
+                                <FormGroup className="has-success">
+                                    <select className="form-control  input-field" name="orgSize" placeholder="size">
                                     {
                                         size.map((value,key)=>(
                                             <option value={value.value} key={key}>{value.name}</option>
                                         ))
                                     }
                                 </select>
-                            </div>
-                            <div className="col-md-6 mt-2">
-                            { 
-                                /*<select className="form-control" name="orgCountry" placeholder="size">
-                                    { country.length > 0 ?
-                                        country.map((value,key)=>(
-                                            <option value={value.value} key={key}>{value.name}</option>
-                                        ))
-                                    : <>loading...</>}
-                                </select>*/
-                            }
-
+                                </FormGroup>
+                            </Col>
+                            <Col md="6">
+                                <FormGroup className="has-success">
                                 <select className="form-control input-field" name="orgCountry" placeholder="size">
-                                <option value="in">India </option>
-                                <option value="us">US </option>
-                            </select>
-                            </div>
-                            <div className="col-md-12 mt-2">
-                                <textarea name="orgAddress" className="form-control input-field" placeholder="address"></textarea>
-                            </div>
+                                    <option value="in">India </option>
+                                    <option value="us">US </option>
+                                </select>
+                                </FormGroup>
+                            </Col>
+                            <Col md="12">
+                                <FormGroup className="has-success">
+                                     <textarea name="orgAddress" className="is-valid form-control input-field" placeholder="address"></textarea>
+                                </FormGroup>
+                            </Col>
                             <div className="col-md-12 mt-2 text-center create-btn">
                                 <button className="btn-red bg-green txt-white">
                                     Create
