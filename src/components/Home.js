@@ -20,7 +20,6 @@ import "../scss/common.scss"
 import PageBanner from '../assets/content-bg.jpeg'
 import { ReactComponent as Comments } from '../assets/images/home-img/comments.svg'
 
-import PopUp from './util/popup';
 
 class Home extends Component {
  
@@ -99,15 +98,7 @@ class Home extends Component {
     this.setState({ btmHeight: newSize + "px" });
   }
 
-  state = {
-    seen: false
-  };
-
-  togglePop = () => {
-    this.setState({
-      seen: !this.state.seen
-    });
-  };
+ 
   render() {  
     return (
       <Wrapper>
@@ -163,9 +154,6 @@ class Home extends Component {
                      <Comments/>
                       Conference
                     </a>
-                    {/* popup demo */}
-                    <a href="#" className="btn-red bg-yellow txt-black ml-2" onClick={this.togglePop}>Demo</a>
-                    {this.state.seen ? <PopUp toggle={this.togglePop} />  : ''}
                     
               </div>
             </div>
