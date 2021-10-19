@@ -31,7 +31,23 @@ export default class Organisation extends React.Component{
             {'name':'30-40',value:'30-40'},
         ]
         const{create,country} = this.props
+        
+        
+        const handleFocus = e => {
+            e.target.classList.add("form-success");
+          };
+        
+          const handleBlur = e => {
+            e.target.classList.remove("form-success");
+          };
 
+          const handleFocusInvalid = e => {
+            e.target.classList.add("form-invalid");
+          };
+        
+          const handleBlurInvalid = e => {
+            e.target.classList.remove("form-invalid");
+          };
         return (
             <Fragment>
             <Header isSignedIn={true} />
@@ -46,58 +62,74 @@ export default class Organisation extends React.Component{
                                 <h2 className="title-2 text-center text-blue">Please fill the details</h2>
                             </div>
                             <Col md="6">
-                                <FormGroup className="has-success">
+                                <FormGroup>
                                     <Input
-                                    className="is-valid form-control input-field"
+                                    className="form-control input-field"
                                     placeholder="My Name"
                                     type="text"
                                     name="first_name"
+                                    onFocus={handleFocus}
+                                    onBlur={handleBlur}
                                     />
                                 </FormGroup>
                             </Col>
                             <Col md="6">
-                                <FormGroup className="has-success">
+                                <FormGroup>
                                     <Input
-                                    className="is-valid form-control input-field"
+                                    className="form-control input-field"
                                     placeholder="My Login Name"
                                     type="text"
                                     name="username"
+                                    onFocus={handleFocusInvalid}
+                                    onBlur={handleBlurInvalid}
                                     />
                                 </FormGroup>
                             </Col>
                             <Col md="6">
                                 <FormGroup className="has-danger">
                                     <Input
-                                    className="is-invalid form-control input-field"
+                                    className="form-control input-field"
                                     placeholder="Enter Password"
                                     type="password"
                                     name="password"
+                                    onFocus={handleFocus}
+                                    onBlur={handleBlur}
                                     />
                                 </FormGroup>
                             </Col>
                             <Col md="6">
                                 <FormGroup className="has-danger">
                                     <Input
-                                    className="is-invalid form-control input-field"
+                                    className="form-control input-field"
                                     placeholder="Repeat Password"
                                     type="password"
                                     name="password"
+                                    onFocus={handleFocus}
+                                    onBlur={handleBlur}
                                     />
                                 </FormGroup>
                             </Col>
                             <Col md="6">
                                 <FormGroup className="has-success">
                                     <Input
-                                    className="is-valid form-control input-field"
+                                    className="form-control input-field"
                                     placeholder="My Organisation"
                                     type="password"
                                     name="orgName"
+                                    onFocus={handleFocus}
+                                    onBlur={handleBlur}
                                     />
                                 </FormGroup>
                             </Col>
                             <Col md="6">
                                 <FormGroup className="has-success">
-                                    <select className="form-control  input-field" name="orgSize" placeholder="size">
+                                    <select 
+                                    className="form-control  input-field"
+                                    name="orgSize" 
+                                    placeholder="size"
+                                    onFocus={handleFocus}
+                                    onBlur={handleBlur}
+                                    >
                                     {
                                         size.map((value,key)=>(
                                             <option value={value.value} key={key}>{value.name}</option>
@@ -108,7 +140,13 @@ export default class Organisation extends React.Component{
                             </Col>
                             <Col md="6">
                                 <FormGroup className="has-success">
-                                <select className="form-control input-field" name="orgCountry" placeholder="size">
+                                <select 
+                                className="form-control input-field" 
+                                name="orgCountry" 
+                                placeholder="size"
+                                onFocus={handleFocus}
+                                    onBlur={handleBlur}
+                                >
                                     <option value="in">India </option>
                                     <option value="us">US </option>
                                 </select>
@@ -116,7 +154,13 @@ export default class Organisation extends React.Component{
                             </Col>
                             <Col md="12">
                                 <FormGroup className="has-success">
-                                     <textarea name="orgAddress" className="is-valid form-control input-field" placeholder="address"></textarea>
+                                     <textarea 
+                                     name="orgAddress" 
+                                     className="form-control input-field" 
+                                     placeholder="address"
+                                     onFocus={handleFocus}
+                                    onBlur={handleBlur}
+                                     ></textarea>
                                 </FormGroup>
                             </Col>
                             <div className="col-md-12 mt-2 text-center create-btn">

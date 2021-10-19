@@ -96,7 +96,7 @@ export default class Conference extends Component {
          </div>
           <div id='conference' style={containerStyle}>
             {this.state.loading ? (
-              <img src={_util.loaderRandomGifs()} className="loaderIcon" />
+              <div className="center-loader"><img src={_util.loaderRandomGifs()} className="loaderIcon" /></div>
             ) : (
               ""
             )}
