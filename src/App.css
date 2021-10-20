@@ -490,7 +490,8 @@ h2 small {
 
 .container-conference {
   max-width: 1700px;
-  padding-left: 15px;
+  padding:0px 15px;
+  margin: auto;
 }
 
 .msTeamsIcon {

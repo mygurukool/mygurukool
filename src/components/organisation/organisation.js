@@ -1,17 +1,28 @@
 import React, { Component, Fragment } from "react";
-import PageBanner from '../../assets/bg.jpg'
+import PageBanner from '../../assets/org.jpg'
 import Header from "../Header";
-import "../../scss/comman.scss"
+import "../../scss/common.scss"
 import { ReactComponent as RightArrowIcon } from '../../assets/icons/arrow.svg'
 import Select from "react-select";
 import countryList from 'react-select-country-list'
+
+import {
+    FormGroup,
+    Form,
+    Input,
+    InputGroupAddon,
+    InputGroupText,
+    InputGroup,
+    Row,
+    Col
+} from "reactstrap";
 
 export default class Organisation extends React.Component{
 
     constructor(props) {
         super(props);
         this.state = { isSignedIn: false, country: "", accessToken: "" };
-      }
+    }
 
     changeHandler = value => {
         this.setState({ country: value});
@@ -27,73 +38,148 @@ export default class Organisation extends React.Component{
         ]
         const{create,country} = this.props
 
-        return (
-            <Fragment>
-            <Header isSignedIn={true} />
-            <div className="page-banner">
-              <img src={PageBanner} />
-            </div>
-            <div className="container">
-              <div className="signup-form-center">
-                    <form onSubmit={((event)=>create(event))}>
-                        <div className="row">
-                            <div className="col-md-12">
-                                <h2 className="title-2 text-center text-blue">Please fill the details</h2>
-                            </div>
-                            <div className="col-md-6 mt-2">
-                                <input name="first_name" className="form-control input-field" placeholder="My Name"/>
-                            </div>
-                            <div className="col-md-6 mt-2">
-                                <input name="username" className="form-control input-field" placeholder="My Login Name"/>
-                            </div>
-                            <div className="col-md-6 mt-2">
-                                <input name="password" className="form-control input-field" placeholder="Enter Password"/>
-                            </div>
-                            <div className="col-md-6 mt-2">
-                                <input className="form-control  input-field" placeholder="Reapeat Password"/>
-                            </div>
-                            <div className="col-md-6 mt-2">
-                                <input name="orgName" className="form-control input-field" placeholder="My Organisation"/>
-                            </div>
-                            <div className="col-md-6 mt-2">
-                                <select className="form-control  input-field" name="orgSize" placeholder="size">
-                                    {
-                                        size.map((value,key)=>(
-                                            <option value={value.value} key={key}>{value.name}</option>
-                                        ))
-                                    }
-                                </select>
-                            </div>
-                            <div className="col-md-6 mt-2">
-                            {
-                                /*<select className="form-control" name="orgCountry" placeholder="size">
-                                    { country.length > 0 ?
-                                        country.map((value,key)=>(
-                                            <option value={value.value} key={key}>{value.name}</option>
-                                        ))
-                                    : <>loading...</>}
-                                </select>*/
-                            }
 
-                                {/*<select className="form-control input-field" name="orgCountry" placeholder="size">
-                                <option value="in">India </option>
-                                <option value="us">US </option>
-                            </select>*/}
-                                <Select options={options} name="orgCountry" value={this.state.country} onChange={this.changeHandler} />
-                            </div>
-                            <div className="col-md-12 mt-2">
-                                <textarea name="orgAddress" className="form-control input-field" placeholder="address"></textarea>
-                            </div>
-                            <div className="col-md-12 mt-2 text-center create-btn">
-                                <button className="btn-red bg-green txt-white">
-                                    Create
-                                    <RightArrowIcon />
-                                </button>
-                            </div>
-                        </div>
-                        </form>
+        const handleFocus = e => {
+            e.target.classList.add("form-success");
+        };
+
+        const handleBlur = e => {
+            e.target.classList.remove("form-success");
+        };
+
+        const handleFocusInvalid = e => {
+            e.target.classList.add("form-invalid");
+        };
+
+        const handleBlurInvalid = e => {
+            e.target.classList.remove("form-invalid");
+        };
+        return (
+          <Fragment>
+              <Header isSignedIn={true} />
+              <div className="page-banner">
+                  <img src={PageBanner} />
               </div>
-            </div>
+              <div className="container">
+                  <div className="signup-form-center">
+                      <form onSubmit={((event)=>create(event))}>
+                          <div className="row">
+                              <div className="col-md-12">
+                                  <h2 className="title-2 text-center text-blue">Please fill the details</h2>
+                              </div>
+                              <Col md="6">
+                                  <FormGroup>
+                                      <Input
+                                        className="form-control input-field"
+                                        placeholder="My Name"
+                                        type="text"
+                                        name="first_name"
+                                        onFocus={handleFocus}
+                                        onBlur={handleBlur}
+                                      />
+                                  </FormGroup>
+                              </Col>
+                              <Col md="6">
+                                  <FormGroup>
+                                      <Input
+                                        className="form-control input-field"
+                                        placeholder="My Login Name"
+                                        type="text"
+                                        name="username"
+                                        onFocus={handleFocusInvalid}
+                                        onBlur={handleBlurInvalid}
+                                      />
+                                  </FormGroup>
+                              </Col>
+                              <Col md="6">
+                                  <FormGroup className="has-danger">
+                                      <Input
+                                        className="form-control input-field"
+                                        placeholder="Enter Password"
+                                        type="password"
+                                        name="password"
+                                        onFocus={handleFocus}
+                                        onBlur={handleBlur}
+                                      />
+                                  </FormGroup>
+                              </Col>
+                              <Col md="6">
+                                  <FormGroup className="has-danger">
+                                      <Input
+                                        className="form-control input-field"
+                                        placeholder="Repeat Password"
+                                        type="password"
+                                        name="password"
+                                        onFocus={handleFocus}
+                                        onBlur={handleBlur}
+                                      />
+                                  </FormGroup>
+                              </Col>
+                              <Col md="6">
+                                  <FormGroup className="has-success">
+                                      <Input
+                                        className="form-control input-field"
+                                        placeholder="My Organisation"
+                                        type="password"
+                                        name="orgName"
+                                        onFocus={handleFocus}
+                                        onBlur={handleBlur}
+                                      />
+                                  </FormGroup>
+                              </Col>
+                              <Col md="6">
+                                  <FormGroup className="has-success">
+                                      <select
+                                        className="form-control  input-field"
+                                        name="orgSize"
+                                        placeholder="size"
+                                        onFocus={handleFocus}
+                                        onBlur={handleBlur}
+                                      >
+                                          {
+                                              size.map((value,key)=>(
+                                                <option value={value.value} key={key}>{value.name}</option>
+                                              ))
+                                          }
+                                      </select>
+                                  </FormGroup>
+                              </Col>
+                              <Col md="6">
+                                  <FormGroup className="has-success">
+                                      {/*<select
+                                        className="form-control input-field"
+                                        name="orgCountry"
+                                        placeholder="size"
+                                        onFocus={handleFocus}
+                                        onBlur={handleBlur}
+                                      >
+                                          <option value="in">India </option>
+                                          <option value="us">US </option>
+                                      </select>*/}
+                                      <Select options={options} value={this.state.country} onChange={this.changeHandler} />
+                                  </FormGroup>
+                              </Col>
+                              <Col md="12">
+                                  <FormGroup className="has-success">
+                                                 <textarea
+                                                   name="orgAddress"
+                                                   className="form-control input-field"
+                                                   placeholder="address"
+                                                   onFocus={handleFocus}
+                                                   onBlur={handleBlur}
+                                                 />
+                                  </FormGroup>
+                              </Col>
+                              <div className="col-md-12 mt-2 text-center create-btn">
+                                  <button className="btn-red bg-green txt-white">
+                                      Create
+                                      <RightArrowIcon />
+                                  </button>
+                              </div>
+                          </div>
+                      </form>
+                  </div>
+              </div>
           </Fragment>
         )
     }

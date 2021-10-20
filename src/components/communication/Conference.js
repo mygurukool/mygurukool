@@ -1,6 +1,8 @@
 /*global JitsiMeetExternalAPI*/
 import React, { Component } from 'react';
 import * as _util from "../util/utils";
+import { ReactComponent as WindowIcon } from '../../assets/icons/window.svg';
+import { ReactComponent as CloseIcon } from '../../assets/icons/close.svg';
 
 const containerStyle = {
     width: '100%',
@@ -61,15 +63,11 @@ export default class Conference extends Component {
   render() {
     return (
       <div className="row-12">
-        <div className="alert alert-primary" role="alert">
-          <a href="#">
-            <i
-              className="fas fa-window-close"
-              id={-1}
-              onClick={this.handleClick}
-            ></i>
-          </a>{" "}
-          &emsp;
+        <div role="alert" className="bg-white">
+         <div className="confrance-header">
+         <span>Video Conference</span>
+          <div>
+          
           <a href="#">
             {this.state.resize ? (
               <i
@@ -85,11 +83,20 @@ export default class Conference extends Component {
               ></i>
             )}{" "}
           </a>
-          &emsp;
-          <span>Video Conference</span>
+          <a href="#">
+            <i
+              className="fas fa-window-close"
+              id={-1}
+              onClick={this.handleClick}
+            >
+            </i>
+          </a>{" "}
+          </div>
+          
+         </div>
           <div id='conference' style={containerStyle}>
             {this.state.loading ? (
-              <img src={_util.loaderRandomGifs()} className="loaderIcon" />
+              <div className="center-loader"><img src={_util.loaderRandomGifs()} className="loaderIcon" /></div>
             ) : (
               ""
             )}

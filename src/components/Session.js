@@ -1,9 +1,10 @@
 /* global gapi */
 
-import React, { Component, Fragment } from "react";
+import React, { Component, Fragment, } from "react";
+import Tooltip from "react-simple-tooltip"
 import "..//App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import "..//scss/comman.scss"
+import "..//scss/common.scss"
 import Header from "./Header";
 import { Redirect } from "react-router";
 import * as _apiUtils from "./util/AxiosUtil";
@@ -28,10 +29,14 @@ import { ReactComponent as Organization } from '../assets/icons/organization.svg
 export default class Session extends Component {
   constructor(props) {
     super(props);
-    this.state = { isSignedIn: false, accessToken: "" };
+    this.state = { isSignedIn: false, accessToken: "", googleSignInCount: 0, };
 
     sessionStorage.setItem(_constants.LOGIN_PROVIDER, "");
     sessionStorage.setItem(_constants.ACCESS_TOKEN, "");
+  }
+
+  componentDidUpdate(){
+    alert("componentDidUpdate")
   }
 
    render() {
@@ -86,24 +91,58 @@ export default class Session extends Component {
                 className="border-shadow box-btn card-hover"
                 type="button"
                 onClick={(e) => {
+
+                 // let gGSC = sessionStorage.getItem(_constants.GOOGLE_SIGNIN_COUNT)
+                 // if(Number.isNaN(gGSC) === true && ) 
+                  gapi.auth2.getAuthInstance().signOut();
+                  
+/*                  this.setState({
+                    googleSignInCount: ++ this.state.googleSignInCount,
+                  })       
+                  sessionStorage.setItem(
+                    _constants.GOOGLE_SIGNIN_COUNT, 
+                    this.state.googleSignInCount
+                  ); 
+                  */
                   sessionStorage.setItem(
                     _constants.LOGIN_PROVIDER,
                     _constants.GOOGLE
-                  );
+                  );                  
                   window.gapi.auth2.getAuthInstance().signIn();
-                }}
+               }}
               >
                <div className="icon-circle"><Google /></div>
                 Login With Google Account
-              </button>
-              <button
+                <br/>
+                <Tooltip 
+                  content="Gmail account may not have logout your session properly, login twice while we log you out" 
+                  customCss={`white-space: nowrap;`}>
+                    <i className="fas fa-exclamation-triangle">{" "}Attention</i>
+                  </Tooltip>
+               </button>
+               <button
                 className="border-shadow box-btn card-hover">
                   <div className="icon-circle"><Organization /></div>
                       Organization
                 </button>
               </div>
-              <h2 className="title-5 text-center">Don't have account?, please <Link className="simple-link" to='/organisation'>Signup</Link> here</h2>              
-            </div>
+              <h2 className="title-5 text-center">Don't have account?, please <Link className="simple-link" to='/organisation'>Signup</Link> here</h2>
+              <br />
+              {      
+    //ggg.signOut()
+}
+  {  
+                
+                //sessionStorage.getItem(                  _constants.GOOGLE_SIGNIN_COUNT                ) >= 1 
+                  //? 
+                  <div >
+                  <Tooltip content="Your session">
+                    <i className="fas fa-exclamation-triangle"></i>
+                  </Tooltip>
+                </div>
+               //   : ""
+                }
+             </div>
           </div>
         </div>
       </Fragment>

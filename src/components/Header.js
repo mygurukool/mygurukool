@@ -5,7 +5,7 @@ import * as _constants from "./util/constants";
 import * as _gconsts from "./util/gConsts";
 import * as _msconsts from "./util/msConsts";
 import "..//App.css";
-import "..//scss/comman.scss";
+import "..//scss/common.scss";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { ReactComponent as User } from '../assets/images/home-img/Person.svg'
 import { ReactComponent as Logout } from '../assets/images/home-img/logout.svg'
@@ -61,7 +61,9 @@ export default class Header extends Component {
 
                             if (provider === _constants.GOOGLE) {
                               gapi.auth2.getAuthInstance().signOut();
-                              //gapi.auth2.getAuthInstance().disconnect();
+                              // Disconnect will logoff gmail login to all the google sessions in the browser
+                              // gapi.auth2.getAuthInstance().disconnect();  
+                              //_apiUtils.googleLogout(gapi.auth2.getAuthInstance().currentUser.get().getAuthResponse(true).access_token);
                             } else {
                               window.location.href =
                                 "https://login.microsoftonline.com/common/oauth2/v2.0/logout?post_logout_redirect_uri=" +
@@ -73,9 +75,7 @@ export default class Header extends Component {
                           <Logout/>
                           Logout
                         </a>
-                      ) : (
-                        ""
-                      )}
+                      ) : ""}
                     </li>
                   </ul>
               </div>

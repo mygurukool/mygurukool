@@ -42,9 +42,11 @@
     "react-select": "^3.1.1",
     "react-select-country-list": "^2.2.3",
     "react-show-more-text": "^1.5.0",
+    "react-simple-tooltip": "^2.6.3",
     "react-spinners": "^0.8.3",
     "react-split-pane": "^0.1.91",
     "react-tiny-fab": "^3.5.0",
+    "reactstrap": "^8.10.0",
     "string-strip-html": "^4.4.0",
     "styled-components": "^5.1.1"
   },
@@ -72,6 +74,7 @@
     ]
   },
   "devDependencies": {
+    "@svgr/webpack": "^5.5.0",
     "gh-pages": "^3.0.0"
   }
 }

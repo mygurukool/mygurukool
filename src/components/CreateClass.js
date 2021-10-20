@@ -3,7 +3,7 @@ import { Modal, Form, Button } from "react-bootstrap";
 import * as _classworkUtil from "./google/ClassworkUtil";
 import axios from "axios";
 import Header from "./Header";
-import PageBanner from "../assets/bg.jpg";
+import PageBanner from "../assets/classroom.jpg";
 import {ReactComponent as RightArrowIcon} from "../assets/icons/arrow.svg";
 
 export default class CreateCourse extends React.Component {
@@ -25,7 +25,7 @@ export default class CreateCourse extends React.Component {
       section: e.target.section.value,
       ageGroup: e.target.ageGroup.value,
     };
-    axios.post('http://localhost:4000/api/classes',data).then((result)=>{
+    axios.post(`${process.env.SCHOOL_API_URL}/classes`,data).then((result)=>{
       if (result.status === 200) {
         alert("Class created successfully");
       }

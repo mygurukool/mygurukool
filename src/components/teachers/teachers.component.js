@@ -1,7 +1,7 @@
 import React, { Component, Fragment } from "react";
-import PageBanner from '../../assets/bg.jpg'
+import PageBanner from '../../assets/teacher.jpg'
 import Header from "../Header";
-import "../../scss/comman.scss"
+import "../../scss/common.scss"
 import { ReactComponent as RightArrowIcon } from '../../assets/icons/arrow.svg'
 
 

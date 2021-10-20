@@ -12,7 +12,7 @@ import CreateCourse from "../CreateCourse";
 import TeacherAuthorization from "./TeacherAuthorization";
 import {COURSE_ID, DATA_SOURCE, HAS_TEACHER_ACCEPTED} from "../util/constants"
 import InvitePeople from "./InvitePeople";
-import "../../scss/comman.scss"
+import "../../scss/common.scss"
 /**
  * User Object structure, this must be update appropriately
  * user: {id, name, group, selectedCourseId, isTeacherLogin}
