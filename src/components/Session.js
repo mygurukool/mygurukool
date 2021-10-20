@@ -84,7 +84,7 @@ export default class Session extends Component {
                 }}
               >
                 <div className="icon-circle"><Microsoft /></div>
-                Login With Microsoft Account
+               <h2> Login With Microsoft Account</h2>
               </button>
 
               <button
@@ -112,18 +112,20 @@ export default class Session extends Component {
                }}
               >
                <div className="icon-circle"><Google /></div>
-                Login With Google Account
+                <h2>Login With Google Account
+
                 <br/>
                 <Tooltip 
                   content="Gmail account may not have logout your session properly, login twice while we log you out" 
                   customCss={`white-space: nowrap;`}>
                     <i className="fas fa-exclamation-triangle">{" "}Attention</i>
                   </Tooltip>
+                  </h2>
                </button>
                <button
                 className="border-shadow box-btn card-hover">
                   <div className="icon-circle"><Organization /></div>
-                      Organization
+                      <h2>Organization</h2>
                 </button>
               </div>
               <h2 className="title-5 text-center">Don't have account?, please <Link className="simple-link" to='/organisation'>Signup</Link> here</h2>

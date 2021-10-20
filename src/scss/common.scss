@@ -32,6 +32,11 @@ a:hover{
         display: flex;
         margin-bottom: 10px;
     }
+    h2{
+        margin: 0px;
+        font-size: 16px;
+        min-height: 40px;
+    }
     &:hover{
         color:rgb(244, 180, 89);
         .icon-circle{
@@ -660,7 +665,7 @@ textarea:-webkit-autofill:active{
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: 145px;
+    margin-top: 10px;
     div{
         a{
             margin-left:10px;
@@ -694,9 +699,70 @@ textarea:-webkit-autofill:active{
     left: 0px;
     background: transparent;
     width:100%;
-    height:100%;
     display:flex;
 }
 .Pane2  {
     background: #fff;
 }
+.confrence-border{
+    border-bottom: 1px solid #D7D7D7;
+    margin-top: 10px;
+    padding-top: 0px;
+}
+.tab-icon-row{
+    padding: 10px;
+    width: 140px;
+    text-align: center;
+    border: 0px;
+    cursor: pointer;
+    background: transparent;
+    position: relative;
+    margin: auto;
+    .tab-icon{
+        border-radius: 100%;
+        width: 80px;
+        height: 80px;
+        margin: 0px auto 5px;
+        display: flex;
+        background: #D5D5D5;
+        img{
+            width: 40px;
+            margin: auto;
+            height: auto;
+        }
+        
+    }
+    h3{
+        font-weight: 600;
+        font-size: 16px;
+        color: #32325d;
+        margin-bottom: 0px;
+        position: relative;
+        z-index: -4;
+    }
+    &.active{
+        background: transparent;
+        box-shadow: 0px 4px 18px rgba(0, 0, 0, 0.08);
+        border-radius: 5px;
+        .tab-icon{
+            background: #7561BA;
+        }
+    }
+}
+.tab-content-scroll{
+    overflow: auto;
+    overflow: auto;
+    max-height: calc(100vh - 300px);
+}
+
+.tab-content-scroll::-webkit-scrollbar {
+    width: 8px;
+  }
+  .tab-content-scroll::-webkit-scrollbar-track {
+    background: #eee;
+  }
+  
+  .tab-content-scroll::-webkit-scrollbar-thumb {
+    background: #6e52d1;
+    border-radius: 10px;
+  }
