@@ -3,18 +3,22 @@ import PageBanner from '../../assets/bg.jpg'
 import Header from "../Header";
 import "../../scss/comman.scss"
 import { ReactComponent as RightArrowIcon } from '../../assets/icons/arrow.svg'
-
-
+import Select from "react-select";
+import countryList from 'react-select-country-list'
 
 export default class Organisation extends React.Component{
 
     constructor(props) {
         super(props);
-        this.state = { isSignedIn: false, accessToken: "" };
+        this.state = { isSignedIn: false, country: "", accessToken: "" };
       }
 
-    
+    changeHandler = value => {
+        this.setState({ country: value});
+    }
+
     render(){
+        const options = countryList().getData()
         const size = [
             {'name':'1-10',value:'1-10'},
             {'name':'10-20',value:'10-20'},
@@ -61,7 +65,7 @@ export default class Organisation extends React.Component{
                                 </select>
                             </div>
                             <div className="col-md-6 mt-2">
-                            { 
+                            {
                                 /*<select className="form-control" name="orgCountry" placeholder="size">
                                     { country.length > 0 ?
                                         country.map((value,key)=>(
@@ -71,10 +75,11 @@ export default class Organisation extends React.Component{
                                 </select>*/
                             }
 
-                                <select className="form-control input-field" name="orgCountry" placeholder="size">
+                                {/*<select className="form-control input-field" name="orgCountry" placeholder="size">
                                 <option value="in">India </option>
                                 <option value="us">US </option>
-                            </select>
+                            </select>*/}
+                                <Select options={options} name="orgCountry" value={this.state.country} onChange={this.changeHandler} />
                             </div>
                             <div className="col-md-12 mt-2">
                                 <textarea name="orgAddress" className="form-control input-field" placeholder="address"></textarea>
@@ -85,7 +90,7 @@ export default class Organisation extends React.Component{
                                     <RightArrowIcon />
                                 </button>
                             </div>
-                        </div>   
+                        </div>
                         </form>
               </div>
             </div>
