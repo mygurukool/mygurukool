@@ -1,7 +1,7 @@
 import React,{PureComponent} from 'react';
 import axios from 'axios'
 import Organization from './organisation';
-import * as _apiUtils from "../util/AxiosUtil";
+import * as _mgkAPI from "../util/MgkAPI";
 
 class OrganisationContainer extends  PureComponent {
 
@@ -21,7 +21,7 @@ class OrganisationContainer extends  PureComponent {
                     creatorName:event.target.first_name.value,
                     }
 
-        _apiUtils.saveOrganisation(data).then((result)=>{
+        _mgkAPI.saveOrganisation(data).then((result)=>{
             alert('Created')
             this.props.history.push('/teachers')
         }).catch((error)=>{

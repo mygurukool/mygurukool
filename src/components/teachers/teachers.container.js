@@ -1,7 +1,7 @@
 import React,{PureComponent} from 'react';
 import axios from 'axios'
 import Teachers from './teachers.component';
-import * as _apiUtils from "../util/AxiosUtil";
+import * as _mgkAPI from "../util/MgkAPI";
 
 class TeachersContainer extends  PureComponent {
 
@@ -22,7 +22,7 @@ class TeachersContainer extends  PureComponent {
                     experience:event.target.experience.value
                     }
 
-        _apiUtils.saveTeacher(data).then(async (res)=>{
+        _mgkAPI.saveTeacher(data).then(async (res)=>{
             alert(res.success.success)
             await this.setState({error:res.error})
          }).catch(async (err)=>{

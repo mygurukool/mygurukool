@@ -411,29 +411,3 @@ function axiosGet(url, params = {}) {
     },
   })
 }
-
-// Organisation Start
-
-export async function saveOrganisation(formData) {
-  return axios.post(`${process.env.REACT_APP_MGK_API_URL}/organization/create`,formData).then((res)=>{
-    return res.data
-  }).catch((err)=>{
-    return err
-  })
-}
-
-// Organisation End
-
-// Teacher Start
-
-export async function saveTeacher(formData) {
-  return axios.post(`${process.env.REACT_APP_MGK_API_URL}/teacher/create/`,formData).then((res)=>{
-        return {'success':res.data,'error':''}
-      }).catch((err)=>{
-      return {'error':err.response.data,'success':''}
-      // console.log(err.response.data);
-      // console.log(err.response.status);
-      })
-}
-
-// Teacher End
