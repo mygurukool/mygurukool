@@ -25,7 +25,7 @@ export default class CreateCourse extends React.Component {
       section: e.target.section.value,
       ageGroup: e.target.ageGroup.value,
     };
-    axios.post(`${process.env.SCHOOL_API_URL}/classes`,data).then((result)=>{
+    axios.post(`${process.env.REACT_APP_MGK_API_URL}/classes`,data).then((result)=>{
       if (result.status === 200) {
         alert("Class created successfully");
       }
