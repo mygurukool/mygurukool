@@ -284,8 +284,8 @@ export function fetchGroupList(courses){
   let groupList = [];
   courses && courses.map((course) => {
     let name = course.section;
-    if(name===null || typeof(name) === DEFAULT_GROUP_NAME) {name = DEFAULT_GROUP_NAME} //TODO: temp for Sudha's testing, to be deleted
-    //if(name!==null && typeof(name) !== DEFAULT_GROUP_NAME && !groupList.includes(name)) groupList.push(name) //TODO enable this when the testing code is deleted
+    //if(name===null || typeof(name) === DEFAULT_GROUP_NAME) {name = DEFAULT_GROUP_NAME} //TODO: temp for Sudha's testing, to be deleted
+    if(name!==null && typeof(name) !== DEFAULT_GROUP_NAME && !groupList.includes(name)) groupList.push(name) //TODO enable this when the testing code is deleted
     if(!groupList.includes(name)) groupList.push(name);
   });
   return groupList;
