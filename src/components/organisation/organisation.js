@@ -29,6 +29,8 @@ export default class Organisation extends React.Component{
     }
 
     render(){
+        const {error} = this.props
+        console.log(error)
         const options = countryList().getData()
         const size = [
             {'name':'1-10',value:'1-10'},
@@ -65,15 +67,15 @@ export default class Organisation extends React.Component{
                       <form onSubmit={((event)=>create(event))}>
                           <div className="row">
                               <div className="col-md-12">
-                                  <h2 className="title-2 text-center text-blue">Please fill the details</h2>
+                                  <h2 className="title-2 text-center orgTitle">Please fill the details</h2>
                               </div>
                               <Col md="6">
                                   <FormGroup>
                                       <Input
-                                        className="form-control input-field"
+                                        className={error.creatorName ? "form-control orgError":'form-control  input-field'}
                                         placeholder="My Name"
                                         type="text"
-                                        name="first_name"
+                                        name="creatorName"
                                         onFocus={handleFocus}
                                         onBlur={handleBlur}
                                       />
@@ -82,7 +84,7 @@ export default class Organisation extends React.Component{
                               <Col md="6">
                                   <FormGroup>
                                       <Input
-                                        className="form-control input-field"
+                                        className={error.creatorName ? "form-control orgError":'form-control  input-field'}
                                         placeholder="My Login Name"
                                         type="text"
                                         name="username"
@@ -120,7 +122,6 @@ export default class Organisation extends React.Component{
                                       <Input
                                         className="form-control input-field"
                                         placeholder="My Organisation"
-                                        type="password"
                                         name="orgName"
                                         onFocus={handleFocus}
                                         onBlur={handleBlur}
@@ -156,7 +157,7 @@ export default class Organisation extends React.Component{
                                           <option value="in">India </option>
                                           <option value="us">US </option>
                                       </select>*/}
-                                      <Select options={options} value={this.state.country} onChange={this.changeHandler} />
+                                      <Select className="orgCountry" options={options} name="orgCountry" value={this.state.country} onChange={this.changeHandler} />
                                   </FormGroup>
                               </Col>
                               <Col md="12">

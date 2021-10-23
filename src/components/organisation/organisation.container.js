@@ -6,7 +6,8 @@ import * as _mgkAPI from "../util/MgkAPI";
 class OrganisationContainer extends  PureComponent {
 
     state={
-        country:{}
+        country:{},
+        error:{}
     }
 
     create(event){
@@ -18,14 +19,19 @@ class OrganisationContainer extends  PureComponent {
                     orgAddress:event.target.orgAddress.value,
                     username:event.target.username.value,
                     password:event.target.password.value,
-                    creatorName:event.target.first_name.value,
+                    creatorName:event.target.creatorName.value,
                     }
 
         _mgkAPI.saveOrganisation(data).then((result)=>{
-            alert('Created')
+            var {sucess,error} = result
+            if(sucess!==''){
+                alert('Created')
             this.props.history.push('/teachers')
+            }
+            this.setState({error})
+            
         }).catch((error)=>{
-            console.log('error')
+            console.log(error.response.data)
         })            
     }
 

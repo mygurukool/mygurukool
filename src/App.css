@@ -3,6 +3,29 @@
 }*/
 
 @import url("https://fonts.googleapis.com/css2?family=Manrope:wght@200;300;400;700&display=swap");
+
+/* Org Css */
+
+.orgTitle{
+  color: #fff;
+  background-color: brown;
+}
+
+.css-yk16xz-control {
+  padding-bottom: 9px;
+  padding-top: 9px;
+}
+
+.orgError {
+  background: #fff;
+  padding: 13px 15px;
+  height: auto;
+  font-weight: 400;
+  border: 2px solid transparent;
+  box-shadow: 0px 4px 21px rgb(0 0 0 / 5%);
+  border-color: red;
+}
+
 ul li {
   display: block;
   line-height: 35px;
