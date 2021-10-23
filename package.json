@@ -16,6 +16,7 @@
     "@types/react": "^17.0.0",
     "axios": "^0.21.1",
     "bootstrap": "^4.5.3",
+    "draft-js": "^0.11.7",
     "hellojs": "^1.18.4",
     "html-react-parser": "^0.10.3",
     "i": "^0.3.6",
@@ -75,6 +76,7 @@
   },
   "devDependencies": {
     "@svgr/webpack": "^5.5.0",
-    "gh-pages": "^3.0.0"
+    "gh-pages": "^3.0.0",
+    "draft-js": "^0.11.7"
   }
 }
