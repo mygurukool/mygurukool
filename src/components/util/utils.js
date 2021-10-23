@@ -1,3 +1,5 @@
+import CheckIcon from '../../assets/default-subject-icon.jpg'
+
 const _loadingGifs = importLoaderGifs(require.context('./../../assets/loading/', false, /\.(gif)$/)); //require.context('./', false, /\.(png|jpe?g|svg)$/));
 function importLoaderGifs(r) {
   return r.keys().map(r);
@@ -79,7 +81,7 @@ export function parseOneNotePage(page) {
 }
 
 export function loadIconBySubject(subjectName) {
-  let subjectIcon;
+  let subjectIcon = CheckIcon;
   _subjectIcons.map(function (icon) {
     // subjectIcon = iconFetch(icon, subjectName.toLowerCase());
     // alert("subjectIcon: " + subjectIcon)
@@ -95,9 +97,12 @@ export function loadIconBySubject(subjectName) {
         )
     ) {
       subjectIcon = icon;
+      console.log("in if: " + subjectName + "..." + subjectIcon)
     }
+    console.log("else: " + subjectName + "..." + subjectIcon)
     return subjectIcon;
   });
+  console.log("end: " + subjectName + "..." + subjectIcon)
   return subjectIcon;
 }
 
