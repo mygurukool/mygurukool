@@ -79,7 +79,7 @@ export default class RichEditor extends React.Component {
             handleKeyCommand={this.handleKeyCommand}
             keyBindingFn={this.mapKeyToEditorCommand}
             onChange={this.onChange}
-            placeholder="Tell a story..."
+            placeholder={this.props.placeholder}
             ref="editor"
             spellCheck={true}
           />

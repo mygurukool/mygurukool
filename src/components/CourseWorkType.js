@@ -10,6 +10,7 @@ import DateTimePicker from "./util/DateTimePicker";
 import Select from 'react-select'
 import { ReactComponent as RightArrowIcon } from '../assets/icons/arrow.svg'
 import { ReactComponent as CrossIcon } from '../assets/icons/cross-white.svg'
+import RichEditor from "./util/RichEditor";
 
 const driveFileTypeList = Object.keys(driveFileTypes).map(key => driveFileTypes[key]);
 const addFileTypeList = Object.keys(addFileTypes).map(key => addFileTypes[key]);
@@ -288,7 +289,7 @@ export default class CourseWorkType extends React.Component {
           )}
         </div>
         <>
-        <Card>
+        {/* <Card>
             <Card.Header>
                 <div className="content-space-between">
                   <Button
@@ -298,7 +299,7 @@ export default class CourseWorkType extends React.Component {
                     disabled={this.state.isSubmitDisabled}
                     onClick={(e) => this.handleClick(e.target.id)}
                   >
-                    {this.state.submitButtonText}
+                    {this.state.submitButtonText} 
                   </Button>
 
                   <a
@@ -311,173 +312,9 @@ export default class CourseWorkType extends React.Component {
                   </a>
                 </div>
             </Card.Header>
-          </Card>
+          </Card> */}
 
         </>
-        <div>
-          <CardGroup>
-            <Row className="mb-3 mt-3">
-              <Col>
-              <Card  className="border-shadow">
-              {/* <Card.Img variant="top" src="holder.js/100px160" /> */}
-              <Card.Body>
-                <Form>
-                  <div className="row">
-                    <Form.Label>
-                      <b>{this.props.workTypeData.title}</b>
-                    </Form.Label>
-                  </div>
-                  <Form.Group controlId="formCreateCourseWork">
-                    <Form.Label>Title</Form.Label>
-                    <Form.Control
-                     className="mb-2"
-                      type="input"
-                      name={TITLE_FIELD}
-                      defaultValue={
-                        this.state.assignmentToEdit
-                          ? this.state.assignmentToEdit.title
-                          : ""
-                      }
-                      //placeholder="eg: English, French"
-                      onKeyPress={(e) => {
-                        e.key === "Enter" && e.preventDefault();
-                      }}
-                      onChange={(e) => this.handleChange(e)}
-                    />
-                    {/* <Form.Text className="text-muted">
-                  We'll never share your email with anyone else.
-                </Form.Text> */}
-
-                    <Form.Label>Instructions</Form.Label>
-                    <Form.Control
-                    className="mb-2"
-                      as="textarea"
-                      name={INSTRUCTIONS_FIELD}
-                      defaultValue={
-                        this.state.assignmentToEdit
-                          ? this.state.assignmentToEdit.description
-                          : ""
-                      }
-                      //placeholder="Class 3A"
-                      onChange={(e) => this.handleChange(e)}
-                    />
-                  </Form.Group>
-
-                  <div className="mb-4 border-bottom pb-3">
-                      <DriveFileTypeDropdown
-                        dropdownTitleText={actionButtonText.ADD}
-                        itemList={addFileTypeList}
-                        itemSelection={this.addFileSelected}
-                      />
-                      
-                      <DriveFileTypeDropdown
-                        dropdownTitleText={actionButtonText.CREATE}
-                        itemList={driveFileTypeList}
-                        itemSelection={this.driveFileSelected}
-                      />
-                  </div>
-                </Form>
-
-                <Modal
-                  show={this.state.showDriveFileModal}
-                  backdrop="static"
-                  keyboard={true}
-                  centered={true}
-                  className="custom-modal-bar"
-                >
-                  <Modal.Body>
-                    <Form>
-                      <Form.Group controlId="formDriveFile">
-                        <div class="modal-header bg-green">
-                          <Form.Label>
-                            {this.state.driveFileType} Title
-                          </Form.Label>
-                        </div>
-                        <Form.Control
-                          type="input"
-                          name={DRIVE_FILE_NAME_FIELD}
-                          autofocus="true"
-                          //placeholder="eg: English, French"
-                          onKeyPress={(e) => {
-                            e.key === "Enter" && e.preventDefault();
-                          }}
-                          onKeyDown={(e) => this.keyDown(e)}
-                          onChange={(e) => this.handleChange(e)}
-                          className="form-control input-field mb-3"
-                        />
-                        <div className="create-btn d-flex justify-content-center">
-                            <Button
-                              variant="secondary"
-                              className="btn-red  bg-grey bg-green txt-white m-0 mr-1" 
-                              onClick={() =>
-                                this.setState({ showDriveFileModal: false })
-                              }
-                            >
-                              Cancel
-                              <CrossIcon />
-                            </Button>
-                            <Button variant="primary" onClick={this.createDriveFiles} className="btn-red bg-green txt-white m-0 ml-1">
-                              Go!
-                              <RightArrowIcon />
-                            </Button>
-                        </div>
-                      </Form.Group>
-                    </Form>
-                  </Modal.Body>
-                </Modal>
-                <table className="custom-table table table-striped table-hover">
-                  {this.renderStrippedTable(this.state.driveFiles)}
-                </table>
-              </Card.Body>
-              {/* <Card.Footer>
-                <small className="text-muted">Last updated 3 mins ago</small>
-              </Card.Footer> */}
-            </Card>
-            </Col>
-              <Col lg="4">
-              <Card   className="border-shadow">
-              <Card.Body>
-                {/* <Row>
-                  <Form.Label>For</Form.Label>
-                </Row> */}
-
-                <Row>
-                  <div>
-                    <Form.Label>For</Form.Label>
-                  </div>
-                  <Col lg="12" className="mb-2 p-0">
-                    <Select
-                      defaultValue={[forClassList[0]]}
-                      isMulti
-                      name="studentsList"
-                      options={forClassList}
-                      className="basic-multi-select"
-                      classNamePrefix="select"
-                    />
-                  </Col>
-                  <Col lg="12" className="mb-2 p-0">
-                    <Select
-                      defaultValue={[forStudentList[0], forStudentList[2]]}
-                      isMulti
-                      name="studentsList"
-                      options={forStudentList}
-                      className="basic-multi-select"
-                      classNamePrefix="select"
-                    />
-                  </Col>
-                </Row>
-                <Row>Due</Row>
-                <Row>
-                  <DateTimePicker />
-                </Row>
-              </Card.Body>
-            </Card>
-              </Col>
-            
-           
-            </Row>
-          </CardGroup>
-        </div>
         <div>
           <Row className="pb-3">
             <Col>
@@ -510,9 +347,17 @@ export default class CourseWorkType extends React.Component {
                       {/* <Form.Text className="text-muted">
                   We'll never share your email with anyone else.
                 </Form.Text> */}
-
+                      <br/>
                       <Form.Label>Instructions</Form.Label>
-                      <Form.Control
+                      <RichEditor 
+                        name={INSTRUCTIONS_FIELD}
+                        placeholder={
+                          this.state.assignmentToEdit
+                            ? this.state.assignmentToEdit.description
+                            : "Assignment description here ..."}
+                        onChange={(e) => this.handleChange(e)}
+                        />
+                      {/* <Form.Control
                         as="textarea"
                         name={INSTRUCTIONS_FIELD}
                         defaultValue={
@@ -523,7 +368,7 @@ export default class CourseWorkType extends React.Component {
                         //placeholder="Class 3A"
                         onChange={(e) => this.handleChange(e)}
                         className="mb-2"
-                      />
+                      /> */}
                     </Form.Group>
                      <div className="mb-3 border-bottom pb-3">
                         <DriveFileTypeDropdown
