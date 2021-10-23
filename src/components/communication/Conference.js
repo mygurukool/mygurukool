@@ -1,8 +1,7 @@
 /*global JitsiMeetExternalAPI*/
 import React, { Component } from 'react';
 import * as _util from "../util/utils";
-import { ReactComponent as WindowIcon } from '../../assets/icons/window.svg';
-import { ReactComponent as CloseIcon } from '../../assets/icons/close.svg';
+import ChatImg  from '../../assets/images/home-img/comments.svg'
 
 const containerStyle = {
     width: '100%',
@@ -37,7 +36,7 @@ export default class Conference extends Component {
      const domain = 'meet.jit.si';
      const options = {
       roomName: 'GuruKoolSchoolVideoConference',
-      height: 700,
+      height: 580,
       parentNode: document.getElementById('conference'),
       interfaceConfigOverwrite: {
        filmStripOnly: false,
@@ -64,6 +63,14 @@ export default class Conference extends Component {
     return (
       <div className="row-12">
         <div role="alert" className="bg-white">
+          {/* <div className="confrence-border">
+          <div className="tab-icon-row">
+              <div className="tab-icon">
+                <img src={ChatImg} />
+              </div>
+              <h3>Conference</h3>
+          </div>
+          </div> */}
          <div className="confrance-header">
          <span>Video Conference</span>
           <div>

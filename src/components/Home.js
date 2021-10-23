@@ -115,7 +115,6 @@ class Home extends Component {
                          showCreateCourse={this.createCourseClick}
                          />}
         <div className={this.state.cssContainer}>
-          <div className="content-scroll">
             <div className="section-header border-shadow br-0 ">
                 {/* role="alert"> */}
                 <span>
@@ -187,7 +186,6 @@ class Home extends Component {
         : 
          <CreateCourse hideCreateCourse={this.createCourseClick}/>
         }
-        </div>
         </div>
         {this.state.userData.group.length === 0 ? <Welcome welcomeAction={this.welcomeAction}/>:""}
       </Wrapper>
