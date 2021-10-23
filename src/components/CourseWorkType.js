@@ -8,6 +8,8 @@ import DriveFileTypeDropdown from "./util/DropdownUtil";
 import {loaderRandomGifs} from "./util/utils";
 import DateTimePicker from "./util/DateTimePicker";
 import Select from 'react-select'
+import { ReactComponent as RightArrowIcon } from '../assets/icons/arrow.svg'
+import { ReactComponent as CrossIcon } from '../assets/icons/cross-white.svg'
 
 const driveFileTypeList = Object.keys(driveFileTypes).map(key => driveFileTypes[key]);
 const addFileTypeList = Object.keys(addFileTypes).map(key => addFileTypes[key]);
@@ -214,12 +216,14 @@ export default class CourseWorkType extends React.Component {
           // if(file.hasOwnProperty('thumbnailUrl')){
           //   imgSrc = require(file.thumbnailUrl);
           // }
+          <tbody>
           <tr class="">
             {/* <div>
                 {imgSrc? <img src={imgSrc} className="loaderIcon" /> : ''}
               </div> */}
-            <td className="filelink">{file.title}</td>
-            <td colspan="2" className="filelink icons">
+            <td className="filelink border-0">{file.title}</td>
+            <td colspan="2" className="filelink icons  border-0 text-right vertical-top">
+              <div class="admin-course-file">
               <a
                 href={
                   file.hasOwnProperty("url")
@@ -232,8 +236,7 @@ export default class CourseWorkType extends React.Component {
               >
                 <i className="fas fa-eye fa-2x"></i>
               </a>
-            </td>
-            <td>
+  
               <a
                 id={index}
                 href="#"
@@ -242,8 +245,10 @@ export default class CourseWorkType extends React.Component {
               >
                 <i className="fas fa-trash-alt fa-2x"></i>
               </a>
+              </div>
             </td>
           </tr>
+          </tbody>
         ))
       : "";
   }
@@ -285,19 +290,7 @@ export default class CourseWorkType extends React.Component {
         <>
         <Card>
             <Card.Header>
-              <Container>
-              <Row>
-                <Col xs={6} md={10}>
-                  <a
-                    href="#"
-                    target=""
-                    variant="secondary"
-                    onClick={(e) => this.handleClick("cancel")}
-                  >
-                    <i className="fas fa-window-close fa-2x"></i>
-                  </a>
-                </Col>
-                <Col xs={6} md={2} style={{justifyContent: "center"}} >
+                <div className="content-space-between">
                   <Button
                     id={this.state.submitButtonText}
                     variant="primary"
@@ -307,16 +300,25 @@ export default class CourseWorkType extends React.Component {
                   >
                     {this.state.submitButtonText}
                   </Button>
-                </Col>
-              </Row>
-              </Container>
+
+                  <a
+                    href="#"
+                    target=""
+                    variant="secondary"
+                    onClick={(e) => this.handleClick("cancel")}
+                  >
+                    <i className="fas fa-window-close fa-2x"></i>
+                  </a>
+                </div>
             </Card.Header>
           </Card>
 
         </>
         <div>
           <CardGroup>
-            <Card style={{ width: "75%" }} md={8}>
+            <Row className="mb-3 mt-3">
+              <Col>
+              <Card  className="border-shadow">
               {/* <Card.Img variant="top" src="holder.js/100px160" /> */}
               <Card.Body>
                 <Form>
@@ -328,6 +330,7 @@ export default class CourseWorkType extends React.Component {
                   <Form.Group controlId="formCreateCourseWork">
                     <Form.Label>Title</Form.Label>
                     <Form.Control
+                     className="mb-2"
                       type="input"
                       name={TITLE_FIELD}
                       defaultValue={
@@ -347,6 +350,7 @@ export default class CourseWorkType extends React.Component {
 
                     <Form.Label>Instructions</Form.Label>
                     <Form.Control
+                    className="mb-2"
                       as="textarea"
                       name={INSTRUCTIONS_FIELD}
                       defaultValue={
@@ -358,16 +362,20 @@ export default class CourseWorkType extends React.Component {
                       onChange={(e) => this.handleChange(e)}
                     />
                   </Form.Group>
-                  <DriveFileTypeDropdown
-                    dropdownTitleText={actionButtonText.ADD}
-                    itemList={addFileTypeList}
-                    itemSelection={this.addFileSelected}
-                  />
-                  <DriveFileTypeDropdown
-                    dropdownTitleText={actionButtonText.CREATE}
-                    itemList={driveFileTypeList}
-                    itemSelection={this.driveFileSelected}
-                  />
+
+                  <div className="mb-4 border-bottom pb-3">
+                      <DriveFileTypeDropdown
+                        dropdownTitleText={actionButtonText.ADD}
+                        itemList={addFileTypeList}
+                        itemSelection={this.addFileSelected}
+                      />
+                      
+                      <DriveFileTypeDropdown
+                        dropdownTitleText={actionButtonText.CREATE}
+                        itemList={driveFileTypeList}
+                        itemSelection={this.driveFileSelected}
+                      />
+                  </div>
                 </Form>
 
                 <Modal
@@ -375,13 +383,16 @@ export default class CourseWorkType extends React.Component {
                   backdrop="static"
                   keyboard={true}
                   centered={true}
+                  className="custom-modal-bar"
                 >
                   <Modal.Body>
                     <Form>
                       <Form.Group controlId="formDriveFile">
-                        <Form.Label>
-                          {this.state.driveFileType} Title
-                        </Form.Label>
+                        <div class="modal-header bg-green">
+                          <Form.Label>
+                            {this.state.driveFileType} Title
+                          </Form.Label>
+                        </div>
                         <Form.Control
                           type="input"
                           name={DRIVE_FILE_NAME_FIELD}
@@ -392,26 +403,29 @@ export default class CourseWorkType extends React.Component {
                           }}
                           onKeyDown={(e) => this.keyDown(e)}
                           onChange={(e) => this.handleChange(e)}
+                          className="form-control input-field mb-3"
                         />
+                        <div className="create-btn d-flex justify-content-center">
+                            <Button
+                              variant="secondary"
+                              className="btn-red  bg-grey bg-green txt-white m-0 mr-1" 
+                              onClick={() =>
+                                this.setState({ showDriveFileModal: false })
+                              }
+                            >
+                              Cancel
+                              <CrossIcon />
+                            </Button>
+                            <Button variant="primary" onClick={this.createDriveFiles} className="btn-red bg-green txt-white m-0 ml-1">
+                              Go!
+                              <RightArrowIcon />
+                            </Button>
+                        </div>
                       </Form.Group>
                     </Form>
                   </Modal.Body>
-                  <div className="modal"></div>
-                  <div className="modal-footer">
-                    <Button
-                      variant="secondary"
-                      onClick={() =>
-                        this.setState({ showDriveFileModal: false })
-                      }
-                    >
-                      Cancel
-                    </Button>
-                    <Button variant="primary" onClick={this.createDriveFiles}>
-                      Go!
-                    </Button>
-                  </div>
                 </Modal>
-                <table className="col-12 table table-stripped">
+                <table className="custom-table table table-striped table-hover">
                   {this.renderStrippedTable(this.state.driveFiles)}
                 </table>
               </Card.Body>
@@ -419,15 +433,19 @@ export default class CourseWorkType extends React.Component {
                 <small className="text-muted">Last updated 3 mins ago</small>
               </Card.Footer> */}
             </Card>
-            <Card xs lg="4">
+            </Col>
+              <Col lg="4">
+              <Card   className="border-shadow">
               <Card.Body>
                 {/* <Row>
                   <Form.Label>For</Form.Label>
                 </Row> */}
 
                 <Row>
-                <Form.Label>For</Form.Label>
-                  <Col>
+                  <div>
+                    <Form.Label>For</Form.Label>
+                  </div>
+                  <Col lg="12" className="mb-2 p-0">
                     <Select
                       defaultValue={[forClassList[0]]}
                       isMulti
@@ -437,7 +455,7 @@ export default class CourseWorkType extends React.Component {
                       classNamePrefix="select"
                     />
                   </Col>
-                  <Col>
+                  <Col lg="12" className="mb-2 p-0">
                     <Select
                       defaultValue={[forStudentList[0], forStudentList[2]]}
                       isMulti
@@ -454,12 +472,16 @@ export default class CourseWorkType extends React.Component {
                 </Row>
               </Card.Body>
             </Card>
+              </Col>
+            
+           
+            </Row>
           </CardGroup>
         </div>
         <div>
-          <Row>
+          <Row className="pb-3">
             <Col>
-              <Card>
+              <Card className="border-shadow">
                 {/* <Card.Img variant="top" src="holder.js/100px160" /> */}
                 <Card.Body>
                   <Form>
@@ -483,6 +505,7 @@ export default class CourseWorkType extends React.Component {
                           e.key === "Enter" && e.preventDefault();
                         }}
                         onChange={(e) => this.handleChange(e)}
+                        className="mb-2"
                       />
                       {/* <Form.Text className="text-muted">
                   We'll never share your email with anyone else.
@@ -499,18 +522,21 @@ export default class CourseWorkType extends React.Component {
                         }
                         //placeholder="Class 3A"
                         onChange={(e) => this.handleChange(e)}
+                        className="mb-2"
                       />
                     </Form.Group>
-                    <DriveFileTypeDropdown
-                      dropdownTitleText={actionButtonText.ADD}
-                      itemList={addFileTypeList}
-                      itemSelection={this.addFileSelected}
-                    />
-                    <DriveFileTypeDropdown
-                      dropdownTitleText={actionButtonText.CREATE}
-                      itemList={driveFileTypeList}
-                      itemSelection={this.driveFileSelected}
-                    />
+                     <div className="mb-3 border-bottom pb-3">
+                        <DriveFileTypeDropdown
+                          dropdownTitleText={actionButtonText.ADD}
+                          itemList={addFileTypeList}
+                          itemSelection={this.addFileSelected}
+                        />
+                        <DriveFileTypeDropdown
+                          dropdownTitleText={actionButtonText.CREATE}
+                          itemList={driveFileTypeList}
+                          itemSelection={this.driveFileSelected}
+                        />
+                     </div>
                   </Form>
 
                   <Modal
@@ -518,13 +544,16 @@ export default class CourseWorkType extends React.Component {
                     backdrop="static"
                     keyboard={true}
                     centered={true}
+                    className="custom-modal-bar"
                   >
                     <Modal.Body>
                       <Form>
                         <Form.Group controlId="formDriveFile">
-                          <Form.Label>
-                            {this.state.driveFileType} Title
-                          </Form.Label>
+                          <div className="modal-header bg-green">
+                            <Form.Label>
+                              {this.state.driveFileType} Title
+                            </Form.Label>
+                          </div>
                           <Form.Control
                             type="input"
                             name={DRIVE_FILE_NAME_FIELD}
@@ -535,26 +564,32 @@ export default class CourseWorkType extends React.Component {
                             }}
                             onKeyDown={(e) => this.keyDown(e)}
                             onChange={(e) => this.handleChange(e)}
+                            className="form-control input-field mt-3"
+                            placeholder="Enter title"
                           />
                         </Form.Group>
+                        <div className="create-btn d-flex justify-content-center">
+                          <Button
+                            variant="secondary"
+                            onClick={() =>
+                              this.setState({ showDriveFileModal: false })
+                            }
+                            className="btn-red  bg-grey bg-green txt-white m-0 mr-1"
+                          >
+                            Cancel
+                            <CrossIcon />
+                          </Button>
+                          <Button variant="primary" onClick={this.createDriveFiles} className="btn-red bg-green txt-white m-0 ml-1">
+                            Go!
+                            <RightArrowIcon />
+                          </Button>
+                    </div>
                       </Form>
                     </Modal.Body>
                     <div className="modal"></div>
-                    <div className="modal-footer">
-                      <Button
-                        variant="secondary"
-                        onClick={() =>
-                          this.setState({ showDriveFileModal: false })
-                        }
-                      >
-                        Cancel
-                      </Button>
-                      <Button variant="primary" onClick={this.createDriveFiles}>
-                        Go!
-                      </Button>
-                    </div>
+                    
                   </Modal>
-                  <table className="col-12 table table-stripped">
+                  <table className="custom-table table table-striped table-hover">
                     {this.renderStrippedTable(this.state.driveFiles)}
                   </table>
                 </Card.Body>
@@ -563,16 +598,19 @@ export default class CourseWorkType extends React.Component {
               </Card.Footer> */}
               </Card>
             </Col>
-            <Col xs lg="4">
-              <Card>
+            <Col lg="4">
+              <Card className="border-shadow">
                 <Card.Body>
                   <Row>
+                    <div>
                     <Form.Label>For</Form.Label>
+                    </div>
                   </Row>
 
                   <Row>
-                    <Col>
+                    <Col lg="12" className="mb-2 p-0">
                       <Select
+                      
                         defaultValue={[forClassList[0]]}
                         isMulti
                         name="studentsList"
@@ -581,8 +619,9 @@ export default class CourseWorkType extends React.Component {
                         classNamePrefix="select"
                       />
                     </Col>
-                    <Col>
+                    <Col lg="12" className="mb-2 p-0">
                       <Select
+                      className="mb-2"
                         defaultValue={[forStudentList[0], forStudentList[2]]}
                         isMulti
                         name="studentsList"

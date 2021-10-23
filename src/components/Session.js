@@ -6,23 +6,14 @@ import "..//App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
 import "..//scss/common.scss"
 import Header from "./Header";
-import { Redirect } from "react-router";
 import * as _apiUtils from "./util/AxiosUtil";
-import google from "./../assets/google.png";
-import microsoft from "./../assets/microsoft.png";
-
 import * as _constants from "./util/constants";
 import * as _gconsts from "./util/gConsts";
 import * as _msconsts from "./util/msConsts";
-import {
-  BrowserRouter as Router,
-  Switch,
-  Route,
-  Link
-} from "react-router-dom";
+import { Link } from "react-router-dom";
 
-import { ReactComponent as Microsoft } from '../assets/icons/microsoft.svg'
-import { ReactComponent as Google } from '../assets/icons/google.svg'
+import { ReactComponent as Microsoft } from '../assets/icons/microsoft_teams.svg'
+import { ReactComponent as Google } from '../assets/icons/google-classroom.svg'
 import PageBanner from '../assets/bg.jpg'
 import { ReactComponent as Organization } from '../assets/icons/organization.svg'
 
@@ -84,7 +75,7 @@ export default class Session extends Component {
                 }}
               >
                 <div className="icon-circle"><Microsoft /></div>
-               <h2> Login With Microsoft Account</h2>
+               <h2> Microsoft Teams Account</h2>
               </button>
 
               <button
@@ -112,7 +103,7 @@ export default class Session extends Component {
                }}
               >
                <div className="icon-circle"><Google /></div>
-                <h2>Login With Google Account
+                <h2>Google Classroom Account 
 
                 <br/>
                 <Tooltip 
@@ -125,7 +116,7 @@ export default class Session extends Component {
                <button
                 className="border-shadow box-btn card-hover">
                   <div className="icon-circle"><Organization /></div>
-                      <h2>Organization</h2>
+                      <h2>MyGuruKOOL Account</h2>
                 </button>
               </div>
               <h2 className="title-5 text-center">Don't have account?, please <Link className="simple-link" to='/organisation'>Signup</Link> here</h2>

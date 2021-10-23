@@ -4,6 +4,8 @@ import { Modal, Button, Form } from "react-bootstrap";
 import {COURSE_ID} from "../util/constants";
 import {roleType} from "../util/gConsts";
 import {getKeyFromEnumValue} from "../util/utils";
+import { ReactComponent as RightArrowIcon } from '../../assets/icons/arrow.svg'
+import { ReactComponent as CrossIcon } from '../../assets/icons/cross-white.svg'
 export default class AddPeople extends React.Component {
   constructor(props) {
     super(props);
@@ -33,11 +35,12 @@ export default class AddPeople extends React.Component {
         keyboard={false}
         centered={true}
       >
-        <Modal.Header>
-          <Modal.Title>Invite {this.props.invitePeopleType}</Modal.Title>
+        <Modal.Header className="card-header bg-green">
+          <Modal.Title className="card-title m-0 txt-white">Invite {this.props.invitePeopleType}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
           <Form.Control
+          className="form-control input-field mb-3"
             as="textarea"
             //name="input"
             ref={this.input}
@@ -46,15 +49,17 @@ export default class AddPeople extends React.Component {
               e.key === "Enter" && e.preventDefault();
             }}
           />
-        </Modal.Body>
-        <Modal.Footer>
-          <Button variant="secondary" onClick={this.handleCancel}>
+        <div className="create-btn d-flex justify-content-center">
+          <Button variant="secondary" onClick={this.handleCancel} className="btn-red  bg-grey bg-green txt-white m-0 mr-1" >
             Cancel
+            <CrossIcon />
           </Button>
-          <Button variant="primary" onClick={this.handleInvites}>
+          <Button variant="primary" onClick={this.handleInvites}  className="btn-red bg-green txt-white m-0 ml-1">
             Invite
+            <RightArrowIcon />
           </Button>
-        </Modal.Footer>
+        </div>
+        </Modal.Body>
       </Modal>
 
       {/* {this.state.isTeacherLogin && !this.state.hasTeacherAccepted ? (

@@ -193,7 +193,7 @@ export default class Course extends Component {
                     ))}
                 </ul>
               </div>
-              <div className="tabcontent col-12">
+              <div className="tabcontent col-12 tab-content-scroll">
             {this.state.isLoading ? (
               <img src={_util.loaderRandomGifs()} className="loaderIcon" />
             ) : (

@@ -354,12 +354,19 @@ a:hover{
                 font-weight: 600;
                 font-size: 16px;
                 line-height: 20px;
-                padding-right: 150px;
+                padding-right: 30px;
                 text-align: right;
-
+                position: relative;
+                z-index: 9;
                 color: #000000;
                 span{
                     font-weight: normal;
+                }
+                a{
+                    i{
+                        color: rgb(255, 255, 255);
+                        font-size: 16px !important;
+                    }
                 }
             }
         }
@@ -524,6 +531,9 @@ a:hover{
 
   .bg-green {
     background-color: #2dce89 !important;
+}
+.bg-grey{
+    background-color: #ccc !important;
 }
 
 .custom-file {
@@ -698,8 +708,8 @@ textarea:-webkit-autofill:active{
     top:0px;
     left: 0px;
     background: transparent;
-    width:100%;
     display:flex;
+    left: calc(50% - 100px);
 }
 .Pane2  {
     background: #fff;
@@ -766,3 +776,43 @@ textarea:-webkit-autofill:active{
     background: #6e52d1;
     border-radius: 10px;
   }
+
+  .admin-course-file{
+      a{
+          margin-left: 10px;
+          i{
+            color: #0032c9;
+            font-size: 18px;
+          }
+      }
+  }
+html{
+    body{
+        div{
+            .vertical-top{
+                vertical-align: top !important;
+            }
+        }
+    }
+}
+.content-space-between{
+    display: flex;
+    justify-content: space-between;
+}
+.custom-modal-bar{
+    .modal-content{
+        border:0px;
+        .modal-body{
+            border: 0px;
+            .modal-header{
+                margin-top: -39px;
+                margin-left: -16px;
+                margin-right: -16px;
+                label{
+                    margin-bottom: 0px;
+                    color: #fff;
+                }
+            }
+        }
+    }
+}
