@@ -21,6 +21,10 @@ export default class FloatingButton extends Component {
     this.props.showCreateCourse(true);
   }
 
+  onClickCreateClass  = () => {
+    this.props.showCreateClass(true);
+  }
+
   onClickCreateCourseWork  = () => {
     this.props.showCreateCourseWork(true);
     //window.location.href = '/home/createcourseWork';
@@ -68,21 +72,37 @@ export default class FloatingButton extends Component {
          )
          )}  */}
          {/* {actionList.map((action) => <li>{action}</li>) } */}
+
+         {/* Conference */}
          <Action text="Conference" onClick={this.onConferenceClick}>
            <i className="far fa-comments fa-1g" />
          </Action>
+
+         {/* Archive */}
          <Action text="Archive" onClick={() => alert("archive")}>
            <i className="fas fa-file-archive fa-1g" />
          </Action>
+         
+         {/* Create Class */}
+         {this.props.isTeacherLogin ? 
+         <Action text="Create Class" onClick={this.onClickCreateClass}>
+           <i className="fas fa-chalkboard-teacher fa-1g" />
+         </Action>:""}
+
+         {/* Create Course/ Subject */}
          {this.props.isTeacherLogin ? 
          <Action text="Create Course" onClick={this.onClickCreateCourse}>
            <i className="fas fa-plus-circle fa-1g" />
          </Action>:""}
+
+         {/* Create Coursework/ Assignment */}
          {this.props.isTeacherLogin && (this.props.selectedCourseId !== 'null') ? 
           <Action text="Create Coursework" onClick={this.onClickCreateCourseWork} > 
             <i className="fas fa-tasks fa-1g" />
           </Action>
           : ""}
+
+         {/* Assign People=> Teachers, Students */}
          {this.props.isTeacherLogin && (this.props.selectedCourseId !== 'null') ? 
           <Action text="People" onClick={this.onClickAddPeople} > 
             <i className="fas fa-user-plus fa-1g" />

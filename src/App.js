@@ -103,16 +103,6 @@ function App() {
             </div>
           )}
         />
-      <Route
-          exact={true}
-          //path="/createcourse"
-          path="/class/create"
-          render={() => (
-            <div className="App">
-              <CreateClass />
-            </div>
-          )}
-        />
     </BrowserRouter>
   );
 }

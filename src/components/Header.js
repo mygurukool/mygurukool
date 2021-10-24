@@ -32,7 +32,7 @@ export default class Header extends Component {
           <div className="container">
             <div  className="header-content">
               <div className="header-left">
-                <h2>My Gurokool (BETA)</h2>
+                <h2>My Gurukool (BETA)</h2>
               </div>
               <div className="header-right">
                   <ul className="navbar-items">
@@ -41,13 +41,7 @@ export default class Header extends Component {
                         <User/>
                         {this.props.studentName}
                       </a>
-
-                    </li>
-                    {this.state.isLoggedIn ? (
-                      <li className="nav-item">
-                        <Link to="/class/create" className="btn-red text-white">Create class</Link>
-                      </li>
-                    ):''}
+                    </li>                   
                     <li>
                     {this.props.isSignedIn ? (
                         <a
