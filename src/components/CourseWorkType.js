@@ -266,7 +266,9 @@ export default class CourseWorkType extends React.Component {
               variant="secondary"
               onClick={(e) => this.handleClick("cancel")}
             >
+              Close
               <i className="fas fa-window-close fa-2x"></i>
+              
             </a>
           </div>
           <div className="col-1">
