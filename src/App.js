@@ -14,7 +14,7 @@ import * as _gconsts from "./components/util/gConsts"
 import CreateCourse from "./components/CreateCourse";
 import OrganisationCreateForm from './components/organisation/organisation.container'
 import TeachersContainer from './components/teachers/teachers.container'
-import CreateClass from "./components/CreateClass";
+import CreateClass from "./components/class/createclass.container";
 
 function googleUpdateSigninStatus(isSignedIn) {
   console.log("googleUpdateSigninStatus")
@@ -103,6 +103,16 @@ function App() {
             </div>
           )}
         />
+
+      <Route
+        exact={true}
+        path="/class/create"
+        render={(props) => (
+          <div className="App">
+            <CreateClass {...props} />
+          </div>
+        )}
+      />
     </BrowserRouter>
   );
 }

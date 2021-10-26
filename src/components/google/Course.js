@@ -9,7 +9,7 @@ import Assignment from "./Assignment"
 import FloatingButton from "../util/FloatingButton";
 import CreateCourseWork from "../CreateCourseWork";
 import CreateCourse from "../CreateCourse";
-import CreateClass from "../CreateClass";
+import CreateClass from "../class/createclass.container";
 import TeacherAuthorization from "./TeacherAuthorization";
 import {COURSE_ID, DATA_SOURCE, HAS_TEACHER_ACCEPTED} from "../util/constants"
 import InvitePeople from "./InvitePeople";
@@ -179,7 +179,7 @@ export default class Course extends Component {
                           href="#?"
                           onClick={this.loadAssignment}
                         >
-                          
+
                           {_util.loadIconBySubject(course.name) ? (
                             <div className="tab-icon">
                               <img
@@ -190,9 +190,9 @@ export default class Course extends Component {
                             </div>
                           ) : (
                             ""
-                            
+
                           )}
-                          
+
                           {/* Course Name */}
                          <h3> {course.name}</h3>
                         </a>
@@ -242,7 +242,7 @@ export default class Course extends Component {
            </div>
             </div>
           </div>
-          
+
         </div>
       </Fragment>
     );

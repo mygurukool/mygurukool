@@ -1,51 +1,17 @@
 import React, {Fragment} from "react";
-import { Modal, Form, Button } from "react-bootstrap";
-import * as _classworkUtil from "./google/ClassworkUtil";
-import axios from "axios";
-import Header from "./Header";
-import PageBanner from "../assets/classroom.jpg";
-import {ReactComponent as RightArrowIcon} from "../assets/icons/arrow.svg";
+import Header from "./../Header";
+import PageBanner from "../../assets/classroom.jpg";
+import CustomInput from "../custom/CustomInput";
 
-export default class CreateCourse extends React.Component {
+export default class CreateClass extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      className: "",
-      section: "",
-      ageGroup: "",
-      error:{}
-    };
-    this.handleChange = this.handleChange.bind(this);
+    this.state = { isSignedIn: false, country: "", accessToken: "" };
   }
 
-  handleClick = async (e) => {
-    e.preventDefault();
-    let data = {
-      name: e.target.className.value,
-      section: e.target.section.value,
-      ageGroup: e.target.ageGroup.value,
-    };
-    axios.post(`${process.env.REACT_APP_MGK_API_URL}/classes`,data).then((result)=>{
-      if (result.status === 200) {
-        alert("Class created successfully");
-      }
-    }).catch((error)=>{
-      console.log(error)
-    })
-  };
-
-  handleChange = async (event) => {
-    const { target } = event;
-    const value = target.type === "checkbox" ? target.checked : target.value;
-    const { name } = target;
-    await this.setState({
-      [name]: value,
-    });
-  };
-
   render() {
+    const{create} = this.props
     return (
-      // {"create course"}
       <Fragment>
         <Header isSignedIn={true} />
         <div className="page-banner">
@@ -59,13 +25,13 @@ export default class CreateCourse extends React.Component {
                   <h5 className="card-title m-0 txt-white">Create Class</h5>
                 </div>
                 <div className="card-body">
-                  <form onSubmit={((event)=>this.handleClick(event))}>
+                  <form onSubmit={((event)=>create(event))}>
                     <div className="row">
                       <div className="col-md-12 mt-3">
-                        <input name="className" className="form-control input-field" placeholder="class 9"/>
+                        <CustomInput type="text" name="className" placeholder="class 9" required/>
                       </div>
                       <div className="col-md-12 mt-3">
-                        <input name="section" className="form-control input-field" placeholder="A"/>
+                        <CustomInput type="text" name="section" placeholder="A" required/>
                       </div>
                       <div className="col-md-12 mt-3">
                         <select className="form-control input-field" name="ageGroup" placeholder="ageGroup">

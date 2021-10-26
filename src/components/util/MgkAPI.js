@@ -58,7 +58,7 @@ function axiosPost(url, data) {
 
 function axiosGet(url, params = {}) {
   return axios.get(url, {
-    params: params, 
+    params: params,
     // headers: {
     //   Authorization: `Bearer ${sessionStorage.getItem(
     //     _constants.ACCESS_TOKEN
@@ -92,3 +92,13 @@ export async function saveTeacher(formData) {
 }
 
 // Teacher End
+
+/* Create class */
+export async function saveClass(formData) {
+  return axios.post(`${process.env.REACT_APP_MGK_API_URL}/classes`,formData).then((res)=>{
+    return res.data
+  }).catch((err)=>{
+    return err
+  })
+}
+/* End create class*/
