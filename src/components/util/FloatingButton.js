@@ -58,7 +58,7 @@ export default class FloatingButton extends Component {
             backgroundColor: "#ffffff",
             color: "#34495e",
           }}
-          position={{
+          style={{
             bottom: 100,
             left: 50,
           }}
@@ -92,7 +92,7 @@ export default class FloatingButton extends Component {
          {/* Create Course/ Subject */}
          {this.props.isTeacherLogin ? 
          <Action text="Create Course" onClick={this.onClickCreateCourse}>
-           <i className="fas fa-plus-circle fa-1g" />
+           <i className="fas fa-book fa-1g" />
          </Action>:""}
 
          {/* Create Coursework/ Assignment */}
