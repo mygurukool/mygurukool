@@ -30,7 +30,7 @@ export default class EditCourseWork extends React.Component {
     return (
       // {"Edit course"}
       <div className="container">
-        <div className="alert alert-success">
+        <div className="alert alert-success border-shadow">
           <Form.Label>
             <b>{this.state.courseworkTitle}</b>
           </Form.Label>
