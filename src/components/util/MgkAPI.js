@@ -30,7 +30,8 @@ function axiosPatch(url, data) {
       // Authorization: `Bearer ${sessionStorage.getItem(
       //   _constants.ACCESS_TOKEN
       // )}`,
-      "Content-Type": "application/json"
+      "Content-Type": "application/json",
+      "Access-Control-Allow-Origin": "*"
     } },
   ).then((response) => {
     console.log('axiosPatch: ' + JSON.stringify(response));
@@ -42,17 +43,17 @@ function axiosPatch(url, data) {
 function axiosPost(url, data) {
   return axios.post(url,
     JSON.stringify(data), { headers: {
-      // Authorization: `Bearer ${sessionStorage.getItem(
-      //   _constants.ACCESS_TOKEN
-      // )}`,
       "Content-Type": "application/json"
+
     } },
   )
   .then((response) => {
     //alert(JSON.stringify(response.data))
     console.log('axiosPost: ' + response);
+    return response.data
   }, (error) => {
     console.log('axiosPost: ' + error);
+    return error
   });
 }
 
@@ -70,11 +71,7 @@ function axiosGet(url, params = {}) {
 // Organisation Start
 
 export async function saveOrganisation(formData) {
-  return axios.post(`${process.env.REACT_APP_MGK_API_URL}/organization/create`,formData).then((res)=>{
-    return res.data
-  }).catch((err)=>{
-    return err
-  })
+  return axiosPost(`${process.env.REACT_APP_MGK_API_URL}/organization/create`,formData)
 }
 
 // Organisation End
@@ -82,13 +79,7 @@ export async function saveOrganisation(formData) {
 // Teacher Start
 
 export async function saveTeacher(formData) {
-  return axios.post(`${process.env.REACT_APP_MGK_API_URL}/teacher/create/`,formData).then((res)=>{
-    return {'success':res.data,'error':''}
-  }).catch((err)=>{
-  return {'error':err.response.data,'success':''}
-  // console.log(err.response.data);
-  // console.log(err.response.status);
-  })
+  return axiosPost(`${process.env.REACT_APP_MGK_API_URL}/teacher/create/`,formData)
 }
 
 // Teacher End

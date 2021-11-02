@@ -13,7 +13,6 @@ export default class CreateClass extends React.Component {
     const{create} = this.props
     return (
       <Fragment>
-        <Header isSignedIn={true} />
         <div className="page-banner">
           <img src={PageBanner} alt={"Logo"}/>
         </div>

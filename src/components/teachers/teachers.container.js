@@ -23,13 +23,19 @@ class TeachersContainer extends  PureComponent {
                     }
 
         _mgkAPI.saveTeacher(data).then(async (res)=>{
+            alert("hello")
             alert(res.success.success)
+            
+            if(res.success.success!==''){
+                alert('Created teacher')
+            this.props.history.push('/class/create')
+            }
             await this.setState({error:res.error})
          }).catch(async (err)=>{
           console.log( await err);
         //   console.log(err.response.status);
          })
-    }
+        }           
 
     async getCountries(){
         var result = await axios.get('https://api.first.org/data/v1/countries').then((res)=>{
