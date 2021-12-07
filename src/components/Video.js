@@ -56,7 +56,10 @@ export default class Video extends React.Component {
         <br />
         {this.state.thumbnailUrl ? (
           <button type="button" className="btn-red bg-yellow txt-black btn btn-info btn-sm" onClick={this.openModal}>
-            <VideoIcon />
+            <img
+              src={this.state.thumbnailUrl}
+               className="thumbnailIcon"
+            />
             Im Video, Click me!
           </button>
         ) : (
